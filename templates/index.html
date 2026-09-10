@@ -1,0 +1,108 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NCart campus marketplace sign in">
+  <title>NCart | Campus marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css?v=3">
+</head>
+<body>
+  <div class="message-modal" id="message-modal" hidden role="dialog" aria-modal="true" aria-labelledby="message-title" aria-describedby="message-text">
+    <div class="message-dialog is-success">
+      <button class="message-close" id="message-close" type="button" aria-label="Close">&times;</button>
+      <div class="message-icon" id="message-icon" aria-hidden="true">&#10003;</div>
+      <h2 class="message-title" id="message-title">Success Message</h2>
+      <p class="message-text" id="message-text"></p>
+      <button class="message-button" id="message-button" type="button">Okay</button>
+    </div>
+  </div>
+  <main class="shell">
+    <section class="intro-panel" aria-labelledby="intro-title">
+      <header class="brand-lockup">
+        <span>NCart</span>
+        <span>Norzagaray College</span>
+      </header>
+      <span class="year">2026</span>
+
+      <div class="intro-copy">
+        <p class="eyebrow">Your campus marketplace</p>
+        <h1 id="intro-title">Make room for<br>what&rsquo;s next.</h1>
+        <p class="intro-description">Buy, sell, and pass along the school essentials that keep student life moving.</p>
+      </div>
+
+      <p class="promise"><span aria-hidden="true">✦</span> Built for student-to-student exchange</p>
+    </section>
+
+    <section class="auth-panel" aria-labelledby="auth-title">
+      <div class="auth-inner">
+        <div class="mark" aria-label="NCart logo">
+          <span class="mark-symbol">N</span>
+          <span class="mark-label">NCART</span>
+        </div>
+
+        <div class="auth-copy">
+          <p class="eyebrow">Start here</p>
+          <h2 id="auth-title">Find your campus<br>people.</h2>
+          <p class="helper">Sign in to browse listings or create yours first one.</p>
+        </div>
+
+        <form class="auth-form" id="auth-form" action="/templates/login.html" method="get">
+          <button class="primary-button" type="button" onclick="window.location.href='/templates/login.html'">Log In</button>
+          <button class="secondary-button" id="create-account" type="button" onclick="window.location.href='/templates/create-account.html'">Create an Account</button>
+        </form>
+
+        <div class="divider"><span>or continue with</span></div>
+
+        <div class="social-actions">
+          <button class="social-button" type="button" data-provider="Google"><span class="social-icon google-icon">G</span>Google</button>
+        </div>
+
+        <p class="status-message" id="status-message" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+  <script>
+    const status = document.querySelector('#status-message');
+    const modal = document.querySelector('#message-modal');
+    const modalText = document.querySelector('#message-text');
+    const closeModal = () => {
+      modal.classList.remove('is-visible');
+      modal.hidden = true;
+    };
+    document.querySelector('#message-close').addEventListener('click', closeModal);
+    document.querySelector('#message-button').addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+    const showStatus = (message) => {
+      status.textContent = message;
+      status.classList.add('is-visible');
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+    params.delete('message');
+    history.replaceState(null, '', `${window.location.pathname}${params.toString() ? `?${params}` : ''}${window.location.hash}`);
+    if (message) {
+      modalText.textContent = message;
+      modal.hidden = false;
+      modal.classList.add('is-visible');
+      showStatus(message);
+    }
+
+    document.querySelectorAll('[data-provider]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (button.dataset.provider === 'Google') {
+          window.location.href = '/auth/google';
+          return;
+        }
+        showStatus(`${button.dataset.provider} sign in selected.`);
+      });
+    });
+  </script>
+</body>
+</html>

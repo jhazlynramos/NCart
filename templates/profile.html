@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<script src="/static/logout.js?v=2" defer></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NCart | Profile</title>
+    <link rel="stylesheet" href="/static/styles.css?v=5" />
+  </head>
+  <body class="dashboard-page">
+  <script src="/static/logout.js?v=2" defer></script>
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/home"
+          ><span class="dashboard-brand-mark">N</span
+          ><span class="dashboard-brand-name">NCART</span></a
+        >
+        <nav class="dashboard-nav">
+          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          ><a class="dashboard-nav-link" href="/marketplace"
+            ><span>▣</span>Marketplace</a
+          ><a class="dashboard-nav-link" href="/favorites"
+            ><span>♥</span>Favorites</a
+          ><a class="dashboard-nav-link" href="/listings"
+            ><span>🛒</span>My Listings</a
+          ><a class="dashboard-nav-link" href="/messages"
+            ><span>▰</span>Messages</a
+          ><a class="dashboard-nav-link" href="/orders"
+            ><span>▤</span>My Orders</a
+          ><a class="dashboard-nav-link is-active" href="/profile"
+            ><span>◉</span>Profile</a
+          >
+        </nav>
+        <a
+          class="dashboard-nav-link dashboard-logout"
+          href="/logout"
+          onclick="return confirm('Are you sure you want to log out?');"
+          ><span>↪</span>Logout</a
+        >
+      </aside>
+      <section class="dashboard-content">
+        <header class="dashboard-header">
+          <label class="dashboard-search" for="search"
+            ><span>⌕</span
+            ><input id="search" type="search" placeholder="Search items"
+          /></label>
+        </header>
+        <div class="dashboard-views">
+          <section class="dashboard-view is-visible">
+            <div class="dashboard-view-heading">
+              <div>
+                <p class="dashboard-kicker">Your account</p>
+                <h1>Profile</h1>
+              </div>
+              <button class="dashboard-primary" type="button">
+                Edit profile
+              </button>
+            </div>
+            <div class="profile-panel">
+              <div class="profile-avatar">N</div>
+              <div>
+                <h2>NCart member</h2>
+                <p>
+                  Keep your profile updated so campus buyers know who they are
+                  dealing with.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

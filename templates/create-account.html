@@ -1,0 +1,201 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Create an NCart account">
+  <title>Create an account | NCart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css?v=4">
+</head>
+<body class="login-page">
+  <div class="message-modal" id="message-modal" hidden role="dialog" aria-modal="true" aria-labelledby="message-title" aria-describedby="message-text">
+    <div class="message-dialog">
+      <button class="message-close" id="message-close" type="button" aria-label="Close">&times;</button>
+      <div class="message-icon" id="message-icon" aria-hidden="true">&times;</div>
+      <h2 class="message-title" id="message-title">Error Message</h2>
+      <p class="message-text" id="message-text"></p>
+      <button class="message-button" id="message-button" type="button">Okay</button>
+    </div>
+  </div>
+  <main class="login-card register-card" aria-labelledby="register-title">
+    <a class="back-link" href="/">&larr; Back to welcome</a>
+
+    <div class="login-copy">
+      <p class="login-eyebrow">Join the exchange</p>
+      <h1 id="register-title">Create your account</h1>
+      <p class="login-helper">Set up your student marketplace profile.</p>
+    </div>
+
+    <form class="login-form register-form" id="register-form" action="/register" method="post">
+      <div class="name-row">
+        <div class="name-field">
+          <label for="surname">Surname</label>
+          <input id="surname" name="surname" type="text" placeholder="Surname" autocomplete="family-name" required>
+        </div>
+        <div class="name-field">
+          <label for="first-name">First Name</label>
+          <input id="first-name" name="first_name" type="text" placeholder="First name" autocomplete="given-name" required>
+        </div>
+      </div>
+
+      <label for="middle-name">Middle Name</label>
+      <input id="middle-name" name="middle_name" type="text" placeholder="Middle name" autocomplete="additional-name" required>
+      <label class="show-password no-middle-name" for="no-middle-name">
+        <input id="no-middle-name" name="no_middle_name" type="checkbox" value="1">
+        I have no middle name
+      </label>
+
+      <label for="register-email">Email Address</label>
+      <input id="register-email" name="email" type="email" placeholder="you@school.edu" autocomplete="email" required>
+      <input id="google-token" name="google_token" type="hidden">
+
+      <label for="register-password">Password</label>
+      <input id="register-password" name="password" type="password" placeholder="Create a strong password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}" title="Use at least 8 characters with an uppercase letter, lowercase letter, number, and special character." autocomplete="new-password" required>
+      <ul class="password-rules" aria-live="polite">
+        <li data-rule="length">At least 8 characters</li>
+        <li data-rule="uppercase">1 uppercase letter</li>
+        <li data-rule="lowercase">1 lowercase letter</li>
+        <li data-rule="number">1 number</li>
+        <li data-rule="special">1 special character</li>
+      </ul>
+
+      <label for="confirm-password">Confirm Password</label>
+      <input id="confirm-password" name="confirm_password" type="password" autocomplete="new-password" required>
+      <label class="show-password" for="show-password">
+        <input id="show-password" type="checkbox">
+        Show passwords
+      </label>
+
+      <button class="login-submit" type="submit">Create Account</button>
+    </form>
+
+    <div class="login-divider"><span>or</span></div>
+
+    <div class="login-socials">
+      <button class="register-social" type="button" data-provider="Google"><span class="social-icon google-icon">G</span>Google</button>
+    </div>
+
+    <p class="signup-prompt">Already have an account? <a href="/templates/login.html">Log in</a></p>
+    <p class="login-status" id="register-status" role="status" aria-live="polite"></p>
+  </main>
+
+  <script>
+    const status = document.querySelector('#register-status');
+    const modal = document.querySelector('#message-modal');
+    const dialog = modal.querySelector('.message-dialog');
+    const modalIcon = document.querySelector('#message-icon');
+    const modalTitle = document.querySelector('#message-title');
+    const modalText = document.querySelector('#message-text');
+    const closeModal = () => {
+      modal.classList.remove('is-visible');
+      modal.hidden = true;
+    };
+    const showModal = (text, isError = true) => {
+      dialog.classList.toggle('is-success', !isError);
+      modalIcon.textContent = isError ? '\u00d7' : '\u2713';
+      modalTitle.textContent = isError ? 'Error Message' : 'Success Message';
+      modalText.textContent = text;
+      modal.hidden = false;
+      modal.classList.add('is-visible');
+    };
+    document.querySelector('#message-close').addEventListener('click', closeModal);
+    document.querySelector('#message-button').addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+
+    const showStatus = (message) => {
+      status.textContent = message;
+      status.classList.add('is-visible');
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+    const error = params.get('error');
+    params.delete('message');
+    params.delete('error');
+    history.replaceState(null, '', `${window.location.pathname}${params.toString() ? `?${params}` : ''}${window.location.hash}`);
+    if (message || error) {
+      showStatus(message || error);
+      status.classList.toggle('is-error', Boolean(error));
+      showModal(message || error, Boolean(error));
+    }
+
+    const googleToken = params.get('google_token');
+    const googleEmail = params.get('google_email');
+    const googleName = params.get('google_name');
+    const googleGivenName = params.get('google_given_name');
+    const googleFamilyName = params.get('google_family_name');
+    if (googleToken && googleEmail) {
+      document.querySelector('#google-token').value = googleToken;
+      document.querySelector('#register-email').value = googleEmail;
+      document.querySelector('#register-email').readOnly = true;
+      document.querySelector('#register-email').title = 'This email was verified by Google and cannot be changed.';
+      if (googleGivenName) document.querySelector('#first-name').value = googleGivenName;
+      if (googleFamilyName) document.querySelector('#surname').value = googleFamilyName;
+      if (googleName) document.querySelector('.login-helper').textContent = `Welcome, ${googleName}. Complete your student marketplace profile.`;
+    }
+
+    const registerForm = document.querySelector('#register-form');
+    const password = document.querySelector('#register-password');
+    const confirmation = document.querySelector('#confirm-password');
+    const showPassword = document.querySelector('#show-password');
+    const middleName = document.querySelector('#middle-name');
+    const noMiddleName = document.querySelector('#no-middle-name');
+    let invalidMessageShown = false;
+    const passwordRules = {
+      length: (value) => value.length >= 8,
+      uppercase: (value) => /[A-Z]/.test(value),
+      lowercase: (value) => /[a-z]/.test(value),
+      number: (value) => /\d/.test(value),
+      special: (value) => /[^A-Za-z\d]/.test(value),
+    };
+
+    registerForm.addEventListener('invalid', () => {
+      if (!invalidMessageShown) {
+        showModal('Please correct the highlighted fields before creating your account.');
+        invalidMessageShown = true;
+      }
+    }, true);
+
+    registerForm.addEventListener('input', () => {
+      invalidMessageShown = false;
+    });
+
+    password.addEventListener('input', () => {
+      Object.entries(passwordRules).forEach(([rule, check]) => {
+        const item = document.querySelector(`[data-rule="${rule}"]`);
+        const passed = check(password.value);
+        item.classList.toggle('is-valid', passed);
+      });
+    });
+
+    showPassword.addEventListener('change', () => {
+      const type = showPassword.checked ? 'text' : 'password';
+      password.type = type;
+      confirmation.type = type;
+    });
+
+    noMiddleName.addEventListener('change', () => {
+      middleName.disabled = noMiddleName.checked;
+      middleName.required = !noMiddleName.checked;
+      if (noMiddleName.checked) {
+        middleName.value = '';
+      }
+    });
+
+    document.querySelectorAll('[data-provider]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (button.dataset.provider === 'Google') {
+          window.location.href = '/auth/google';
+          return;
+        }
+        showStatus(`${button.dataset.provider} sign up selected.`);
+      });
+    });
+  </script>
+</body>
+</html>

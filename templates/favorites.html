@@ -1,0 +1,118 @@
+﻿<!doctype html>
+<script src="/static/logout.js?v=2" defer></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NCart | Favorites</title>
+    <link rel="stylesheet" href="/static/styles.css?v=5" />
+  </head>
+
+  <script src="/static/logout.js?v=2" defer></script>
+
+  <body class="dashboard-page">
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/dashboard"
+          ><span class="dashboard-brand-mark">N</span
+          ><span class="dashboard-brand-name">NCART</span></a
+        >
+        <nav class="dashboard-nav">
+          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          ><a class="dashboard-nav-link" href="/marketplace"
+            ><span>▣</span>Marketplace</a
+          ><a class="dashboard-nav-link is-active" href="/favorites"
+            ><span>♥</span>Favorites</a
+          ><a class="dashboard-nav-link" href="/listings"
+            ><span>🛒</span>My Listings</a
+          ><a class="dashboard-nav-link" href="/messages"
+            ><span>▰</span>Messages</a
+          ><a class="dashboard-nav-link" href="/orders"
+            ><span>▤</span>My Orders</a
+          ><a class="dashboard-nav-link" href="/profile"
+            ><span>◉</span>Profile</a
+          >
+        </nav>
+        <a
+          class="dashboard-nav-link dashboard-logout"
+          href="/logout"
+          onclick="return confirm('Are you sure you want to log out?');"
+          ><span>↪</span>Logout</a
+        >
+      </aside>
+      <section class="dashboard-content">
+        <header class="dashboard-header">
+          <label class="dashboard-search" for="search"
+            ><span>⌕</span
+            ><input id="search" type="search" placeholder="Search items"
+          /></label>
+        </header>
+        <div class="dashboard-views">
+          <section class="dashboard-view is-visible">
+            <div class="dashboard-view-heading">
+              <div>
+                <p class="dashboard-kicker">Saved for later</p>
+                <h1>Favorites</h1>
+              </div>
+            </div>
+            <div class="item-grid" id="favorites-grid"></div>
+            <div class="empty-state" id="favorites-empty">
+              <span>♥</span>
+              <h2>Your favorites will appear here.</h2>
+              <p>Save items from the marketplace to find them quickly later.</p>
+              <a class="dashboard-primary" href="/marketplace"
+                >Explore marketplace</a
+              >
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script>
+      const search = document.querySelector("#search");
+      const favoritesGrid = document.querySelector("#favorites-grid");
+      const favoritesEmpty = document.querySelector("#favorites-empty");
+      const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
+      })[character]);
+
+      const renderFavorites = async () => {
+        const response = await fetch("/api/favorites");
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not load favorites.");
+        const query = search.value.trim().toLowerCase();
+        const listings = data.listings.filter((listing) => !query || `${listing.title} ${listing.category} ${listing.item_condition} ${listing.description}`.toLowerCase().includes(query));
+        favoritesGrid.innerHTML = listings.map((listing) => `
+          <article class="item-card">
+            ${listing.image_url ? `<div class="item-image-wrap"><img class="item-image" src="${escapeHtml(listing.image_url)}" alt="${escapeHtml(listing.title)}"><button class="favorite-button is-favorite" type="button" aria-label="Remove ${escapeHtml(listing.title)} from favorites" aria-pressed="true">♥</button></div>` : `<div class="item-image-wrap"><button class="favorite-button is-favorite" type="button" aria-label="Remove ${escapeHtml(listing.title)} from favorites" aria-pressed="true">♥</button></div>`}
+            <div><span class="item-category">${escapeHtml(listing.category)}</span><h3>${escapeHtml(listing.title)}</h3><p>${escapeHtml(listing.item_condition)}</p><small>${escapeHtml(listing.description)}</small><strong>₱${escapeHtml(listing.price)}</strong></div>
+          </article>`).join("");
+        favoritesGrid.querySelectorAll(".favorite-button").forEach((button, index) => {
+          button.addEventListener("click", async () => {
+            button.disabled = true;
+            try {
+              const removeResponse = await fetch(`/api/favorites/${listings[index].id}`, { method: "DELETE" });
+              if (!removeResponse.ok) {
+                const error = await removeResponse.json();
+                throw new Error(error.error || "Could not remove favorite.");
+              }
+              await renderFavorites();
+            } catch (error) {
+              window.alert(error.message);
+              button.disabled = false;
+            }
+          });
+        });
+        favoritesEmpty.hidden = data.listings.length > 0;
+        favoritesGrid.hidden = data.listings.length === 0;
+      };
+
+      search.addEventListener("input", () => renderFavorites().catch((error) => window.alert(error.message)));
+      renderFavorites().catch((error) => {
+        favoritesEmpty.hidden = false;
+        favoritesEmpty.querySelector("h2").textContent = "Favorites unavailable.";
+        favoritesEmpty.querySelector("p").textContent = error.message;
+      });
+    </script>
+  </body>
+</html>

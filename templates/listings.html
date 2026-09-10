@@ -1,0 +1,578 @@
+﻿<!doctype html>
+<script src="/static/logout.js?v=2" defer></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NCart | My Listings</title>
+    <link rel="stylesheet" href="/static/styles.css?v=4" />
+  </head>
+  <body class="dashboard-page dashboard-listings-page">
+  <script src="/static/logout.js?v=2" defer></script>
+    <div class="message-modal crop-modal" id="crop-modal" hidden role="dialog" aria-modal="true" aria-labelledby="crop-title">
+      <div class="crop-dialog">
+        <div class="listing-form-heading">
+          <h2 id="crop-title">Crop image</h2>
+          <button class="form-close" id="close-crop" type="button" aria-label="Close crop editor">&times;</button>
+        </div>
+        <div class="crop-stage" id="crop-stage">
+          <canvas id="crop-canvas" width="320" height="240"></canvas>
+          <div class="crop-frame" aria-hidden="true"></div>
+        </div>
+        <label class="crop-zoom" for="crop-zoom">Zoom<input id="crop-zoom" type="range" min="1" max="3" step="0.01" value="1"></label>
+        <div class="crop-actions"><button class="message-cancel" id="cancel-crop" type="button">Cancel</button><button class="dashboard-primary" id="apply-crop" type="button">Use cropped image</button></div>
+      </div>
+    </div>
+    <div class="message-modal saving-modal" id="saving-modal" hidden role="status" aria-live="polite">
+      <div class="saving-dialog">
+        <span class="saving-spinner" aria-hidden="true"></span>
+        <strong id="saving-message">Preparing your listing...</strong>
+      </div>
+    </div>
+    <div class="message-modal listing-error-modal" id="listing-error-modal" hidden role="alertdialog" aria-modal="true" aria-labelledby="listing-error-title" aria-describedby="listing-error-message">
+      <div class="listing-error-dialog">
+        <span class="listing-error-icon" aria-hidden="true">!</span>
+        <h2 id="listing-error-title">Unable to save listing</h2>
+        <p id="listing-error-message"></p>
+        <button class="dashboard-primary" id="close-listing-error" type="button">OK</button>
+      </div>
+    </div>
+    <div class="message-modal listing-success-modal" id="listing-success-modal" hidden role="alertdialog" aria-modal="true" aria-labelledby="listing-success-title" aria-describedby="listing-success-message">
+      <div class="listing-success-dialog">
+        <span class="listing-success-icon" aria-hidden="true">&#10003;</span>
+        <h2 id="listing-success-title">Item saved</h2>
+        <p id="listing-success-message">Your item was successfully posted.</p>
+        <button class="dashboard-primary" id="close-listing-success" type="button">OK</button>
+      </div>
+    </div>
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/home"
+          ><span class="dashboard-brand-mark">N</span
+          ><span class="dashboard-brand-name">NCART</span></a
+        >
+        <nav class="dashboard-nav">
+          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          ><a class="dashboard-nav-link" href="/marketplace"
+            ><span>▣</span>Marketplace</a
+          ><a class="dashboard-nav-link" href="/favorites"
+            ><span>♥</span>Favorites</a
+          ><a class="dashboard-nav-link is-active" href="/listings"
+            ><span>🛒</span>My Listings</a
+          ><a class="dashboard-nav-link" href="/messages"
+            ><span>▰</span>Messages</a
+          ><a class="dashboard-nav-link" href="/orders"
+            ><span>▤</span>My Orders</a
+          ><a class="dashboard-nav-link" href="/profile"
+            ><span>◉</span>Profile</a
+          >
+        </nav>
+        <a
+          class="dashboard-nav-link dashboard-logout"
+          href="/logout"
+          onclick="return confirm('Are you sure you want to log out?');"
+          ><span>↪</span>Logout</a
+        >
+      </aside>
+      <section class="dashboard-content">
+        <header class="dashboard-header">
+          <label class="dashboard-search" for="search"
+            ><span>⌕</span
+            ><input id="search" type="search" placeholder="Search items"
+          /></label>
+        </header>
+        <div class="dashboard-views">
+          <section class="dashboard-view is-visible">
+            <div class="dashboard-view-heading">
+              <div>
+                <p class="dashboard-kicker">Your activity</p>
+                <h1>My Listings</h1>
+              </div>
+              <button class="dashboard-primary" id="show-post-form" type="button">
+                Post an Item
+              </button>
+            </div>
+            <div class="marketplace-detail-slot" id="listing-detail-slot">
+              <div class="marketplace-detail-view" id="listing-detail-view" hidden>
+                <button class="marketplace-back" id="listing-detail-back" type="button">&#8592; Back</button>
+                <div class="marketplace-detail-panel">
+                  <img class="item-modal-image" id="listing-detail-image" src="" alt="">
+                  <div class="listing-detail-content">
+                    <span class="item-category" id="listing-detail-category"></span>
+                    <h2 class="message-title" id="listing-detail-title"></h2>
+                    <strong class="item-modal-price" id="listing-detail-price"></strong>
+                    <div class="listing-detail-meta">
+                      <p><strong>Category:</strong> <span id="listing-detail-category-copy"></span></p>
+                      <p><strong>Condition:</strong> <span id="listing-detail-condition"></span></p>
+                    </div>
+                    <div class="listing-detail-description">
+                      <h3>Description</h3>
+                      <p id="listing-detail-description-text"></p>
+                    </div>
+                    <button class="message-button" id="edit-listing-button" type="button">Edit Item</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="listing-form-view" id="listing-modal" hidden>
+              <button class="marketplace-back" id="hide-post-form" type="button">&#8592; Back</button>
+              <form class="listing-form" id="listing-form">
+                <div class="listing-form-heading">
+                  <h2 id="listing-modal-title">Post an Item</h2>
+                </div>
+                <div class="listing-form-grid">
+                  <label>Item name<input name="title" required maxlength="160" placeholder="e.g. Biology textbook"></label>
+                  <label>Category<select id="category-select" name="category" required><option value="">Choose a category</option><option>Textbooks</option><option>School Supplies</option><option>Daily Essentials</option><option value="__add_category__">Add Category</option></select></label>
+                  <label class="custom-category-field" id="custom-category-field" hidden>New Category<input id="custom-category" name="custom_category" maxlength="80" placeholder="e.g. Dorm essentials"></label>
+                  <label>Condition<input name="condition" required maxlength="80" placeholder="e.g. Good condition"></label>
+                  <label>Price (PHP)<input name="price" required min="0" step="0.01" type="number" placeholder="450"></label>
+                </div>
+                <label>Description<textarea name="description" required maxlength="1000" rows="3" placeholder="Describe the item and pickup details"></textarea></label>
+                <div class="image-upload-section">
+                  <span class="listing-field-title">Image</span>
+                  <label class="image-upload-box" for="listing-image"><img class="image-upload-preview" id="listing-image-preview" alt="Selected listing preview" hidden><span class="image-upload-icon">↑</span><strong>Upload image</strong><small>PNG, JPG, GIF, or WEBP up to 5 MB</small><input id="listing-image" name="image" type="file" accept="image/png,image/jpeg,image/gif,image/webp" /></label>
+                </div>
+                <p class="selected-image" id="selected-image" aria-live="polite"></p>
+                <button class="dashboard-primary" type="submit">Save listing</button>
+                <p class="listing-status" id="listing-status" role="status"></p>
+              </form>
+            </div>
+            <div class="item-grid" id="listing-grid"></div>
+            <div class="empty-state" id="listing-empty">
+              <span>▱</span>
+              <h2>No listings yet.</h2>
+              <p>
+                Turn unused school essentials into something useful for another
+                student.
+              </p>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script>
+      const listingForm = document.querySelector("#listing-form");
+      const listingModal = document.querySelector("#listing-modal");
+      const listingGrid = document.querySelector("#listing-grid");
+      const listingEmpty = document.querySelector("#listing-empty");
+      const listingStatus = document.querySelector("#listing-status");
+      const savingModal = document.querySelector("#saving-modal");
+      const savingMessage = document.querySelector("#saving-message");
+      const listingErrorModal = document.querySelector("#listing-error-modal");
+      const listingErrorMessage = document.querySelector("#listing-error-message");
+      const listingSuccessModal = document.querySelector("#listing-success-modal");
+      const listingDetailView = document.querySelector("#listing-detail-view");
+      const listingDetailImage = document.querySelector("#listing-detail-image");
+      const listingDetailCategory = document.querySelector("#listing-detail-category");
+      const listingDetailCategoryCopy = document.querySelector("#listing-detail-category-copy");
+      const listingDetailTitle = document.querySelector("#listing-detail-title");
+      const listingDetailCondition = document.querySelector("#listing-detail-condition");
+      const listingDetailDescription = document.querySelector("#listing-detail-description-text");
+      const listingDetailPrice = document.querySelector("#listing-detail-price");
+      let selectedListing = null;
+      let editingListingId = null;
+      const categorySelect = document.querySelector("#category-select");
+      const customCategoryField = document.querySelector("#custom-category-field");
+      const customCategory = document.querySelector("#custom-category");
+      const imageInput = document.querySelector("#listing-image");
+      const imagePreview = document.querySelector("#listing-image-preview");
+      const selectedImage = document.querySelector("#selected-image");
+      const cropModal = document.querySelector("#crop-modal");
+      const cropCanvas = document.querySelector("#crop-canvas");
+      const cropStage = document.querySelector("#crop-stage");
+      const cropZoom = document.querySelector("#crop-zoom");
+      let cropImage = null;
+      let cropSourceFile = null;
+      let cropOffsetX = 0;
+      let cropOffsetY = 0;
+      let cropStartX = 0;
+      let cropStartY = 0;
+      let cropDragging = false;
+      let croppedImageData = "";
+      let saveInProgress = false;
+      const showListingError = (message) => {
+        listingErrorMessage.textContent = message;
+        listingErrorModal.hidden = false;
+        listingErrorModal.classList.add("is-visible");
+        document.querySelector("#close-listing-error").focus();
+      };
+      const closeListingError = () => {
+        listingErrorModal.classList.remove("is-visible");
+        listingErrorModal.hidden = true;
+      };
+      const showListingSuccess = () => {
+        listingSuccessModal.hidden = false;
+        listingSuccessModal.classList.add("is-visible");
+        document.querySelector("#close-listing-success").focus();
+      };
+      const closeListingSuccess = () => {
+        listingSuccessModal.classList.remove("is-visible");
+        listingSuccessModal.hidden = true;
+      };
+      const drawCrop = () => {
+        if (!cropImage) return;
+        const context = cropCanvas.getContext("2d");
+        const width = cropCanvas.width;
+        const height = cropCanvas.height;
+        const scale = Math.max(width / cropImage.width, height / cropImage.height) * Number(cropZoom.value);
+        const drawWidth = cropImage.width * scale;
+        const drawHeight = cropImage.height * scale;
+        context.clearRect(0, 0, width, height);
+        context.fillStyle = "#111534";
+        context.fillRect(0, 0, width, height);
+        context.drawImage(cropImage, (width - drawWidth) / 2 + cropOffsetX, (height - drawHeight) / 2 + cropOffsetY, drawWidth, drawHeight);
+      };
+      const openCropEditor = (file) => {
+        cropSourceFile = file;
+        const reader = new FileReader();
+        reader.onload = () => {
+          cropImage = new Image();
+          cropImage.onload = () => {
+            cropOffsetX = 0;
+            cropOffsetY = 0;
+            cropZoom.value = "1";
+            drawCrop();
+            cropModal.hidden = false;
+            cropModal.classList.add("is-visible");
+          };
+          cropImage.onerror = () => showListingError("The image could not be opened.");
+          cropImage.src = reader.result;
+        };
+        reader.onerror = () => showListingError("The image could not be read. Please choose another image.");
+        reader.readAsDataURL(file);
+      };
+      const closeCropEditor = () => {
+        cropModal.classList.remove("is-visible");
+        cropModal.hidden = true;
+      };
+      const closeListingDetail = () => {
+        listingDetailView.hidden = true;
+        listingGrid.hidden = false;
+        listingEmpty.hidden = listingGrid.children.length > 0;
+        document.querySelector(".dashboard-view-heading").hidden = false;
+      };
+      const openListingDetail = (listing) => {
+        selectedListing = listing;
+        listingDetailImage.src = listing.image_url || "";
+        listingDetailImage.alt = listing.title;
+        listingDetailImage.hidden = !listing.image_url;
+        listingDetailCategory.textContent = listing.category;
+        listingDetailCategoryCopy.textContent = listing.category;
+        listingDetailTitle.textContent = listing.title;
+        listingDetailCondition.textContent = listing.item_condition;
+        listingDetailDescription.textContent = listing.description;
+        listingDetailPrice.textContent = `₱${listing.price}`;
+        listingDetailView.hidden = false;
+        listingGrid.hidden = true;
+        listingEmpty.hidden = true;
+        document.querySelector(".dashboard-view-heading").hidden = true;
+        listingDetailView.scrollIntoView({ behavior: "auto", block: "start" });
+      };
+      const startEditingListing = () => {
+        if (!selectedListing) return;
+        editingListingId = selectedListing.id;
+        document.querySelector("#listing-modal-title").textContent = "Edit Item";
+        document.querySelector("#listing-form button[type=submit]").textContent = "Save changes";
+        listingForm.elements.title.value = selectedListing.title;
+        categorySelect.value = selectedListing.category;
+        if (categorySelect.value !== selectedListing.category) {
+          categorySelect.value = "__add_category__";
+          customCategoryField.hidden = false;
+          customCategory.required = true;
+          customCategory.value = selectedListing.category;
+        } else {
+          customCategoryField.hidden = true;
+          customCategory.required = false;
+          customCategory.value = "";
+        }
+        listingForm.elements.condition.value = selectedListing.item_condition;
+        listingForm.elements.price.value = selectedListing.price;
+        listingForm.elements.description.value = selectedListing.description;
+        imageInput.value = "";
+        croppedImageData = "";
+        selectedImage.textContent = selectedListing.image_url ? "Current image will be kept unless replaced" : "";
+        imagePreview.src = selectedListing.image_url || "";
+        imagePreview.hidden = !selectedListing.image_url;
+        closeListingDetail();
+        listingModal.hidden = false;
+        listingGrid.hidden = true;
+        listingEmpty.hidden = true;
+        document.querySelector(".dashboard-view-heading").hidden = true;
+        listingForm.elements.title.focus();
+      };
+      const readApiResponse = async (response) => {
+        const body = await response.text();
+        if (!response.headers.get("content-type")?.includes("application/json")) {
+          throw new Error(`Listings service returned HTTP ${response.status}. Restart the NCart server.`);
+        }
+        try {
+          return JSON.parse(body);
+        } catch {
+          throw new Error("Listings service returned an invalid response.");
+        }
+      };
+      const fetchWithTimeout = async (url, options = {}) => {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 30000);
+        try {
+          return await fetch(url, { ...options, signal: controller.signal });
+        } catch (error) {
+          if (error.name === "AbortError") throw new Error("The listing service took too long to respond.");
+          throw error;
+        } finally {
+          clearTimeout(timeout);
+        }
+      };
+      const imageFileToDataUrl = (imageFile) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const image = new Image();
+          image.onload = () => {
+            const maxDimension = 1600;
+            const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1, Math.round(image.width * scale));
+            canvas.height = Math.max(1, Math.round(image.height * scale));
+            canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/jpeg", 0.82));
+          };
+          image.onerror = () => reject(new Error("Could not process the image."));
+          image.src = reader.result;
+        };
+        reader.onerror = () => reject(new Error("Could not read the image."));
+        reader.readAsDataURL(imageFile);
+      });
+      const withTimeout = (promise, milliseconds, message) => Promise.race([
+        promise,
+        new Promise((resolve, reject) => setTimeout(() => reject(new Error(message)), milliseconds)),
+      ]);
+      const titleCase = (value) => value.trim().toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase());
+      categorySelect.addEventListener("change", () => {
+        const isCustom = categorySelect.value === "__add_category__";
+        customCategoryField.hidden = !isCustom;
+        customCategory.required = isCustom;
+        if (isCustom) customCategory.focus();
+      });
+      imageInput.addEventListener("change", () => {
+        const imageFile = imageInput.files[0];
+        selectedImage.textContent = imageFile ? imageFile.name : "";
+        if (!imageFile) {
+          imagePreview.hidden = true;
+          imagePreview.removeAttribute("src");
+          return;
+        }
+        if (imageFile.size > 5 * 1024 * 1024) {
+          imageInput.value = "";
+          selectedImage.textContent = "";
+          imagePreview.hidden = true;
+          imagePreview.removeAttribute("src");
+          showListingError("The image is too large. Please choose an image that is 5 MB or smaller.");
+          return;
+        }
+        croppedImageData = "";
+        openCropEditor(imageFile);
+      });
+      cropZoom.addEventListener("input", drawCrop);
+      cropStage.addEventListener("pointerdown", (event) => {
+        cropDragging = true;
+        cropStartX = event.clientX - cropOffsetX;
+        cropStartY = event.clientY - cropOffsetY;
+        cropStage.setPointerCapture(event.pointerId);
+      });
+      cropStage.addEventListener("pointermove", (event) => {
+        if (!cropDragging) return;
+        cropOffsetX = event.clientX - cropStartX;
+        cropOffsetY = event.clientY - cropStartY;
+        drawCrop();
+      });
+      cropStage.addEventListener("pointerup", () => { cropDragging = false; });
+      document.querySelector("#close-crop").addEventListener("click", closeCropEditor);
+      document.querySelector("#cancel-crop").addEventListener("click", () => {
+        cropSourceFile = null;
+        imageInput.value = "";
+        selectedImage.textContent = "";
+        closeCropEditor();
+      });
+      document.querySelector("#apply-crop").addEventListener("click", () => {
+        const croppedCanvas = document.createElement("canvas");
+        croppedCanvas.width = 480;
+        croppedCanvas.height = 360;
+        const context = croppedCanvas.getContext("2d");
+        const scale = Math.max(cropCanvas.width / cropImage.width, cropCanvas.height / cropImage.height) * Number(cropZoom.value);
+        const drawWidth = cropImage.width * scale;
+        const drawHeight = cropImage.height * scale;
+        const outputScale = croppedCanvas.width / cropCanvas.width;
+        context.drawImage(cropImage, ((cropCanvas.width - drawWidth) / 2 + cropOffsetX) * outputScale, ((cropCanvas.height - drawHeight) / 2 + cropOffsetY) * outputScale, drawWidth * outputScale, drawHeight * outputScale);
+        croppedImageData = croppedCanvas.toDataURL("image/jpeg", 0.68);
+        if (croppedImageData.length > 2 * 1024 * 1024) {
+          croppedImageData = "";
+          showListingError("The cropped image is still too large. Zoom out or choose a smaller image.");
+          return;
+        }
+        imagePreview.src = croppedImageData;
+        imagePreview.hidden = false;
+        selectedImage.textContent = cropSourceFile ? `${cropSourceFile.name} (cropped)` : "Cropped image";
+        closeCropEditor();
+      });
+      const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
+      })[character]);
+      const addExistingCategories = (listings) => {
+        const addCategoryOption = categorySelect.querySelector('option[value="__add_category__"]');
+        const existingCategories = new Set(
+          Array.from(categorySelect.options).map((option) => option.value.toLowerCase()),
+        );
+        [...new Map(
+          listings
+            .map((listing) => String(listing.category || "").trim())
+            .filter(Boolean)
+            .map((category) => [category.toLowerCase(), category]),
+        ).values()].forEach((category) => {
+          if (existingCategories.has(category.toLowerCase())) return;
+          const option = document.createElement("option");
+          option.value = category;
+          option.textContent = category;
+          categorySelect.insertBefore(option, addCategoryOption);
+          existingCategories.add(category.toLowerCase());
+        });
+      };
+      const renderListings = async () => {
+        const response = await fetchWithTimeout("/api/listings?mine=1");
+        const data = await readApiResponse(response);
+        if (!response.ok) throw new Error(data.error || "Could not load listings.");
+        addExistingCategories(data.listings);
+        listingGrid.innerHTML = data.listings.map((listing) => `
+          <article class="item-card listing-card" tabindex="0" data-listing-id="${listing.id}">
+            ${listing.image_url ? `<img class="item-image" src="${escapeHtml(listing.image_url)}" alt="${escapeHtml(listing.title)}">` : ""}
+            <div><span class="item-category">${escapeHtml(listing.category)}</span><h3>${escapeHtml(listing.title)}</h3><p>${escapeHtml(listing.item_condition)}</p><small>${escapeHtml(listing.description)}</small><strong>₱${escapeHtml(listing.price)}</strong></div>
+          </article>`).join("");
+        listingGrid.querySelectorAll(".listing-card").forEach((card, index) => {
+          const listing = data.listings[index];
+          card.addEventListener("click", () => openListingDetail(listing));
+          card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openListingDetail(listing);
+            }
+          });
+        });
+        listingEmpty.hidden = data.listings.length > 0;
+        listingGrid.hidden = data.listings.length === 0;
+      };
+
+      document.querySelector("#show-post-form").addEventListener("click", () => {
+        editingListingId = null;
+        listingForm.reset();
+        croppedImageData = "";
+        customCategoryField.hidden = true;
+        customCategory.required = false;
+        customCategory.value = "";
+        selectedImage.textContent = "";
+        imagePreview.hidden = true;
+        imagePreview.removeAttribute("src");
+        document.querySelector("#listing-modal-title").textContent = "Post an Item";
+        document.querySelector("#listing-form button[type=submit]").textContent = "Save listing";
+        listingModal.hidden = false;
+        listingGrid.hidden = true;
+        listingEmpty.hidden = true;
+        document.querySelector(".dashboard-view-heading").hidden = true;
+        document.querySelector('input[name="title"]').focus();
+      });
+      const closeListingModal = () => {
+        listingModal.hidden = true;
+        listingGrid.hidden = false;
+        listingEmpty.hidden = listingGrid.children.length > 0;
+        document.querySelector(".dashboard-view-heading").hidden = false;
+      };
+      document.querySelector("#hide-post-form").addEventListener("click", closeListingModal);
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        if (!listingModal.hidden) closeListingModal();
+        if (!listingDetailView.hidden) closeListingDetail();
+      });
+      document.querySelector("#listing-detail-back").addEventListener("click", closeListingDetail);
+      document.querySelector("#edit-listing-button").addEventListener("click", startEditingListing);
+      document.querySelector("#close-listing-error").addEventListener("click", closeListingError);
+      document.querySelector("#close-listing-success").addEventListener("click", closeListingSuccess);
+      listingErrorModal.addEventListener("click", (event) => {
+        if (event.target === listingErrorModal) closeListingError();
+      });
+      listingSuccessModal.addEventListener("click", (event) => {
+        if (event.target === listingSuccessModal) closeListingSuccess();
+      });
+      listingForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (saveInProgress) return;
+        if (!listingForm.checkValidity()) {
+          listingForm.reportValidity();
+          showListingError("Complete all required fields before saving the listing.");
+          return;
+        }
+        saveInProgress = true;
+        const saveButton = listingForm.querySelector("button[type=submit]");
+        saveButton.disabled = true;
+        listingStatus.textContent = "Preparing your listing...";
+        savingMessage.textContent = "Preparing your listing...";
+        listingStatus.className = "listing-status";
+        savingModal.hidden = false;
+        savingModal.classList.add("is-visible");
+        try {
+          const values = Object.fromEntries(new FormData(listingForm));
+          if (values.category === "__add_category__") values.category = titleCase(values.custom_category);
+          delete values.custom_category;
+          const imageFile = imageInput.files[0];
+          delete values.image;
+          if (croppedImageData) {
+            values.image_data = croppedImageData;
+          } else if (imageFile) {
+            throw new Error("Please apply the crop before saving the image.");
+          }
+          if (values.image_data && values.image_data.length > 2 * 1024 * 1024) {
+            throw new Error("The image is too large after cropping. Please zoom out and crop again.");
+          }
+          listingStatus.textContent = "Saving to the database...";
+          savingMessage.textContent = "Saving to the database...";
+          const saveUrl = editingListingId ? `/api/listings/${editingListingId}` : "/api/listings";
+          const requestBody = JSON.stringify(values);
+          if (requestBody.length > 3 * 1024 * 1024) {
+            throw new Error("The listing data is too large. Please use a smaller cropped image.");
+          }
+          const response = await fetchWithTimeout(saveUrl, { method: editingListingId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: requestBody });
+          const data = await readApiResponse(response);
+          if (!response.ok) throw new Error(data.error || "Could not save listing.");
+          listingForm.reset();
+          croppedImageData = "";
+          editingListingId = null;
+          document.querySelector("#listing-modal-title").textContent = "Post an Item";
+          document.querySelector("#listing-form button[type=submit]").textContent = "Save listing";
+          selectedImage.textContent = "";
+          imagePreview.hidden = true;
+          imagePreview.removeAttribute("src");
+          closeListingModal();
+          savingModal.classList.remove("is-visible");
+          savingModal.hidden = true;
+          showListingSuccess();
+          try {
+            await renderListings();
+          } catch (error) {
+            showListingError(`Item saved, but the listings could not refresh: ${error.message}`);
+          }
+        } catch (error) {
+          const message = error.message || "Could not save listing.";
+          listingStatus.textContent = message;
+          listingStatus.classList.add("is-error");
+          showListingError(message);
+        } finally {
+          savingModal.classList.remove("is-visible");
+          savingModal.hidden = true;
+          saveButton.disabled = false;
+          saveInProgress = false;
+        }
+      });
+      renderListings().catch((error) => {
+        listingStatus.textContent = error.message;
+        listingStatus.classList.add("is-error");
+      });
+    </script>
+  </body>
+</html>

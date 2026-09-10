@@ -1,0 +1,296 @@
+﻿<!doctype html>
+<script src="/static/logout.js?v=2" defer></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NCart | Messages</title>
+    <link rel="stylesheet" href="/static/styles.css?v=15" />
+  </head>
+  <body class="dashboard-page dashboard-messages-page">
+  <script src="/static/logout.js?v=2" defer></script>
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/home"
+          ><span class="dashboard-brand-mark">N</span
+          ><span class="dashboard-brand-name">NCART</span></a
+        >
+        <nav class="dashboard-nav">
+          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          ><a class="dashboard-nav-link" href="/marketplace"
+            ><span>▣</span>Marketplace</a
+          ><a class="dashboard-nav-link" href="/favorites"
+            ><span>♥</span>Favorites</a
+          ><a class="dashboard-nav-link" href="/listings"
+            ><span>🛒</span>My Listings</a
+          ><a class="dashboard-nav-link is-active" href="/messages"
+            ><span>▰</span>Messages</a
+          ><a class="dashboard-nav-link" href="/orders"
+            ><span>▤</span>My Orders</a
+          ><a class="dashboard-nav-link" href="/profile"
+            ><span>◉</span>Profile</a
+          >
+        </nav>
+        <a
+          class="dashboard-nav-link dashboard-logout"
+          href="/logout"
+          onclick="return confirm('Are you sure you want to log out?');"
+          ><span>↪</span>Logout</a
+        >
+      </aside>
+      <section class="dashboard-content">
+        <div class="dashboard-views">
+          <section class="dashboard-view is-visible">
+            <section class="messages-workspace" aria-label="Messages workspace">
+              <aside class="conversation-list">
+                <div class="conversation-list-heading">
+                  <span class="conversation-list-icon">▰</span>
+                  <label class="conversation-search" for="conversation-search">
+                    <span>⌕</span><input id="conversation-search" type="search" placeholder="Search Messages">
+                  </label>
+                </div>
+                <div id="conversation-list-items">
+                  <button class="conversation-list-item" id="conversation-list-item" type="button" hidden>
+                    <span class="conversation-avatar">N</span>
+                    <span class="conversation-list-copy"><strong>NCART seller</strong><small id="conversation-preview">Is this item still available?</small></span>
+                    <time>Just now</time>
+                  </button>
+                </div>
+                <div class="messages-empty empty-state" id="messages-empty">
+                  <span>▰</span>
+                  <h2>Your conversations will appear here.</h2>
+                  <p>Message sellers and buyers safely through NCart.</p>
+                </div>
+              </aside>
+              <section class="conversation-panel" id="conversation-panel" hidden aria-label="Conversation">
+                <div class="conversation-heading">
+                  <div>
+                    <p class="dashboard-kicker">Conversation</p>
+                    <h2 id="conversation-title"></h2>
+                    <span id="conversation-context"></span>
+                  </div>
+                  <a class="message-button" href="/marketplace">Back to Marketplace</a>
+                </div>
+                <div class="conversation-thread" id="conversation-thread">
+                  <p class="conversation-placeholder">Start a conversation about this item.</p>
+                </div>
+                <div class="reply-compose-preview" id="reply-compose-preview" hidden>
+                  <span><strong id="reply-compose-label">Replying to</strong><small id="reply-compose-text"></small></span>
+                  <button id="cancel-reply" type="button" aria-label="Cancel reply">&times;</button>
+                </div>
+                <form class="conversation-compose" id="conversation-compose">
+                  <input id="conversation-input" type="text" placeholder="Write a message..." autocomplete="off" required>
+                  <button class="dashboard-primary" type="submit">Send</button>
+                </form>
+              </section>
+            </section>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script>
+      let activeConversation = (() => {
+        try {
+          return JSON.parse(localStorage.getItem("ncart-active-conversation") || "null");
+        } catch {
+          return null;
+        }
+      })();
+      const messagesEmpty = document.querySelector("#messages-empty");
+      const conversationListItems = document.querySelector("#conversation-list-items");
+      const conversationListItem = document.querySelector("#conversation-list-item");
+      const conversationPreview = document.querySelector("#conversation-preview");
+      const conversationPanel = document.querySelector("#conversation-panel");
+      const conversationTitle = document.querySelector("#conversation-title");
+      const conversationContext = document.querySelector("#conversation-context");
+      const conversationThread = document.querySelector("#conversation-thread");
+      const conversationCompose = document.querySelector("#conversation-compose");
+      const conversationInput = document.querySelector("#conversation-input");
+      const replyComposePreview = document.querySelector("#reply-compose-preview");
+      const replyComposeLabel = document.querySelector("#reply-compose-label");
+      const replyComposeText = document.querySelector("#reply-compose-text");
+      const cancelReply = document.querySelector("#cancel-reply");
+      let replyToMessage = null;
+      const setReplyTarget = (message) => {
+        replyToMessage = message;
+        replyComposeLabel.textContent = `Replying to ${message.sender_name || "message"}`;
+        replyComposeText.textContent = message.body;
+        replyComposePreview.hidden = false;
+        conversationInput.focus();
+      };
+      const clearReplyTarget = () => {
+        replyToMessage = null;
+        replyComposePreview.hidden = true;
+        replyComposeText.textContent = "";
+      };
+      cancelReply.addEventListener("click", clearReplyTarget);
+      const clearActiveConversation = () => {
+        localStorage.removeItem("ncart-active-conversation");
+        activeConversation = null;
+        conversationPanel.hidden = true;
+        messagesEmpty.hidden = false;
+        conversationListItem.hidden = true;
+      };
+      const renderMessages = (messages) => {
+        const wasAtBottom = conversationThread.scrollHeight - conversationThread.scrollTop - conversationThread.clientHeight < 80;
+        const previousScrollTop = conversationThread.scrollTop;
+        const hadMessages = conversationThread.children.length > 0;
+        conversationThread.replaceChildren();
+        if (!messages.length) {
+          const placeholder = document.createElement("p");
+          placeholder.className = "conversation-placeholder";
+          placeholder.textContent = "Start a conversation about this item.";
+          conversationThread.append(placeholder);
+          return;
+        }
+        messages.forEach((item) => {
+          const message = document.createElement("div");
+          message.className = Number(item.sender_id) === Number(activeConversation.viewerId)
+            ? "conversation-message is-sent"
+            : "conversation-message is-received";
+          const messageBody = document.createElement("span");
+          messageBody.textContent = item.body;
+          const itemLabel = document.createElement("small");
+          itemLabel.className = "conversation-message-item";
+          itemLabel.textContent = `Item: ${item.listing_title}`;
+          message.append(itemLabel);
+          if (item.replied_body) {
+            const quoted = document.createElement("small");
+            quoted.className = "conversation-message-quote";
+            quoted.textContent = `Replying to: ${item.replied_body}`;
+            message.append(quoted);
+          }
+          message.append(messageBody);
+          const replyButton = document.createElement("button");
+          replyButton.type = "button";
+          replyButton.className = "conversation-reply-button";
+          replyButton.textContent = "Reply";
+          replyButton.addEventListener("click", () => setReplyTarget(item));
+          message.append(replyButton);
+          conversationThread.append(message);
+        });
+        conversationPreview.textContent = messages[messages.length - 1].body;
+        requestAnimationFrame(() => {
+          if (wasAtBottom || !hadMessages) {
+            conversationThread.scrollTop = conversationThread.scrollHeight;
+          } else {
+            conversationThread.scrollTop = previousScrollTop;
+          }
+        });
+      };
+      const loadMessages = async () => {
+        const response = await fetch(`/api/messages?listing_id=${encodeURIComponent(activeConversation.listingId)}&other_user_id=${encodeURIComponent(activeConversation.sellerId)}`);
+        const data = await response.json();
+        if (!response.ok) {
+          if (response.status === 400) clearActiveConversation();
+          throw new Error(data.error || "Could not load messages.");
+        }
+        activeConversation.viewerId = data.viewer_id;
+        renderMessages(data.messages || []);
+      };
+      const sendMessage = async (messageText) => {
+        if (!activeConversation?.listingId || !activeConversation?.sellerId) {
+          throw new Error("Choose a valid conversation first.");
+        }
+        const response = await fetch("/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            listing_id: activeConversation.listingId,
+            recipient_id: activeConversation.sellerId,
+            body: messageText,
+            reply_to_id: replyToMessage?.id || null,
+          }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not send message.");
+      };
+      const openConversation = (conversation) => {
+        localStorage.setItem("ncart-active-conversation", JSON.stringify({
+          listingId: conversation.listing_id,
+          sellerId: conversation.other_user_id,
+          sellerName: conversation.other_name,
+          title: conversation.listing_title,
+          category: conversation.listing_category || "",
+          price: conversation.listing_price || "",
+          image: conversation.listing_image || "",
+          message: "",
+        }));
+        window.location.reload();
+      };
+      const loadInbox = async () => {
+        const response = await fetch("/api/messages", { cache: "no-store" });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not load conversations.");
+        if (data.conversations?.length) {
+          messagesEmpty.hidden = true;
+          conversationListItems.replaceChildren();
+          data.conversations.forEach((conversation) => {
+            const item = conversationListItem.cloneNode(true);
+            item.removeAttribute("id");
+            item.hidden = false;
+            item.querySelector("strong").textContent = conversation.other_name;
+            item.querySelector("small").textContent = conversation.body;
+            item.querySelector("time").textContent = "Just now";
+            item.onclick = () => openConversation(conversation);
+            conversationListItems.append(item);
+          });
+        } else if (!hasValidConversation) {
+          messagesEmpty.hidden = false;
+          conversationListItems.replaceChildren();
+          conversationListItem.hidden = true;
+        }
+      };
+      const hasValidConversation = activeConversation?.title
+        && Number(activeConversation.listingId) > 0
+        && Number(activeConversation.sellerId) > 0;
+      if (hasValidConversation) {
+        messagesEmpty.hidden = true;
+        conversationListItem.hidden = false;
+        conversationListItem.querySelector("strong").textContent = activeConversation.sellerName || "Seller";
+        conversationPreview.textContent = activeConversation.message || "Is this item still available?";
+        conversationPanel.hidden = false;
+        conversationTitle.textContent = activeConversation.sellerName || "Seller";
+        conversationContext.textContent = `${activeConversation.price || ""} · ${activeConversation.category || ""}`;
+        loadMessages().then(async () => {
+          if (activeConversation.message && !activeConversation.initialMessageSent) {
+            await sendMessage(activeConversation.message);
+            activeConversation.initialMessageSent = true;
+            localStorage.setItem("ncart-active-conversation", JSON.stringify(activeConversation));
+            await loadMessages();
+          }
+        }).catch((error) => {
+          if (activeConversation) conversationThread.textContent = error.message;
+          if (!activeConversation) loadInbox();
+        });
+        conversationInput.focus();
+        window.setInterval(() => {
+          loadMessages().catch(() => {});
+          loadInbox().catch(() => {});
+        }, 2500);
+      }
+      conversationCompose.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const messageText = conversationInput.value.trim();
+        if (!messageText || !hasValidConversation || !activeConversation) return;
+        try {
+          await sendMessage(messageText);
+          conversationInput.value = "";
+          clearReplyTarget();
+          await loadMessages();
+          conversationInput.focus();
+        } catch (error) {
+          window.alert(error.message);
+        }
+      });
+      if (!hasValidConversation) {
+        loadInbox().catch((error) => {
+          conversationThread.textContent = error.message;
+        });
+        window.setInterval(() => {
+          loadInbox().catch(() => {});
+        }, 2500);
+      }
+    </script>
+  </body>
+</html>

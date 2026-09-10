@@ -1,0 +1,385 @@
+﻿<!doctype html>
+<script src="/static/logout.js?v=2" defer></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NCart | My Orders</title>
+    <link rel="stylesheet" href="/static/styles.css?v=5" />
+  </head>
+  <body class="dashboard-page">
+    <div class="message-modal order-cancel-modal" id="order-cancel-modal" hidden role="dialog" aria-modal="true" aria-labelledby="order-cancel-title">
+      <div class="message-dialog order-cancel-dialog">
+        <button class="message-close" id="order-cancel-close" type="button" aria-label="Close cancellation confirmation">&times;</button>
+        <div class="message-icon order-cancel-icon" aria-hidden="true">!</div>
+        <h2 class="message-title" id="order-cancel-title">Cancel order?</h2>
+        <p class="message-text">Are you sure you want to cancel this order? This action cannot be undone.</p>
+        <div class="message-actions order-cancel-actions">
+          <button class="message-button message-cancel" id="order-cancel-keep" type="button">Keep order</button>
+          <button class="message-button order-cancel-confirm" id="order-cancel-confirm" type="button">Yes, cancel</button>
+        </div>
+      </div>
+    </div>
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/home"
+          ><span class="dashboard-brand-mark">N</span
+          ><span class="dashboard-brand-name">NCART</span></a
+        >
+        <nav class="dashboard-nav">
+          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          ><a class="dashboard-nav-link" href="/marketplace"
+            ><span>▣</span>Marketplace</a
+          ><a class="dashboard-nav-link" href="/favorites"
+            ><span>♥</span>Favorites</a
+          ><a class="dashboard-nav-link" href="/listings"
+            ><span>🛒</span>My Listings</a
+          ><a class="dashboard-nav-link" href="/messages"
+            ><span>▰</span>Messages</a
+          ><a class="dashboard-nav-link is-active" href="/orders"
+            ><span>▤</span>My Orders</a
+          ><a class="dashboard-nav-link" href="/profile"
+            ><span>◉</span>Profile</a
+          >
+        </nav>
+        <a
+          class="dashboard-nav-link dashboard-logout"
+          href="/logout"
+          onclick="return confirm('Are you sure you want to log out?');"
+          ><span>↪</span>Logout</a
+        >
+      </aside>
+      <section class="dashboard-content">
+        <header class="dashboard-header">
+          <label class="dashboard-search" for="search"
+            ><span>⌕</span
+            ><input id="search" type="search" placeholder="Search items"
+          /></label>
+        </header>
+        <div class="dashboard-views">
+          <section class="dashboard-view is-visible">
+            <div class="dashboard-view-heading">
+              <div>
+                <p class="dashboard-kicker">Purchase history</p>
+                <h1>My Orders</h1>
+              </div>
+            </div>
+            <div class="dashboard-filter-row order-filter-row" id="order-filters">
+              <button class="dashboard-filter is-selected" type="button" data-order-filter="all">All orders</button>
+              <button class="dashboard-filter" type="button" data-order-filter="pending">Pending</button>
+              <button class="dashboard-filter" type="button" data-order-filter="received">Received</button>
+              <button class="dashboard-filter" type="button" data-order-filter="cancelled">Cancelled</button>
+            </div>
+            <div class="order-grid" id="orders-grid" hidden></div>
+            <section class="seller-orders-section" id="seller-orders-section" hidden>
+              <div class="dashboard-section-heading">
+                <div>
+                  <p class="dashboard-kicker">Seller dashboard</p>
+                  <h2>Orders for my listings</h2>
+                </div>
+              </div>
+              <div class="order-grid" id="seller-orders-grid"></div>
+            </section>
+            <div class="empty-state" id="orders-empty">
+              <span>▤</span>
+              <h2>No orders yet.</h2>
+              <p>
+                When you buy an item, its status and details will show here.
+              </p>
+              <a class="dashboard-primary" href="/marketplace"
+                >Start shopping</a
+              >
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script>
+      const ordersGrid = document.querySelector("#orders-grid");
+      const ordersEmpty = document.querySelector("#orders-empty");
+      const sellerOrdersSection = document.querySelector("#seller-orders-section");
+      const sellerOrdersGrid = document.querySelector("#seller-orders-grid");
+      const orderFilters = document.querySelector("#order-filters");
+      const orderCancelModal = document.querySelector("#order-cancel-modal");
+      const orderCancelClose = document.querySelector("#order-cancel-close");
+      const orderCancelKeep = document.querySelector("#order-cancel-keep");
+      const orderCancelConfirm = document.querySelector("#order-cancel-confirm");
+      const cartStorageKey = "ncart-cart";
+      const checkoutStorageKey = "ncart-checkout-active";
+      const money = (value) => `₱${Number(value || 0).toFixed(2)}`;
+      const formatDate = (value) => new Date(value).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      const readCart = () => {
+        try {
+          const saved = JSON.parse(localStorage.getItem(cartStorageKey) || "[]");
+          return Array.isArray(saved) ? saved : [];
+        } catch {
+          return [];
+        }
+      };
+      const clearCart = () => localStorage.removeItem(cartStorageKey);
+      const readApiResponse = async (response) => {
+        const text = await response.text();
+        const contentType = response.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          throw new Error(`Orders service returned HTTP ${response.status}. Restart the NCart server.`);
+        }
+        try {
+          return JSON.parse(text);
+        } catch {
+          throw new Error("Orders service returned an invalid response.");
+        }
+      };
+      const statusClass = (status) => {
+        const normalized = (status || "pending").toLowerCase();
+        if (normalized === "paid" || normalized === "received") return "is-paid";
+        if (normalized === "shipped" || normalized === "out_for_delivery") return "is-shipped";
+        if (normalized === "cancelled") return "is-cancelled";
+        return "is-pending";
+      };
+      const statusLabel = (status) => String(status || "pending").replaceAll("_", " ");
+      const renderSellerOrders = (sales) => {
+        const sellerSales = Array.isArray(sales) ? sales : [];
+        sellerOrdersSection.hidden = sellerSales.length === 0;
+        sellerOrdersGrid.replaceChildren();
+        if (sellerSales.length === 0) return;
+        sellerOrdersGrid.innerHTML = sellerSales.map((order) => `
+          <article class="order-card seller-order-card">
+            <div class="order-image-wrap">
+              ${order.listing_image ? `<img class="order-image" src="${order.listing_image}" alt="${order.listing_title}">` : "<div class='order-image order-image-empty'>No image</div>"}
+            </div>
+            <div class="order-card-body">
+              <div class="order-card-top">
+                <span class="order-label">Order #${order.id}</span>
+                <span class="order-status ${statusClass(order.status)}">${statusLabel(order.status)}</span>
+              </div>
+              <h3>${order.listing_title}</h3>
+              <p>Buyer: ${order.buyer_name}</p>
+              <div class="order-summary-row"><span>Total</span><strong>${money(order.total_price)}</strong></div>
+              <small>Ordered on ${formatDate(order.created_at)}</small>
+              <label class="seller-status-field">Update status
+                <select class="seller-status-select" data-order-id="${order.id}"${order.status === "cancelled" ? " disabled" : ""}>
+                  <option value="pending"${order.status === "pending" ? " selected" : ""}>Pending</option>
+                  <option value="shipped"${order.status === "shipped" ? " selected" : ""}>Shipped</option>
+                  <option value="out_for_delivery"${order.status === "out_for_delivery" ? " selected" : ""}>Out for delivery</option>
+                  <option value="received"${order.status === "received" ? " selected" : ""}>Received</option>
+                </select>
+              </label>
+            </div>
+          </article>
+        `).join("");
+        sellerOrdersGrid.querySelectorAll(".seller-status-select").forEach((select) => {
+          select.addEventListener("change", async () => {
+            const previousStatus = select.dataset.previousStatus || select.value;
+            select.disabled = true;
+            try {
+              const response = await fetch(`/api/orders/${select.dataset.orderId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: select.value }),
+              });
+              const data = await readApiResponse(response);
+              if (!response.ok) throw new Error(data.error || "Could not update order status.");
+              select.dataset.previousStatus = select.value;
+            } catch (error) {
+              select.value = previousStatus;
+              window.alert(error.message);
+            } finally {
+              select.disabled = false;
+            }
+          });
+        });
+      };
+      const orderFilterStatus = (status) => {
+        const normalized = String(status || "pending").toLowerCase();
+        if (normalized === "paid" || normalized === "shipped" || normalized === "received") return "received";
+        if (normalized === "cancelled") return "cancelled";
+        return "pending";
+      };
+      let selectedOrderFilter = "all";
+      const applyOrderFilter = () => {
+        const cards = Array.from(ordersGrid.querySelectorAll(".order-card"));
+        cards.forEach((card) => {
+          card.hidden = selectedOrderFilter !== "all" && card.dataset.orderStatus !== selectedOrderFilter;
+        });
+      };
+      let pendingCancelButton = null;
+      const closeCancelModal = () => {
+        orderCancelModal.classList.remove("is-visible");
+        orderCancelModal.hidden = true;
+        pendingCancelButton = null;
+      };
+      const openCancelModal = (button) => {
+        pendingCancelButton = button;
+        orderCancelModal.hidden = false;
+        orderCancelModal.classList.add("is-visible");
+        orderCancelKeep.focus();
+      };
+      const cancelOrder = async () => {
+        if (!pendingCancelButton) return;
+        const button = pendingCancelButton;
+        button.disabled = true;
+        orderCancelConfirm.disabled = true;
+        try {
+          const response = await fetch(`/api/orders/${button.dataset.orderId}`, { method: "DELETE" });
+          const data = await readApiResponse(response);
+          if (!response.ok) throw new Error(data.error || "Could not cancel this order.");
+          closeCancelModal();
+          window.location.reload();
+        } catch (error) {
+          button.disabled = false;
+          orderCancelConfirm.disabled = false;
+          closeCancelModal();
+          window.alert(error.message);
+        }
+      };
+      const renderCheckout = () => {
+        const cart = readCart();
+        orderFilters.hidden = true;
+        sellerOrdersSection.hidden = true;
+        sellerOrdersGrid.replaceChildren();
+        if (!cart.length) {
+          ordersGrid.hidden = true;
+          ordersEmpty.hidden = false;
+          return;
+        }
+        const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
+        const total = subtotal;
+        ordersEmpty.hidden = true;
+        ordersGrid.hidden = false;
+        ordersGrid.innerHTML = `
+          <div class="checkout-panel">
+            <div class="checkout-header">
+              <div>
+                <p class="dashboard-kicker">Checkout</p>
+                <h2>Review your order</h2>
+              </div>
+            </div>
+            <div class="checkout-items">
+              ${cart.map((item) => `
+                <div class="checkout-item">
+                  <div class="checkout-thumb">${item.image ? `<img src="${item.image}" alt="${item.title}">` : "<span>Item</span>"}</div>
+                  <div class="checkout-copy">
+                    <strong>${item.title}</strong>
+                    <small>${item.category || "General"}</small>
+                    <span>${money(item.price)}</span>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+            <div class="checkout-summary">
+              <div><span>Subtotal</span><strong>${money(subtotal)}</strong></div>
+              <div><span>Delivery</span><strong>Free</strong></div>
+              <div class="checkout-total"><span>Total</span><strong>${money(total)}</strong></div>
+            </div>
+            <label class="checkout-field">
+              Payment method
+              <select id="checkout-payment-method">
+                <option>Cash on Delivery</option>
+                <option>GCash</option>
+                <option>Bank Transfer</option>
+              </select>
+            </label>
+            <button class="checkout-submit" id="place-order" type="button">Place order</button>
+          </div>
+        `;
+        document.querySelector("#place-order").addEventListener("click", async () => {
+          const paymentMethod = document.querySelector("#checkout-payment-method")?.value || "Cash on Delivery";
+          const items = readCart();
+          if (!items.length) return;
+          try {
+            for (const item of items) {
+              const response = await fetch("/api/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ listing_id: Number(item.listingId), payment_method: paymentMethod }),
+              });
+              const data = await readApiResponse(response);
+              if (!response.ok) throw new Error(data.error || "Could not place order.");
+            }
+            clearCart();
+            localStorage.removeItem(checkoutStorageKey);
+            window.location.reload();
+          } catch (error) {
+            window.alert(error.message);
+          }
+        });
+      };
+      const renderOrders = async () => {
+        const cart = readCart();
+        const checkoutActive = localStorage.getItem(checkoutStorageKey) === "1";
+        if (cart.length && checkoutActive) {
+          renderCheckout();
+          return;
+        }
+        const response = await fetch("/api/orders", { cache: "no-store" });
+        const data = await readApiResponse(response);
+        if (!response.ok) throw new Error(data.error || "Could not load orders.");
+        const orders = data.orders || [];
+        renderSellerOrders(data.sales || []);
+        orderFilters.hidden = false;
+        if (!orders.length) {
+          ordersGrid.hidden = true;
+          ordersEmpty.hidden = false;
+          return;
+        }
+        ordersEmpty.hidden = true;
+        ordersGrid.hidden = false;
+        ordersGrid.innerHTML = orders.map((order) => `
+          <article class="order-card" data-order-status="${orderFilterStatus(order.status)}">
+            <div class="order-image-wrap">
+              ${order.listing_image ? `<img class="order-image" src="${order.listing_image}" alt="${order.listing_title}">` : "<div class='order-image order-image-empty'>No image</div>"}
+            </div>
+            <div class="order-card-body">
+              <div class="order-card-top">
+                <span class="order-label">Order #${order.id}</span>
+                <span class="order-status ${statusClass(order.status)}">${order.status || "pending"}</span>
+              </div>
+              <h3>${order.listing_title}</h3>
+              <p>Seller: ${order.seller_name}</p>
+              <div class="order-payment-row">
+                <span>Payment</span>
+                <strong>${order.payment_method || "Cash on Delivery"}</strong>
+              </div>
+              <div class="order-summary-row">
+                <span>Total</span>
+                <strong>${money(order.total_price)}</strong>
+              </div>
+              <small>Ordered on ${formatDate(order.created_at)}</small>
+              <div class="order-actions">
+                <button class="order-track-button" type="button">Track order</button>
+                ${String(order.status || "pending").toLowerCase() === "pending"
+                  ? `<button class="order-cancel-button" type="button" data-order-id="${order.id}"${order.can_cancel === false ? " disabled" : ""}>${order.can_cancel === false ? "Cancellation expired" : "Cancel order"}</button>`
+                  : ""}
+              </div>
+            </div>
+          </article>
+        `).join("");
+        ordersGrid.querySelectorAll(".order-cancel-button").forEach((button) => {
+          button.addEventListener("click", () => openCancelModal(button));
+        });
+        applyOrderFilter();
+      };
+      orderFilters.addEventListener("click", (event) => {
+        const filter = event.target.closest("[data-order-filter]");
+        if (!filter) return;
+        selectedOrderFilter = filter.dataset.orderFilter;
+        orderFilters.querySelectorAll("[data-order-filter]").forEach((button) => {
+          button.classList.toggle("is-selected", button === filter);
+        });
+        applyOrderFilter();
+      });
+      orderCancelClose.addEventListener("click", closeCancelModal);
+      orderCancelKeep.addEventListener("click", closeCancelModal);
+      orderCancelConfirm.addEventListener("click", cancelOrder);
+      orderCancelModal.addEventListener("click", (event) => {
+        if (event.target === orderCancelModal) closeCancelModal();
+      });
+      renderOrders().catch((error) => {
+        ordersEmpty.hidden = false;
+        ordersGrid.hidden = true;
+        ordersEmpty.querySelector("h2").textContent = "Orders unavailable.";
+        ordersEmpty.querySelector("p").textContent = error.message;
+      });
+    </script>
+  </body>
+</html>

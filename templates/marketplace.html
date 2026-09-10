@@ -1,0 +1,605 @@
+﻿<!doctype html>
+<script src="/static/logout.js?v=2" defer></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NCart | Marketplace</title>
+    <link rel="stylesheet" href="/static/styles.css?v=5" />
+  </head>
+  <body class="dashboard-page">
+    <div class="message-modal report-modal" id="report-modal" hidden role="dialog" aria-modal="true" aria-labelledby="report-modal-title">
+      <form class="report-dialog" id="report-form">
+        <button class="report-back" id="report-back" type="button">&#8592; Back</button>
+        <button class="report-close" id="report-close" type="button" aria-label="Close report form">&times;</button>
+        <p class="report-brand">KEEP NCART HELPFUL</p>
+        <h1 id="report-modal-title">Report this item</h1>
+        <p class="report-subtitle">Tell us what is wrong</p>
+        <label class="report-field">Reason
+          <select id="report-reason" required>
+            <option value="">Choose a reason</option>
+            <option>Prohibited item</option>
+            <option>Misleading information</option>
+            <option>Inappropriate content</option>
+            <option>Scam or fraud</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="report-field">Additional details
+          <textarea id="report-details" rows="4" placeholder="Add any useful details..."></textarea>
+        </label>
+        <button class="report-submit" type="submit">Submit report</button>
+      </form>
+    </div>
+    <div class="message-modal cart-confirm-modal" id="cart-confirm-modal" hidden role="dialog" aria-modal="true" aria-labelledby="cart-confirm-title">
+      <div class="message-dialog cart-confirm-dialog">
+        <button class="message-close" id="cart-confirm-close" type="button" aria-label="Close add to cart confirmation">&times;</button>
+        <div class="message-icon" aria-hidden="true">✓</div>
+        <h2 class="message-title" id="cart-confirm-title">Added to cart</h2>
+        <p class="message-text">This item is now in your cart. You can continue shopping or go to checkout.</p>
+        <div class="message-actions cart-confirm-actions">
+          <button class="message-button" id="cart-confirm-continue" type="button">Continue</button>
+          <button class="message-button cart-confirm-link" id="cart-confirm-checkout" type="button">Checkout</button>
+        </div>
+      </div>
+    </div>
+    <aside class="seller-chat-preview" id="seller-chat-preview" hidden aria-label="Message seller">
+      <div class="seller-chat-header">
+        <div>
+          <span class="seller-chat-kicker">New conversation</span>
+          <strong id="seller-chat-title">Message seller</strong>
+        </div>
+        <button class="seller-chat-close" id="seller-chat-close" type="button" aria-label="Close message preview">&times;</button>
+      </div>
+      <p id="seller-chat-context"></p>
+      <textarea id="seller-chat-draft" rows="3" placeholder="Write a message..."></textarea>
+      <div class="seller-chat-actions">
+        <button class="message-button" id="seller-chat-open" type="button">Open Messages</button>
+        <button class="seller-chat-send" id="seller-chat-send" type="button">Send</button>
+      </div>
+    </aside>
+  <script src="/static/logout.js?v=2" defer></script>
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/home"
+          ><span class="dashboard-brand-mark">N</span
+          ><span class="dashboard-brand-name">NCART</span></a
+        >
+        <nav class="dashboard-nav">
+          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          ><a class="dashboard-nav-link is-active" href="/marketplace"
+            ><span>▣</span>Marketplace</a
+          ><a class="dashboard-nav-link" href="/favorites"
+            ><span>♥</span>Favorites</a
+          ><a class="dashboard-nav-link" href="/listings"
+            ><span>🛒</span>My Listings</a
+          ><a class="dashboard-nav-link" href="/messages"
+            ><span>▰</span>Messages</a
+          ><a class="dashboard-nav-link" href="/orders"
+            ><span>▤</span>My Orders</a
+          ><a class="dashboard-nav-link" href="/profile"
+            ><span>◉</span>Profile</a
+          >
+        </nav>
+        <a
+          class="dashboard-nav-link dashboard-logout"
+          href="/logout"
+          onclick="return confirm('Are you sure you want to log out?');"
+          ><span>↪</span>Logout</a
+        >
+      </aside>
+      <section class="dashboard-content">
+        <header class="dashboard-header">
+          <label class="dashboard-search" for="search"
+            ><span>⌕</span
+            ><input id="search" type="search" placeholder="Search marketplace"
+          /></label>
+          <div class="dashboard-header-actions">
+            <button class="dashboard-cart-button" id="marketplace-cart-button" type="button" aria-expanded="false" aria-controls="marketplace-cart-panel">
+              <span class="dashboard-cart-icon">🛒</span>
+              <span class="dashboard-cart-label">Cart</span>
+              <span class="dashboard-cart-count" id="marketplace-cart-count">0</span>
+            </button>
+          </div>
+        </header>
+        <aside class="marketplace-cart-panel" id="marketplace-cart-panel" hidden aria-label="Shopping cart" aria-live="polite">
+          <div class="marketplace-cart-header">
+            <div>
+              <span class="dashboard-kicker">Cart</span>
+              <h2>Your items</h2>
+            </div>
+            <button class="marketplace-cart-close" id="marketplace-cart-close" type="button" aria-label="Close cart">&times;</button>
+          </div>
+          <div class="marketplace-cart-items" id="marketplace-cart-items"></div>
+          <div class="marketplace-cart-footer">
+            <div class="marketplace-cart-total"><span>Total</span><strong id="marketplace-cart-total">₱0.00</strong></div>
+            <button class="message-button marketplace-cart-checkout" id="marketplace-cart-checkout" type="button">Checkout</button>
+          </div>
+        </aside>
+        <div class="dashboard-views">
+          <section class="dashboard-view is-visible">
+            <div class="dashboard-view-heading">
+              <div>
+                <p class="dashboard-kicker">Campus exchange</p>
+                <h1>Marketplace</h1>
+              </div>
+              <a class="dashboard-primary" href="/listings">
+                Post an item
+              </a>
+            </div>
+            <div class="dashboard-filter-row" id="category-filters">
+              <button class="dashboard-filter is-selected" type="button" data-category-filter="">All items</button>
+            </div>
+            <div class="marketplace-detail-slot" id="item-detail-slot">
+              <div class="marketplace-detail-view" id="item-detail-view" hidden>
+                <button class="marketplace-back" id="item-detail-back" type="button">&#8592; Back</button>
+                <div class="marketplace-detail-panel">
+                  <img class="item-modal-image" id="item-modal-image" src="" alt="">
+                  <div class="listing-detail-content">
+                    <span class="item-category" id="item-modal-category"></span>
+                    <h2 class="message-title" id="item-modal-title"></h2>
+                    <strong class="item-modal-price" id="item-modal-price"></strong>
+                    <div class="listing-detail-meta">
+                      <p><strong>Seller:</strong> <span id="item-modal-seller"></span></p>
+                      <p><strong>Category:</strong> <span id="item-modal-category-copy"></span></p>
+                      <p><strong>Condition:</strong> <span id="item-modal-condition"></span></p>
+                    </div>
+                    <div class="listing-detail-description">
+                      <h3>Description</h3>
+                      <p id="item-modal-description"></p>
+                    </div>
+                    <div class="marketplace-detail-actions">
+                      <button class="message-button" id="item-detail-interest" type="button">Add to cart</button>
+                      <button class="message-button" id="item-detail-buy-now" type="button">Buy now</button>
+                      <button class="message-button" id="item-detail-message" type="button">Message Seller</button>
+                      <button class="message-button marketplace-report-button" id="item-detail-report" type="button">Report Item</button>
+                      <span class="seller-item-actions" id="seller-item-actions" hidden>Your item</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item-grid" id="marketplace-grid"></div>
+            <div class="empty-state" id="marketplace-empty" hidden>
+              <span>▱</span>
+              <h2>No items listed yet.</h2>
+              <p>Be the first to post something for your campus community.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script>
+      const search = document.querySelector("#search");
+      const marketplaceGrid = document.querySelector("#marketplace-grid");
+      const marketplaceEmpty = document.querySelector("#marketplace-empty");
+      const itemDetailView = document.querySelector("#item-detail-view");
+      const itemDetailSlot = document.querySelector("#item-detail-slot");
+      const itemDetailBack = document.querySelector("#item-detail-back");
+      const reportModal = document.querySelector("#report-modal");
+      const cartConfirmModal = document.querySelector("#cart-confirm-modal");
+      const cartConfirmClose = document.querySelector("#cart-confirm-close");
+      const cartConfirmContinue = document.querySelector("#cart-confirm-continue");
+      const cartConfirmCheckout = document.querySelector("#cart-confirm-checkout");
+      const marketplaceCartButton = document.querySelector("#marketplace-cart-button");
+      const marketplaceCartPanel = document.querySelector("#marketplace-cart-panel");
+      const marketplaceCartClose = document.querySelector("#marketplace-cart-close");
+      const marketplaceCartItems = document.querySelector("#marketplace-cart-items");
+      const marketplaceCartCount = document.querySelector("#marketplace-cart-count");
+      const marketplaceCartCheckout = document.querySelector("#marketplace-cart-checkout");
+      const reportForm = document.querySelector("#report-form");
+      const reportBack = document.querySelector("#report-back");
+      const reportClose = document.querySelector("#report-close");
+      const reportReason = document.querySelector("#report-reason");
+      const reportDetails = document.querySelector("#report-details");
+      const reportButton = document.querySelector("#item-detail-report");
+      const messageSellerButton = document.querySelector("#item-detail-message");
+      const sellerChatPreview = document.querySelector("#seller-chat-preview");
+      const sellerChatClose = document.querySelector("#seller-chat-close");
+      const sellerChatTitle = document.querySelector("#seller-chat-title");
+      const sellerChatContext = document.querySelector("#seller-chat-context");
+      const sellerChatDraft = document.querySelector("#seller-chat-draft");
+      const sellerChatOpen = document.querySelector("#seller-chat-open");
+      const sellerChatSend = document.querySelector("#seller-chat-send");
+      const cartStorageKey = "ncart-cart";
+      const checkoutStorageKey = "ncart-checkout-active";
+      const itemModalImage = document.querySelector("#item-modal-image");
+      const itemModalCategory = document.querySelector("#item-modal-category");
+      const itemModalCategoryCopy = document.querySelector("#item-modal-category-copy");
+      const itemModalCondition = document.querySelector("#item-modal-condition");
+      const itemModalSeller = document.querySelector("#item-modal-seller");
+      const itemModalTitle = document.querySelector("#item-modal-title");
+      const itemModalDescription = document.querySelector("#item-modal-description");
+      const itemModalPrice = document.querySelector("#item-modal-price");
+      const sellerItemActions = document.querySelector("#seller-item-actions");
+      const buyerItemActions = [document.querySelector("#item-detail-interest"), document.querySelector("#item-detail-buy-now"), messageSellerButton, reportButton];
+      let viewerId = null;
+      const readCart = () => {
+        try {
+          const saved = JSON.parse(localStorage.getItem(cartStorageKey) || "[]");
+          return Array.isArray(saved) ? saved : [];
+        } catch {
+          return [];
+        }
+      };
+      const saveCart = (items) => localStorage.setItem(cartStorageKey, JSON.stringify(items));
+      const formatCartMoney = (value) => `₱${Number(value || 0).toFixed(2)}`;
+      const updateCartTotal = () => {
+        const selectedItems = Array.from(marketplaceCartItems.querySelectorAll(".marketplace-cart-checkbox:checked"));
+        const total = selectedItems.reduce((sum, checkbox) => sum + Number(checkbox.dataset.price || 0), 0);
+        marketplaceCartCount.textContent = String(readCart().length);
+        document.querySelector("#marketplace-cart-total").textContent = formatCartMoney(total);
+        marketplaceCartCheckout.disabled = selectedItems.length === 0;
+      };
+      const renderCartPanel = () => {
+        const cart = readCart();
+        const itemCount = cart.length;
+        marketplaceCartCount.textContent = String(itemCount);
+        if (!itemCount) {
+          marketplaceCartItems.innerHTML = '<div class="marketplace-cart-empty"><span>🛒</span><p>Your cart is empty.</p></div>';
+          updateCartTotal();
+          return;
+        }
+        marketplaceCartItems.innerHTML = cart.map((entry) => {
+          const image = entry.image ? `<img src="${escapeHtml(entry.image)}" alt="${escapeHtml(entry.title)}">` : '<div class="marketplace-cart-thumb placeholder">No image</div>';
+          return `
+            <div class="marketplace-cart-item" data-listing-id="${escapeHtml(entry.listingId || "")}">
+              <input class="marketplace-cart-checkbox" type="checkbox" checked aria-label="Select ${escapeHtml(entry.title || "item")} for checkout" data-price="${escapeHtml(entry.price || "0")}">
+              ${image}
+              <span class="marketplace-cart-copy">
+                <strong>${escapeHtml(entry.title || "Item")}</strong>
+                <small>${escapeHtml(entry.category || "General")}</small>
+                <em>${escapeHtml(entry.price ? `₱${entry.price}` : "₱0")}</em>
+              </span>
+            </div>
+          `;
+        }).join("");
+        updateCartTotal();
+      };
+      const openCartPanel = () => {
+        renderCartPanel();
+        marketplaceCartPanel.hidden = false;
+        marketplaceCartButton.setAttribute("aria-expanded", "true");
+      };
+      const closeCartPanel = () => {
+        marketplaceCartPanel.hidden = true;
+        marketplaceCartButton.setAttribute("aria-expanded", "false");
+      };
+      const openCartItem = (listingId) => {
+        const target = Array.from(document.querySelectorAll(".item-card")).find((card) => String(card.dataset.listingId) === String(listingId));
+        if (target) {
+          openItemDetail(target);
+          closeCartPanel();
+          return;
+        }
+        closeCartPanel();
+      };
+      const getCartItemFromDetail = () => ({
+        listingId: String(itemDetailView.dataset.listingId || ""),
+        sellerId: String(itemDetailView.dataset.sellerId || ""),
+        title: itemModalTitle.textContent,
+        category: itemModalCategoryCopy.textContent,
+        price: itemModalPrice.textContent.replace(/[^0-9.]/g, ""),
+        image: itemModalImage.src,
+        sellerName: itemModalSeller.textContent,
+      });
+      const showCartConfirmModal = () => {
+        cartConfirmModal.hidden = false;
+        cartConfirmModal.classList.add("is-visible");
+      };
+      const hideCartConfirmModal = () => {
+        cartConfirmModal.classList.remove("is-visible");
+        cartConfirmModal.hidden = true;
+      };
+      const addToCart = () => {
+        const item = getCartItemFromDetail();
+        if (!item.listingId) return;
+        localStorage.removeItem(checkoutStorageKey);
+        const cart = readCart();
+        if (!cart.some((entry) => String(entry.listingId) === String(item.listingId))) {
+          cart.push(item);
+          saveCart(cart);
+        }
+        renderCartPanel();
+        showCartConfirmModal();
+      };
+      const buyNow = () => {
+        const item = getCartItemFromDetail();
+        if (!item.listingId) return;
+        const cart = readCart();
+        const next = cart.some((entry) => String(entry.listingId) === String(item.listingId))
+          ? cart
+          : [...cart, item];
+        saveCart(next);
+        localStorage.setItem(checkoutStorageKey, "1");
+        window.location.href = "/orders";
+      };
+      const categoryFilterRow = document.querySelector("#category-filters");
+      const favoriteIds = new Set();
+      let selectedCategory = "";
+      const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
+      })[character]);
+      const readApiResponse = async (response) => {
+        const body = await response.text();
+        if (!response.headers.get("content-type")?.includes("application/json")) {
+          throw new Error(`Marketplace service returned HTTP ${response.status}. Restart the NCart server.`);
+        }
+        try {
+          return JSON.parse(body);
+        } catch {
+          throw new Error("Marketplace service returned an invalid response.");
+        }
+      };
+      const updateFavorite = async (listingId, shouldFavorite) => {
+        const response = await fetch(`/api/favorites${shouldFavorite ? "" : `/${listingId}`}`, {
+          method: shouldFavorite ? "POST" : "DELETE",
+          headers: shouldFavorite ? { "Content-Type": "application/json" } : {},
+          body: shouldFavorite ? JSON.stringify({ listing_id: listingId }) : undefined,
+        });
+        const data = await readApiResponse(response);
+        if (!response.ok) throw new Error(data.error || "Could not update favorite.");
+      };
+      const closeItemDetail = () => {
+        itemDetailView.hidden = true;
+        marketplaceGrid.hidden = false;
+        document.querySelector("#category-filters").hidden = false;
+        document.querySelector(".dashboard-view-heading").hidden = false;
+      };
+      const closeReportModal = () => {
+        reportModal.classList.remove("is-visible");
+        reportModal.hidden = true;
+        reportForm.reset();
+      };
+      const openReportModal = () => {
+        reportModal.hidden = false;
+        reportModal.classList.add("is-visible");
+        reportReason.focus();
+      };
+      const createOrder = async (listingId) => {
+        const response = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ listing_id: listingId }),
+        });
+        const data = await readApiResponse(response);
+        if (!response.ok) throw new Error(data.error || "Could not place order.");
+        return data;
+      };
+      const getSelectedConversation = () => ({
+        listingId: itemDetailView.dataset.listingId || "",
+        title: itemModalTitle.textContent,
+        price: itemModalPrice.textContent,
+        category: itemModalCategoryCopy.textContent,
+        image: itemModalImage.src,
+        sellerId: itemDetailView.dataset.sellerId || "",
+        sellerName: itemModalSeller.textContent,
+        message: sellerChatDraft.value.trim(),
+      });
+      const showSellerChat = () => {
+        sellerChatTitle.textContent = `Message seller about ${itemModalTitle.textContent}`;
+        sellerChatContext.textContent = `${itemModalPrice.textContent} · ${itemModalCategoryCopy.textContent}`;
+        sellerChatPreview.hidden = false;
+        sellerChatDraft.focus();
+      };
+      const closeSellerChat = () => {
+        sellerChatPreview.hidden = true;
+        sellerChatDraft.value = "";
+      };
+      const saveConversationAndOpenMessages = () => {
+        const conversation = getSelectedConversation();
+        localStorage.setItem("ncart-active-conversation", JSON.stringify(conversation));
+        window.location.href = "/messages";
+      };
+      const applyMarketplaceFilters = () => {
+        const query = search.value.trim().toLowerCase();
+        document.querySelectorAll(".item-card").forEach((item) => {
+          const matchesCategory = !selectedCategory || item.dataset.category === selectedCategory;
+          const matchesSearch = !query || item.dataset.search.includes(query);
+          item.hidden = !matchesCategory || !matchesSearch;
+        });
+        const hasVisibleItems = Array.from(document.querySelectorAll(".item-card")).some((item) => !item.hidden);
+        marketplaceEmpty.hidden = hasVisibleItems;
+        if (hasVisibleItems) marketplaceGrid.hidden = false;
+      };
+      const addMarketplaceCategoryFilters = (listings) => {
+        const categories = listings
+          .map((listing) => String(listing.category || "").trim())
+          .filter(Boolean);
+        categoryFilterRow.innerHTML = '<button class="dashboard-filter is-selected" type="button" data-category-filter="">All items</button>';
+        [...new Map(categories.map((category) => [category.toLowerCase(), category])).values()].forEach((category) => {
+          const button = document.createElement("button");
+          button.className = "dashboard-filter";
+          button.type = "button";
+          button.dataset.categoryFilter = category.toLowerCase();
+          button.textContent = category;
+          categoryFilterRow.append(button);
+        });
+      };
+      const openItemDetail = (card) => {
+        itemModalImage.src = card.dataset.image;
+        itemModalImage.alt = card.dataset.title;
+        itemModalImage.hidden = !card.dataset.image;
+        itemModalCategory.textContent = card.dataset.categoryLabel;
+        itemModalSeller.textContent = card.dataset.seller;
+        itemModalCategoryCopy.textContent = card.dataset.categoryLabel;
+        itemModalCondition.textContent = card.dataset.condition;
+        itemModalTitle.textContent = card.dataset.title;
+        itemModalDescription.textContent = card.dataset.description;
+        itemModalPrice.textContent = card.dataset.price;
+        itemDetailView.dataset.listingId = card.dataset.listingId;
+        itemDetailView.dataset.sellerId = card.dataset.sellerId;
+        const isOwnListing = Number(viewerId) === Number(card.dataset.sellerId);
+        buyerItemActions.forEach((button) => { button.hidden = isOwnListing; });
+        sellerItemActions.hidden = !isOwnListing;
+        itemDetailView.hidden = false;
+        marketplaceGrid.hidden = true;
+        marketplaceEmpty.hidden = true;
+        document.querySelector("#category-filters").hidden = true;
+        document.querySelector(".dashboard-view-heading").hidden = true;
+        itemDetailView.scrollIntoView({ behavior: "auto", block: "start" });
+      };
+
+      const setupItemCard = (card) => {
+        const favoriteButton = card.querySelector(".favorite-button");
+        const favoriteId = Number(card.dataset.listingId);
+        const updateFavoriteButton = () => {
+          const isFavorite = favoriteIds.has(favoriteId);
+          favoriteButton.classList.toggle("is-favorite", isFavorite);
+          favoriteButton.setAttribute("aria-pressed", String(isFavorite));
+          favoriteButton.setAttribute("aria-label", `${isFavorite ? "Remove" : "Add"} ${favoriteId} ${isFavorite ? "from" : "to"} favorites`);
+        };
+        updateFavoriteButton();
+        favoriteButton.addEventListener("click", async (event) => {
+          event.stopPropagation();
+          const shouldFavorite = !favoriteIds.has(favoriteId);
+          favoriteButton.disabled = true;
+          try {
+            await updateFavorite(favoriteId, shouldFavorite);
+            if (shouldFavorite) favoriteIds.add(favoriteId);
+            else favoriteIds.delete(favoriteId);
+            updateFavoriteButton();
+          } catch (error) {
+            window.alert(error.message);
+          } finally {
+            favoriteButton.disabled = false;
+          }
+        });
+        card.addEventListener("click", (event) => {
+          if (!event.target.closest(".item-buy, .favorite-button")) openItemDetail(card);
+        });
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openItemDetail(card);
+          }
+        });
+      };
+      const renderMarketplace = async () => {
+        const [listingsResponse, favoritesResponse] = await Promise.all([
+          fetch("/api/listings"),
+          fetch("/api/favorites"),
+        ]);
+        const data = await readApiResponse(listingsResponse);
+        if (!listingsResponse.ok) throw new Error(data.error || "Could not load marketplace listings.");
+
+        let favoriteData = { favorite_ids: [] };
+        if (favoritesResponse.ok) {
+          favoriteData = await readApiResponse(favoritesResponse);
+        } else if (favoritesResponse.status !== 401) {
+          const favoriteError = await readApiResponse(favoritesResponse).catch(() => ({ error: "Could not load favorites." }));
+          throw new Error(favoriteError.error || "Could not load favorites.");
+        }
+
+        viewerId = data.viewer_id;
+        favoriteIds.clear();
+        (favoriteData.favorite_ids || []).forEach((listingId) => favoriteIds.add(Number(listingId)));
+        addMarketplaceCategoryFilters(data.listings);
+        marketplaceGrid.innerHTML = data.listings.map((listing) => {
+          const title = escapeHtml(listing.title);
+          const category = escapeHtml(listing.category);
+          const description = escapeHtml(listing.description);
+          const condition = escapeHtml(listing.item_condition);
+          const seller = escapeHtml(listing.seller_name || "NCart seller");
+          const sellerId = escapeHtml(listing.seller_id);
+          const price = escapeHtml(listing.price);
+          const image = listing.image_url
+            ? `<img class="item-image" src="${escapeHtml(listing.image_url)}" alt="${title}">`
+            : "";
+          const imageWrap = image
+            ? `<div class="item-image-wrap">${image}<button class="favorite-button" type="button" aria-label="Add ${title} to favorites" aria-pressed="false">♥</button></div>`
+            : `<div class="item-image-wrap"><button class="favorite-button" type="button" aria-label="Add ${title} to favorites" aria-pressed="false">♥</button></div>`;
+          return `<article class="item-card" tabindex="0" data-listing-id="${listing.id}" data-seller-id="${sellerId}" data-search="${escapeHtml(`${listing.title} ${listing.category} ${listing.item_condition} ${listing.description} ${listing.seller_name || ""}`.toLowerCase())}" data-title="${title}" data-category="${escapeHtml(listing.category.toLowerCase())}" data-category-label="${category}" data-condition="${condition}" data-seller="${seller}" data-description="${description}" data-price="₱${price}" data-image="${escapeHtml(listing.image_url || "")}">${imageWrap}<div><span class="item-category">${category}</span><h3>${title}</h3><p>Sold by ${seller}</p><small>${description}</small><strong>₱${price}</strong></div></article>`;
+        }).join("");
+        marketplaceEmpty.hidden = data.listings.length > 0;
+        marketplaceGrid.hidden = data.listings.length === 0;
+        marketplaceGrid.querySelectorAll(".item-card").forEach(setupItemCard);
+        applyMarketplaceFilters();
+      };
+      itemDetailBack.addEventListener("click", closeItemDetail);
+      marketplaceCartButton.addEventListener("click", () => {
+        if (marketplaceCartPanel.hidden) openCartPanel();
+        else closeCartPanel();
+      });
+      marketplaceCartClose.addEventListener("click", closeCartPanel);
+      marketplaceCartCheckout.addEventListener("click", () => {
+        const selectedIds = new Set(Array.from(marketplaceCartItems.querySelectorAll(".marketplace-cart-checkbox:checked"))
+          .map((checkbox) => checkbox.closest(".marketplace-cart-item")?.dataset.listingId));
+        if (!selectedIds.size) return;
+        saveCart(readCart().filter((item) => selectedIds.has(String(item.listingId))));
+        localStorage.setItem(checkoutStorageKey, "1");
+        closeCartPanel();
+        window.location.href = "/orders";
+      });
+      marketplaceCartItems.addEventListener("click", (event) => {
+        if (event.target.closest(".marketplace-cart-checkbox")) {
+          updateCartTotal();
+          return;
+        }
+        const cartItem = event.target.closest(".marketplace-cart-item");
+        if (!cartItem) return;
+        const listingId = cartItem.dataset.listingId;
+        if (listingId) openCartItem(listingId);
+      });
+      document.addEventListener("click", (event) => {
+        if (!marketplaceCartPanel.hidden && !marketplaceCartPanel.contains(event.target) && !marketplaceCartButton.contains(event.target)) {
+          closeCartPanel();
+        }
+      });
+      cartConfirmClose.addEventListener("click", hideCartConfirmModal);
+      cartConfirmContinue.addEventListener("click", hideCartConfirmModal);
+      cartConfirmCheckout.addEventListener("click", () => {
+        hideCartConfirmModal();
+        localStorage.setItem(checkoutStorageKey, "1");
+        window.location.href = "/orders";
+      });
+      cartConfirmModal.addEventListener("click", (event) => {
+        if (event.target === cartConfirmModal) hideCartConfirmModal();
+      });
+      messageSellerButton.addEventListener("click", showSellerChat);
+      sellerChatClose.addEventListener("click", closeSellerChat);
+      sellerChatOpen.addEventListener("click", saveConversationAndOpenMessages);
+      sellerChatSend.addEventListener("click", () => {
+        if (!sellerChatDraft.value.trim()) {
+          sellerChatDraft.focus();
+          return;
+        }
+        saveConversationAndOpenMessages();
+      });
+      document.querySelector("#item-detail-interest").addEventListener("click", addToCart);
+      document.querySelector("#item-detail-buy-now").addEventListener("click", buyNow);
+      reportButton.addEventListener("click", openReportModal);
+      reportBack.addEventListener("click", closeReportModal);
+      reportClose.addEventListener("click", closeReportModal);
+      reportModal.addEventListener("click", (event) => {
+        if (event.target === reportModal) closeReportModal();
+      });
+      reportForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!reportForm.checkValidity()) {
+          reportForm.reportValidity();
+          return;
+        }
+        closeReportModal();
+        window.alert("Thank you. Your report has been submitted.");
+      });
+
+      categoryFilterRow.addEventListener("click", (event) => {
+        const filter = event.target.closest("[data-category-filter]");
+        if (!filter) return;
+        selectedCategory = filter.dataset.categoryFilter;
+        categoryFilterRow.querySelectorAll("[data-category-filter]").forEach((button) => {
+          button.classList.toggle("is-selected", button === filter);
+        });
+        applyMarketplaceFilters();
+      });
+      search.addEventListener("input", applyMarketplaceFilters);
+      renderCartPanel();
+      renderMarketplace().catch((error) => {
+        marketplaceEmpty.hidden = false;
+        marketplaceEmpty.querySelector("h2").textContent = "Marketplace unavailable.";
+        marketplaceEmpty.querySelector("p").textContent = error.message;
+      });
+    </script>
+  </body>
+</html>

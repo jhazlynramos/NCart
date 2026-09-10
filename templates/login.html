@@ -1,0 +1,131 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Log in to NCart">
+  <title>Log in | NCart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css?v=3">
+</head>
+<body class="login-page">
+  <div class="message-modal" id="message-modal" hidden role="dialog" aria-modal="true" aria-labelledby="message-title" aria-describedby="message-text">
+    <div class="message-dialog">
+      <button class="message-close" id="message-close" type="button" aria-label="Close">&times;</button>
+      <div class="message-icon" id="message-icon" aria-hidden="true">&times;</div>
+      <h2 class="message-title" id="message-title">Error Message</h2>
+      <p class="message-text" id="message-text"></p>
+      <button class="message-button" id="message-button" type="button">Okay</button>
+    </div>
+  </div>
+  <main class="login-card" aria-labelledby="login-title">
+    <a class="back-link" href="/">&larr; Back to welcome</a>
+
+    <div class="login-copy">
+      <p class="login-eyebrow">Welcome back</p>
+      <h1 id="login-title">Log in to NCart</h1>
+      <p class="login-helper">Your campus marketplace is waiting.</p>
+    </div>
+
+    <form class="login-form" id="login-form" action="/login" method="post">
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email" placeholder="you@school.edu" autocomplete="email" required>
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="At least 8 characters" minlength="8" autocomplete="current-password" required>
+
+      <div class="login-submit-row">
+        <button class="login-submit" type="submit">Log In</button>
+        <a class="forgot-link" href="/templates/reset-password.html">Forgot password?</a>
+      </div>
+    </form>
+
+    <div class="login-divider"><span>or</span></div>
+
+    <div class="login-socials">
+      <button class="login-social" type="button" data-provider="Google"><span class="social-icon google-icon">G</span>Google</button>
+    </div>
+
+    <p class="signup-prompt">New to NCart? <a href="/templates/create-account.html">Create an account</a></p>
+    <p class="login-status" id="login-status" role="status" aria-live="polite"></p>
+  </main>
+
+  <script>
+    const status = document.querySelector('#login-status');
+    const modal = document.querySelector('#message-modal');
+    const dialog = modal.querySelector('.message-dialog');
+    const modalIcon = document.querySelector('#message-icon');
+    const modalTitle = document.querySelector('#message-title');
+    const modalText = document.querySelector('#message-text');
+    const loginForm = document.querySelector('#login-form');
+    let loginSuccess = false;
+    let resetSuccess = false;
+    let invalidMessageShown = false;
+    const closeModal = () => {
+      modal.classList.remove('is-visible');
+      modal.hidden = true;
+    };
+    const showModal = (text, isError = true) => {
+      dialog.classList.toggle('is-success', !isError);
+      modalIcon.textContent = isError ? '\u00d7' : '\u2713';
+      modalTitle.textContent = isError ? 'Error Message' : 'Success Message';
+      modalText.textContent = text;
+      modal.hidden = false;
+      modal.classList.add('is-visible');
+    };
+    document.querySelector('#message-close').addEventListener('click', closeModal);
+    document.querySelector('#message-button').addEventListener('click', () => {
+      closeModal();
+      if (loginSuccess) window.location.replace('/home');
+      if (resetSuccess) window.location.replace('/templates/login.html');
+    });
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+
+    loginForm.addEventListener('invalid', () => {
+      if (!invalidMessageShown) {
+        showModal('Please enter a valid email and password before logging in.');
+        invalidMessageShown = true;
+      }
+    }, true);
+
+    loginForm.addEventListener('input', () => {
+      invalidMessageShown = false;
+    });
+
+    const showStatus = (message) => {
+      status.textContent = message;
+      status.classList.add('is-visible');
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+    const error = params.get('error');
+    loginSuccess = params.get('login_success') === '1';
+    resetSuccess = params.get('reset_success') === '1';
+    params.delete('message');
+    params.delete('error');
+    params.delete('login_success');
+    params.delete('reset_success');
+    history.replaceState(null, '', `${window.location.pathname}${params.toString() ? `?${params}` : ''}${window.location.hash}`);
+    if (message || error) {
+      showStatus(message || error);
+      status.classList.toggle('is-error', Boolean(error));
+      showModal(message || error, Boolean(error));
+    }
+
+    document.querySelectorAll('[data-provider]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (button.dataset.provider === 'Google') {
+          window.location.href = '/auth/google';
+          return;
+        }
+        showStatus(`${button.dataset.provider} sign in selected.`);
+      });
+    });
+  </script>
+</body>
+</html>

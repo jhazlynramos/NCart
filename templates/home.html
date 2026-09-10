@@ -1,0 +1,60 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="NCart marketplace home">
+	<title>NCart | Home</title>
+	<link rel="stylesheet" href="/static/styles.css?v=6">
+</head>
+<body class="dashboard-page dashboard-home-page">
+	<main class="dashboard-shell">
+		<aside class="dashboard-sidebar" aria-label="Main navigation">
+			<a class="dashboard-brand" href="/home" aria-label="NCart home">
+				<span class="dashboard-brand-mark">N</span>
+				<span class="dashboard-brand-name">NCART</span>
+			</a>
+			<nav class="dashboard-nav">
+				<a class="dashboard-nav-link is-active" href="/home"><span aria-hidden="true">⌂</span>Home</a>
+				<a class="dashboard-nav-link" href="/marketplace"><span aria-hidden="true">▣</span>Marketplace</a>
+				<a class="dashboard-nav-link" href="/favorites"><span aria-hidden="true">♥</span>Favorites</a>
+				<a class="dashboard-nav-link" href="/listings"><span aria-hidden="true">🛒</span>My Listings</a>
+				<a class="dashboard-nav-link" href="/messages"><span aria-hidden="true">▰</span>Messages</a>
+				<a class="dashboard-nav-link" href="/orders"><span aria-hidden="true">▤</span>My Orders</a>
+				<a class="dashboard-nav-link" href="/profile"><span aria-hidden="true">◉</span>Profile</a>
+			</nav>
+            <a
+            class="dashboard-nav-link dashboard-logout"
+			href="/logout"
+            onclick="return confirm('Are you sure you want to log out?');"
+            ><span>↪</span>Logout</a
+            >
+        </aside>
+		<section class="dashboard-content">
+			<header class="dashboard-header">
+				<label class="dashboard-search" for="home-search">
+					<span aria-hidden="true">⌕</span>
+					<input id="home-search" type="search" placeholder="Search items" autocomplete="off">
+				</label>
+			</header>
+			<div class="dashboard-views">
+				<section class="dashboard-view is-visible">
+					<div class="dashboard-welcome">
+						<p class="dashboard-kicker">NCart marketplace</p>
+						<h1>Find what keeps<br>student life moving.</h1>
+						<p>Browse useful finds from people on campus, all in one place.</p>
+						<a class="dashboard-primary" href="/marketplace">Browse marketplace</a>
+					</div>
+					<div class="dashboard-section-heading"><h2>Quick access</h2><span>For you</span></div>
+					<div class="dashboard-stat-grid">
+						<a class="dashboard-stat" href="/marketplace"><strong>Marketplace</strong><span>Fresh campus finds</span></a>
+						<a class="dashboard-stat" href="/listings"><strong>My Listings</strong><span>Manage your posts</span></a>
+						<a class="dashboard-stat" href="/orders"><strong>My Orders</strong><span>Track purchases</span></a>
+					</div>
+				</section>
+			</div>
+		</section>
+	</main>
+	<script src="/static/logout.js?v=2"></script>
+</body>
+</html>
