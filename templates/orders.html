@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NCart | My Orders</title>
-    <link rel="stylesheet" href="/static/styles.css?v=5" />
+    <link rel="stylesheet" href="/static/orders.css?v=1" />
   </head>
   <body class="dashboard-page">
     <div class="message-modal order-cancel-modal" id="order-cancel-modal" hidden role="dialog" aria-modal="true" aria-labelledby="order-cancel-title">
@@ -18,6 +18,21 @@
           <button class="message-button message-cancel" id="order-cancel-keep" type="button">Keep order</button>
           <button class="message-button order-cancel-confirm" id="order-cancel-confirm" type="button">Yes, cancel</button>
         </div>
+      </div>
+    </div>
+    <div class="message-modal order-track-modal" id="order-track-modal" hidden role="dialog" aria-modal="true" aria-labelledby="order-track-title">
+      <div class="message-dialog order-track-dialog">
+        <button class="message-close" id="order-track-close" type="button" aria-label="Close tracking details">&times;</button>
+        <div class="message-icon order-track-icon" aria-hidden="true">✓</div>
+        <h2 class="message-title" id="order-track-title">Track your order</h2>
+        <p class="order-track-summary" id="order-track-summary">Current status</p>
+        <div class="order-tracking-status" id="order-track-status">Pending</div>
+        <ul class="tracking-steps" aria-label="Order tracking progress">
+          <li class="tracking-step is-complete"><span>Pending</span></li>
+          <li class="tracking-step"><span>Shipped</span></li>
+          <li class="tracking-step"><span>Out for delivery</span></li>
+          <li class="tracking-step"><span>Received</span></li>
+        </ul>
       </div>
     </div>
     <main class="dashboard-shell">
@@ -71,15 +86,6 @@
               <button class="dashboard-filter" type="button" data-order-filter="cancelled">Cancelled</button>
             </div>
             <div class="order-grid" id="orders-grid" hidden></div>
-            <section class="seller-orders-section" id="seller-orders-section" hidden>
-              <div class="dashboard-section-heading">
-                <div>
-                  <p class="dashboard-kicker">Seller dashboard</p>
-                  <h2>Orders for my listings</h2>
-                </div>
-              </div>
-              <div class="order-grid" id="seller-orders-grid"></div>
-            </section>
             <div class="empty-state" id="orders-empty">
               <span>▤</span>
               <h2>No orders yet.</h2>
@@ -90,6 +96,28 @@
                 >Start shopping</a
               >
             </div>
+            <section class="seller-orders-section" id="seller-orders-section" hidden>
+              <div class="dashboard-section-heading">
+                <div>
+                  <p class="dashboard-kicker">Seller dashboard</p>
+                  <h2>Orders for my listings</h2>
+                </div>
+              </div>
+              <div class="dashboard-filter-row order-filter-row seller-order-filter-row" id="seller-order-filters">
+                <button class="dashboard-filter is-selected" type="button" data-seller-order-filter="all">All orders</button>
+                <button class="dashboard-filter" type="button" data-seller-order-filter="pending">Pending</button>
+                <button class="dashboard-filter" type="button" data-seller-order-filter="received">Received</button>
+                <button class="dashboard-filter" type="button" data-seller-order-filter="cancelled">Cancelled</button>
+              </div>
+              <div class="empty-state seller-empty-state" id="seller-orders-empty" hidden>
+                <span>▤</span>
+                <h2>No orders yet.</h2>
+                <p>
+                  When someone orders one of your listings, its status and details will show here.
+                </p>
+              </div>
+              <div class="order-grid" id="seller-orders-grid"></div>
+            </section>
           </section>
         </div>
       </section>
@@ -99,11 +127,18 @@
       const ordersEmpty = document.querySelector("#orders-empty");
       const sellerOrdersSection = document.querySelector("#seller-orders-section");
       const sellerOrdersGrid = document.querySelector("#seller-orders-grid");
+      const sellerOrdersEmpty = document.querySelector("#seller-orders-empty");
+      const sellerOrderFilters = document.querySelector("#seller-order-filters");
       const orderFilters = document.querySelector("#order-filters");
       const orderCancelModal = document.querySelector("#order-cancel-modal");
       const orderCancelClose = document.querySelector("#order-cancel-close");
       const orderCancelKeep = document.querySelector("#order-cancel-keep");
       const orderCancelConfirm = document.querySelector("#order-cancel-confirm");
+      const orderTrackModal = document.querySelector("#order-track-modal");
+      const orderTrackClose = document.querySelector("#order-track-close");
+      const orderTrackStatus = document.querySelector("#order-track-status");
+      const orderTrackSummary = document.querySelector("#order-track-summary");
+      const trackingSteps = Array.from(document.querySelectorAll(".tracking-step"));
       const cartStorageKey = "ncart-cart";
       const checkoutStorageKey = "ncart-checkout-active";
       const money = (value) => `₱${Number(value || 0).toFixed(2)}`;
@@ -139,11 +174,18 @@
       const statusLabel = (status) => String(status || "pending").replaceAll("_", " ");
       const renderSellerOrders = (sales) => {
         const sellerSales = Array.isArray(sales) ? sales : [];
-        sellerOrdersSection.hidden = sellerSales.length === 0;
+        sellerOrdersSection.hidden = false;
         sellerOrdersGrid.replaceChildren();
-        if (sellerSales.length === 0) return;
+        sellerOrdersGrid.hidden = false;
+        sellerOrdersEmpty.hidden = true;
+        if (sellerSales.length === 0) {
+          sellerOrdersGrid.hidden = true;
+          sellerOrdersEmpty.hidden = false;
+          updateSellerOrdersEmptyState(0, 0);
+          return;
+        }
         sellerOrdersGrid.innerHTML = sellerSales.map((order) => `
-          <article class="order-card seller-order-card">
+          <article class="order-card seller-order-card" data-order-status="${orderFilterStatus(order.status)}">
             <div class="order-image-wrap">
               ${order.listing_image ? `<img class="order-image" src="${order.listing_image}" alt="${order.listing_title}">` : "<div class='order-image order-image-empty'>No image</div>"}
             </div>
@@ -180,6 +222,11 @@
               const data = await readApiResponse(response);
               if (!response.ok) throw new Error(data.error || "Could not update order status.");
               select.dataset.previousStatus = select.value;
+              const orderCard = select.closest(".order-card");
+              if (orderCard) {
+                orderCard.dataset.orderStatus = orderFilterStatus(select.value);
+              }
+              applySellerOrderFilter();
             } catch (error) {
               select.value = previousStatus;
               window.alert(error.message);
@@ -188,6 +235,7 @@
             }
           });
         });
+        applySellerOrderFilter();
       };
       const orderFilterStatus = (status) => {
         const normalized = String(status || "pending").toLowerCase();
@@ -196,11 +244,71 @@
         return "pending";
       };
       let selectedOrderFilter = "all";
+      let selectedSellerOrderFilter = "all";
+      const updateOrdersEmptyState = (visibleOrderCount, totalOrderCount) => {
+        if (totalOrderCount === 0) {
+          ordersEmpty.querySelector("h2").textContent = "No orders yet.";
+          ordersEmpty.querySelector("p").textContent = "When you buy an item, its status and details will show here.";
+          return;
+        }
+        if (visibleOrderCount > 0) return;
+        const filterLabels = {
+          pending: "Pending",
+          received: "Received",
+          cancelled: "Cancelled",
+        };
+        const filterLabel = filterLabels[selectedOrderFilter] || "";
+        ordersEmpty.querySelector("h2").textContent = `No ${filterLabel} Orders`;
+        ordersEmpty.querySelector("p").textContent = `You have no ${filterLabel.toLowerCase()} orders right now.`;
+      };
       const applyOrderFilter = () => {
         const cards = Array.from(ordersGrid.querySelectorAll(".order-card"));
         cards.forEach((card) => {
-          card.hidden = selectedOrderFilter !== "all" && card.dataset.orderStatus !== selectedOrderFilter;
+          if (selectedOrderFilter === "all") {
+            card.hidden = card.dataset.orderStatus === "cancelled";
+            return;
+          }
+          card.hidden = card.dataset.orderStatus !== selectedOrderFilter;
         });
+        const visibleOrderCount = cards.filter((card) => !card.hidden).length;
+        const totalOrderCount = selectedOrderFilter === "all"
+          ? cards.filter((card) => card.dataset.orderStatus !== "cancelled").length
+          : cards.length;
+        ordersEmpty.hidden = visibleOrderCount > 0;
+        updateOrdersEmptyState(visibleOrderCount, totalOrderCount);
+      };
+      const updateSellerOrdersEmptyState = (visibleOrderCount, totalOrderCount) => {
+        if (totalOrderCount === 0) {
+          sellerOrdersEmpty.querySelector("h2").textContent = "No orders yet.";
+          sellerOrdersEmpty.querySelector("p").textContent = "When someone orders one of your listings, its status and details will show here.";
+          return;
+        }
+        if (visibleOrderCount > 0) return;
+        const filterLabels = {
+          pending: "Pending",
+          received: "Received",
+          cancelled: "Cancelled",
+        };
+        const filterLabel = filterLabels[selectedSellerOrderFilter] || "";
+        sellerOrdersEmpty.querySelector("h2").textContent = `No ${filterLabel} Orders`;
+        sellerOrdersEmpty.querySelector("p").textContent = `You have no ${filterLabel.toLowerCase()} listing orders right now.`;
+      };
+      const applySellerOrderFilter = () => {
+        const cards = Array.from(sellerOrdersGrid.querySelectorAll(".order-card"));
+        cards.forEach((card) => {
+          if (selectedSellerOrderFilter === "all") {
+            card.hidden = card.dataset.orderStatus === "cancelled";
+            return;
+          }
+          card.hidden = card.dataset.orderStatus !== selectedSellerOrderFilter;
+        });
+        const visibleOrderCount = cards.filter((card) => !card.hidden).length;
+        const totalOrderCount = selectedSellerOrderFilter === "all"
+          ? cards.filter((card) => card.dataset.orderStatus !== "cancelled").length
+          : cards.length;
+        sellerOrdersGrid.hidden = visibleOrderCount === 0 && cards.length > 0;
+        sellerOrdersEmpty.hidden = visibleOrderCount > 0;
+        updateSellerOrdersEmptyState(visibleOrderCount, totalOrderCount);
       };
       let pendingCancelButton = null;
       const closeCancelModal = () => {
@@ -213,6 +321,31 @@
         orderCancelModal.hidden = false;
         orderCancelModal.classList.add("is-visible");
         orderCancelKeep.focus();
+      };
+      const updateTrackingSteps = (status) => {
+        const stepOrder = ["pending", "shipped", "out_for_delivery", "received"];
+        const currentIndex = stepOrder.indexOf(String(status || "pending").toLowerCase());
+        trackingSteps.forEach((step, index) => {
+          const isComplete = index <= Math.max(currentIndex, 0);
+          step.classList.toggle("is-complete", isComplete);
+          step.classList.toggle("is-current", index === currentIndex && currentIndex >= 0);
+        });
+      };
+      const openTrackModal = (order) => {
+        const normalizedStatus = String(order.status || "pending").toLowerCase();
+        const messages = {
+          pending: "Your order is being processed and will be prepared for shipping soon.",
+          shipped: "Your order has been packed and is on the way to you.",
+          out_for_delivery: "Your order is out for delivery and should arrive soon.",
+          received: "Your order has been received. Thank you for shopping with NCart.",
+          cancelled: "This order was cancelled and is no longer active.",
+        };
+        const label = statusLabel(order.status);
+        orderTrackStatus.textContent = label;
+        orderTrackSummary.textContent = messages[normalizedStatus] || messages.pending;
+        updateTrackingSteps(normalizedStatus);
+        orderTrackModal.hidden = false;
+        orderTrackModal.classList.add("is-visible");
       };
       const cancelOrder = async () => {
         if (!pendingCancelButton) return;
@@ -320,6 +453,7 @@
         if (!orders.length) {
           ordersGrid.hidden = true;
           ordersEmpty.hidden = false;
+          updateOrdersEmptyState(0, 0);
           return;
         }
         ordersEmpty.hidden = true;
@@ -346,7 +480,9 @@
               </div>
               <small>Ordered on ${formatDate(order.created_at)}</small>
               <div class="order-actions">
-                <button class="order-track-button" type="button">Track order</button>
+                ${String(order.status || "pending").toLowerCase() === "cancelled"
+                  ? ""
+                  : `<button class="order-track-button" type="button" data-order-status="${order.status || "pending"}" data-order-id="${order.id}">Track order</button>`}
                 ${String(order.status || "pending").toLowerCase() === "pending"
                   ? `<button class="order-cancel-button" type="button" data-order-id="${order.id}"${order.can_cancel === false ? " disabled" : ""}>${order.can_cancel === false ? "Cancellation expired" : "Cancel order"}</button>`
                   : ""}
@@ -354,6 +490,15 @@
             </div>
           </article>
         `).join("");
+        ordersGrid.querySelectorAll(".order-track-button").forEach((button) => {
+          button.addEventListener("click", () => {
+            const currentOrder = {
+              id: Number(button.dataset.orderId),
+              status: button.dataset.orderStatus || "pending",
+            };
+            openTrackModal(currentOrder);
+          });
+        });
         ordersGrid.querySelectorAll(".order-cancel-button").forEach((button) => {
           button.addEventListener("click", () => openCancelModal(button));
         });
@@ -368,11 +513,30 @@
         });
         applyOrderFilter();
       });
+      sellerOrderFilters.addEventListener("click", (event) => {
+        const filter = event.target.closest("[data-seller-order-filter]");
+        if (!filter) return;
+        selectedSellerOrderFilter = filter.dataset.sellerOrderFilter;
+        sellerOrderFilters.querySelectorAll("[data-seller-order-filter]").forEach((button) => {
+          button.classList.toggle("is-selected", button === filter);
+        });
+        applySellerOrderFilter();
+      });
       orderCancelClose.addEventListener("click", closeCancelModal);
       orderCancelKeep.addEventListener("click", closeCancelModal);
       orderCancelConfirm.addEventListener("click", cancelOrder);
       orderCancelModal.addEventListener("click", (event) => {
         if (event.target === orderCancelModal) closeCancelModal();
+      });
+      orderTrackClose.addEventListener("click", () => {
+        orderTrackModal.classList.remove("is-visible");
+        orderTrackModal.hidden = true;
+      });
+      orderTrackModal.addEventListener("click", (event) => {
+        if (event.target === orderTrackModal) {
+          orderTrackModal.classList.remove("is-visible");
+          orderTrackModal.hidden = true;
+        }
       });
       renderOrders().catch((error) => {
         ordersEmpty.hidden = false;

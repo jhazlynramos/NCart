@@ -1,0 +1,295 @@
+:root {
+  --ink: #111534;
+  --mono: "DM Mono", "Courier New", monospace;
+  --serif: "Libre Baskerville", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #f7f7f5;
+  font-family: var(--serif);
+}
+
+button {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.dashboard-page {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.dashboard-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  background: #ffffff;
+}
+
+.dashboard-sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 24px 14px;
+  border-right: 1px solid #aeb4b1;
+  background: #ffffff;
+}
+
+.dashboard-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #17144f;
+  text-decoration: none;
+}
+
+.dashboard-brand-mark {
+  color: #15115b;
+  font-family: Georgia, serif;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 0.8;
+  text-shadow: 3px 2px 0 #dfab21;
+}
+
+.dashboard-brand-name {
+  margin-top: 9px;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.dashboard-nav {
+  display: grid;
+  gap: 10px;
+  margin-top: 42px;
+}
+
+.dashboard-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 14px;
+  border-radius: 7px;
+  color: #202626;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.dashboard-nav-link span {
+  flex: 0 0 16px;
+  width: 16px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.dashboard-nav-link.is-active,
+.dashboard-nav-link:hover {
+  color: #ffffff;
+  background: #080f76;
+}
+
+.dashboard-logout {
+  position: absolute;
+  right: 24px;
+  bottom: 20px;
+  left: 24px;
+  width: auto;
+}
+
+.dashboard-content {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #c7cfcc;
+}
+
+.dashboard-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 460px);
+  height: 38px;
+  padding: 0 15px;
+  border-radius: 18px;
+  color: #25235f;
+  background: #e9e7ff;
+}
+
+.dashboard-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #202626;
+  background: transparent;
+  font-family: var(--serif);
+  font-size: 12px;
+}
+
+.dashboard-views {
+  height: calc(100% - 60px);
+  min-height: 0;
+  overflow: auto;
+  padding: 42px clamp(28px, 5vw, 76px);
+  background: #fbfbfa;
+}
+
+.dashboard-view {
+  display: none;
+  max-width: 1060px;
+  animation: profile-view-in 180ms ease both;
+}
+
+.dashboard-view.is-visible {
+  display: block;
+}
+
+@keyframes profile-view-in {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-view-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.dashboard-kicker {
+  margin: 0 0 8px;
+  color: #5c63a8;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.dashboard-view-heading h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 400;
+}
+
+.dashboard-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 39px;
+  padding: 8px 18px;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #080f76;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+}
+
+.dashboard-primary:hover,
+.dashboard-primary:focus {
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 7px 16px rgba(8, 15, 118, 0.2);
+  transform: translateY(-1px);
+}
+
+.profile-panel {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  max-width: 620px;
+  padding: 28px;
+  border: 1px solid #e1e3e1;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.profile-avatar {
+  display: grid;
+  flex: 0 0 68px;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #080f76;
+  font-family: Georgia, serif;
+  font-size: 36px;
+}
+
+.profile-panel h2 {
+  margin: 0 0 8px;
+  font-size: 21px;
+  font-weight: 400;
+}
+
+.profile-panel p {
+  margin: 0;
+  color: #858a87;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .dashboard-shell {
+    grid-template-columns: 180px 1fr;
+  }
+
+  .dashboard-sidebar {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .dashboard-page:not(.dashboard-home-page) .dashboard-logout {
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+  }
+
+  .profile-panel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
