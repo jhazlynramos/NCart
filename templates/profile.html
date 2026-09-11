@@ -7,13 +7,12 @@
     <title>NCart | Profile</title>
     <link rel="stylesheet" href="/static/profile.css?v=1" />
   </head>
-  <body class="dashboard-page">
+  <body class="dashboard-page profile-page">
   <script src="/static/logout.js?v=2" defer></script>
     <main class="dashboard-shell">
       <aside class="dashboard-sidebar">
         <a class="dashboard-brand" href="/home"
-          ><span class="dashboard-brand-mark">N</span
-          ><span class="dashboard-brand-name">NCART</span></a
+          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a
         >
         <nav class="dashboard-nav">
           <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
@@ -27,6 +26,8 @@
             ><span>▰</span>Messages</a
           ><a class="dashboard-nav-link" href="/orders"
             ><span>▤</span>My Orders</a
+          ><a class="dashboard-nav-link" href="/reports"
+            ><span>ⓘ</span>Reports</a
           ><a class="dashboard-nav-link is-active" href="/profile"
             ><span>◉</span>Profile</a
           >
@@ -40,10 +41,6 @@
       </aside>
       <section class="dashboard-content">
         <header class="dashboard-header">
-          <label class="dashboard-search" for="search"
-            ><span>⌕</span
-            ><input id="search" type="search" placeholder="Search items"
-          /></label>
         </header>
         <div class="dashboard-views">
           <section class="dashboard-view is-visible">
@@ -52,23 +49,127 @@
                 <p class="dashboard-kicker">Your account</p>
                 <h1>Profile</h1>
               </div>
-              <button class="dashboard-primary" type="button">
+              <button class="dashboard-primary" id="profile-action" type="button">
                 Edit profile
               </button>
             </div>
-            <div class="profile-panel">
-              <div class="profile-avatar">N</div>
-              <div>
-                <h2>NCart member</h2>
-                <p>
-                  Keep your profile updated so campus buyers know who they are
-                  dealing with.
-                </p>
+            <form class="profile-panel profile-form" id="profile-form">
+              <div class="profile-identity">
+                <button class="profile-avatar-button" id="profile-avatar-button" type="button" aria-label="Choose a profile picture">
+                  <span class="profile-avatar" id="profile-avatar">N</span>
+                </button>
+                <div>
+                  <div class="profile-summary-copy" id="profile-summary-copy">
+                    <h2 id="profile-display-name">Full Name</h2>
+                    <p id="profile-display-location">Location</p>
+                    <p id="profile-display-bio">Tell buyers a little about yourself and how you sell safely.</p>
+                  </div>
+                  <p class="profile-picture-hint">Add a clear picture so buyers know who is selling.</p>
+                  <input id="profile-image" type="file" accept="image/jpeg,image/png,image/gif,image/webp" hidden>
+                  <button class="profile-upload-button" id="profile-upload-button" type="button" hidden>Choose picture</button>
+                </div>
               </div>
-            </div>
+              <label class="profile-field">Account name<input id="profile-name" name="full_name" autocomplete="name" maxlength="120" placeholder="Loading account name..." required></label>
+              <label class="profile-field">Location<input id="profile-location" name="location" maxlength="160" placeholder="e.g. Norzagaray College"></label>
+              <label class="profile-field profile-field-wide">About you<textarea id="profile-bio" name="bio" maxlength="500" rows="4" placeholder="Tell buyers a little about yourself and how you sell safely."></textarea></label>
+              <p class="profile-status" id="profile-status" role="status" aria-live="polite"></p>
+            </form>
           </section>
         </div>
       </section>
     </main>
   </body>
+  <script>
+    const profileForm = document.querySelector("#profile-form");
+    const profileImage = document.querySelector("#profile-image");
+    const profileAvatar = document.querySelector("#profile-avatar");
+    const profileStatus = document.querySelector("#profile-status");
+    const profileAction = document.querySelector("#profile-action");
+    const profileUploadButton = document.querySelector("#profile-upload-button");
+    const profileSummaryCopy = document.querySelector("#profile-summary-copy");
+    const profileControls = profileForm.querySelectorAll("input:not([type='hidden']), textarea, button");
+    let imageData = "";
+    let isEditing = false;
+
+    const setEditing = (editing) => {
+      isEditing = editing;
+      profileControls.forEach((control) => {
+        control.disabled = !editing;
+      });
+      profileAction.textContent = editing ? "Save profile" : "Edit profile";
+      profileAction.type = editing ? "submit" : "button";
+      profileUploadButton.hidden = !editing;
+      if (editing) profileAction.setAttribute("form", "profile-form");
+      else profileAction.removeAttribute("form");
+      profileForm.classList.toggle("is-editing", editing);
+      profileSummaryCopy.hidden = editing;
+    };
+
+    const showProfile = (profile) => {
+      document.querySelector("#profile-name").value = profile.full_name || "";
+      document.querySelector("#profile-location").value = profile.location || "";
+      document.querySelector("#profile-bio").value = profile.bio || "";
+      document.querySelector("#profile-display-name").textContent = profile.full_name || "Full Name";
+      document.querySelector("#profile-display-location").textContent = profile.location || "Location";
+      document.querySelector("#profile-display-bio").textContent = profile.bio || "Tell buyers a little about yourself and how you sell safely.";
+      profileAvatar.textContent = profile.full_name?.trim().charAt(0).toUpperCase() || "N";
+      if (profile.profile_image_url) {
+        profileAvatar.textContent = "";
+        profileAvatar.style.backgroundImage = `url("${profile.profile_image_url}")`;
+        profileAvatar.classList.add("has-image");
+      }
+    };
+
+    document.querySelector("#profile-avatar-button").addEventListener("click", () => profileImage.click());
+    document.querySelector("#profile-upload-button").addEventListener("click", () => profileImage.click());
+    profileAction.addEventListener("click", (event) => {
+      if (!isEditing) {
+        event.preventDefault();
+        setEditing(true);
+      }
+    });
+    profileImage.addEventListener("change", () => {
+      const file = profileImage.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        imageData = reader.result;
+        profileAvatar.textContent = "";
+        profileAvatar.style.backgroundImage = `url("${imageData}")`;
+        profileAvatar.classList.add("has-image");
+      });
+      reader.readAsDataURL(file);
+    });
+    profileForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      profileStatus.textContent = "Saving...";
+      const response = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: document.querySelector("#profile-name").value,
+          location: document.querySelector("#profile-location").value,
+          bio: document.querySelector("#profile-bio").value,
+          image_data: imageData,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        profileStatus.textContent = data.error || "Could not save your profile.";
+        return;
+      }
+      imageData = "";
+      showProfile(data.profile);
+      setEditing(false);
+      profileStatus.textContent = "Profile saved. Buyers can now learn more about you.";
+    });
+    fetch("/api/profile").then(async (response) => {
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not load your account name.");
+      showProfile(data.profile);
+      setEditing(false);
+    }).catch((error) => {
+      profileStatus.textContent = error.message;
+    });
+  </script>
 </html>

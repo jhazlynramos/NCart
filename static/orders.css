@@ -187,19 +187,19 @@ button {
 .tracking-step {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  gap: 11px;
+  padding: 10px 11px;
   border-radius: 8px;
   color: #60676d;
   background: #f3f5f4;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .tracking-step::before {
   content: "";
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: #d6dad8;
 }
@@ -265,19 +265,11 @@ button {
   text-decoration: none;
 }
 
-.dashboard-brand-mark {
-  color: #15115b;
-  font-family: Georgia, serif;
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 0.8;
-  text-shadow: 3px 2px 0 #dfab21;
-}
-
-.dashboard-brand-name {
-  margin-top: 9px;
-  font-size: 16px;
-  letter-spacing: 1px;
+.dashboard-brand-image {
+  display: block;
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
 }
 
 .dashboard-nav {
@@ -494,7 +486,7 @@ button {
   color: #080f76;
   background: #eef0ff;
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 10px;
   text-transform: capitalize;
 }
 
@@ -520,7 +512,7 @@ button {
 
 .order-card h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 400;
 }
 
@@ -529,7 +521,7 @@ button {
   margin: 0;
   color: #707772;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.5;
 }
 
@@ -552,7 +544,7 @@ button {
 .order-summary-row strong,
 .order-card strong {
   color: #080f76;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
 }
 

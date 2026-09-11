@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NCart | Reports</title>
+    <link rel="stylesheet" href="/static/reports.css?v=1">
+  </head>
+  <body class="dashboard-page reports-page">
+    <div class="reports-success-modal" id="reports-success-modal" hidden role="dialog" aria-modal="true" aria-labelledby="reports-success-title">
+      <div class="reports-success-dialog">
+        <button class="reports-success-close" id="reports-success-close" type="button" aria-label="Close report success">&times;</button>
+        <div class="reports-success-icon" aria-hidden="true">!</div>
+        <h2 id="reports-success-title">Report Success</h2>
+        <p>Your report was<br>submitted for review.</p>
+        <button class="reports-success-okay" id="reports-success-okay" type="button">Okay</button>
+      </div>
+    </div>
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar" aria-label="Main navigation">
+        <a class="dashboard-brand" href="/home" aria-label="NCart home"><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a>
+        <nav class="dashboard-nav">
+          <a class="dashboard-nav-link" href="/home"><span aria-hidden="true">⌂</span>Home</a>
+          <a class="dashboard-nav-link" href="/marketplace"><span aria-hidden="true">▣</span>Marketplace</a>
+          <a class="dashboard-nav-link" href="/favorites"><span aria-hidden="true">♥</span>Favorites</a>
+          <a class="dashboard-nav-link" href="/listings"><span aria-hidden="true">🛒</span>My Listings</a>
+          <a class="dashboard-nav-link" href="/messages"><span aria-hidden="true">▰</span>Messages</a>
+          <a class="dashboard-nav-link" href="/orders"><span aria-hidden="true">▤</span>My Orders</a>
+          <a class="dashboard-nav-link is-active" href="/reports"><span aria-hidden="true">ⓘ</span>Reports</a>
+          <a class="dashboard-nav-link" href="/profile"><span aria-hidden="true">◉</span>Profile</a>
+        </nav>
+        <a class="dashboard-nav-link dashboard-logout" href="/logout"><span aria-hidden="true">↪</span>Logout</a>
+      </aside>
+      <section class="dashboard-content">
+        <header class="dashboard-header">
+          <label class="dashboard-search" for="reports-search"><span aria-hidden="true">⌕</span><input id="reports-search" type="search" placeholder="Search items"></label>
+        </header>
+        <div class="dashboard-views">
+          <section class="dashboard-view is-visible">
+            <div class="reports-heading">
+              <div>
+                <p class="reports-kicker">Safety center</p>
+                <h1>Reports</h1>
+                <p class="reports-intro">Keep track of concerns you have sent to the NCart team.</p>
+              </div>
+              <div class="reports-count"><strong id="reports-count">0</strong><span>submitted</span></div>
+            </div>
+            <section class="reports-panel" aria-live="polite">
+              <div id="reports-list" class="reports-list"></div>
+              <div id="reports-empty" class="reports-empty">
+                <span class="reports-empty-icon" aria-hidden="true">i</span>
+                <strong>No reports yet</strong>
+                <p>When you report an item from Marketplace, it will appear here with its current status.</p>
+              </div>
+            </section>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script src="/static/logout.js?v=2" defer></script>
+    <script>
+      const reportsList = document.querySelector("#reports-list");
+      const reportsEmpty = document.querySelector("#reports-empty");
+      const reportsSearch = document.querySelector("#reports-search");
+      const reportsCount = document.querySelector("#reports-count");
+      const reportsSuccessModal = document.querySelector("#reports-success-modal");
+      let viewerId = null;
+      const closeReportsSuccess = () => {
+        reportsSuccessModal.hidden = true;
+        reportsSuccessModal.classList.remove("is-visible");
+      };
+      const escapeHtml = (value) => String(value).replace(/[&<>\"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]);
+      const renderReports = () => {
+        const query = reportsSearch.value.trim().toLowerCase();
+        const reports = JSON.parse(localStorage.getItem("ncart-reports") || "[]");
+        const ownReports = reports.filter((report) => Number(report.ownerId) === Number(viewerId));
+        const visibleReports = ownReports.filter((report) => `${report.title} ${report.reason}`.toLowerCase().includes(query));
+        reportsCount.textContent = ownReports.length;
+        reportsList.innerHTML = visibleReports.map((report) => `
+          <article class="report-row">
+            <div class="report-row-main">
+              <span class="report-row-label">Reported item</span>
+              <strong>${escapeHtml(report.title)}</strong>
+              <small>${escapeHtml(report.details || "No additional details provided.")}</small>
+            </div>
+            <div class="report-row-meta">
+              <span class="report-reason">${escapeHtml(report.reason)}</span>
+              <span class="report-status">Pending review</span>
+              <small>${escapeHtml(report.time || "Just now")}</small>
+            </div>
+          </article>`).join("");
+        reportsEmpty.hidden = visibleReports.length > 0;
+      };
+      reportsSearch.addEventListener("input", renderReports);
+      fetch("/api/profile").then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not load your account.");
+        viewerId = data.profile.id;
+        renderReports();
+      }).catch(() => {
+        reportsCount.textContent = "0";
+        reportsList.innerHTML = "";
+        reportsEmpty.hidden = false;
+      });
+      if (sessionStorage.getItem("ncart-report-success") === "1") {
+        sessionStorage.removeItem("ncart-report-success");
+        reportsSuccessModal.hidden = false;
+        reportsSuccessModal.classList.add("is-visible");
+      }
+      document.querySelector("#reports-success-close").addEventListener("click", closeReportsSuccess);
+      document.querySelector("#reports-success-okay").addEventListener("click", closeReportsSuccess);
+    </script>
+  </body>
+</html>

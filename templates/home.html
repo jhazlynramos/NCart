@@ -11,8 +11,7 @@
 	<main class="dashboard-shell">
 		<aside class="dashboard-sidebar" aria-label="Main navigation">
 			<a class="dashboard-brand" href="/home" aria-label="NCart home">
-				<span class="dashboard-brand-mark">N</span>
-				<span class="dashboard-brand-name">NCART</span>
+				<img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart">
 			</a>
 			<nav class="dashboard-nav">
 				<a class="dashboard-nav-link is-active" href="/home"><span aria-hidden="true">⌂</span>Home</a>
@@ -21,6 +20,7 @@
 				<a class="dashboard-nav-link" href="/listings"><span aria-hidden="true">🛒</span>My Listings</a>
 				<a class="dashboard-nav-link" href="/messages"><span aria-hidden="true">▰</span>Messages</a>
 				<a class="dashboard-nav-link" href="/orders"><span aria-hidden="true">▤</span>My Orders</a>
+				<a class="dashboard-nav-link" href="/reports"><span aria-hidden="true">ⓘ</span>Reports</a>
 				<a class="dashboard-nav-link" href="/profile"><span aria-hidden="true">◉</span>Profile</a>
 			</nav>
             <a
@@ -32,10 +32,6 @@
         </aside>
 		<section class="dashboard-content">
 			<header class="dashboard-header">
-				<label class="dashboard-search" for="home-search">
-					<span aria-hidden="true">⌕</span>
-					<input id="home-search" type="search" placeholder="Search items" autocomplete="off">
-				</label>
 			</header>
 			<div class="dashboard-views">
 				<section class="dashboard-view is-visible">
@@ -50,6 +46,7 @@
 						<a class="dashboard-stat" href="/marketplace"><strong>Marketplace</strong><span>Fresh campus finds</span></a>
 						<a class="dashboard-stat" href="/listings"><strong>My Listings</strong><span>Manage your posts</span></a>
 						<a class="dashboard-stat" href="/orders"><strong>My Orders</strong><span>Track purchases</span></a>
+						<a class="dashboard-stat" href="/reports"><strong>Reports</strong><span>Review submitted reports</span></a>
 					</div>
 				</section>
 			</div>

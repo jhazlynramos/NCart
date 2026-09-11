@@ -82,19 +82,11 @@ button {
   text-decoration: none;
 }
 
-.dashboard-brand-mark {
-  color: #15115b;
-  font-family: Georgia, serif;
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 0.8;
-  text-shadow: 3px 2px 0 #dfab21;
-}
-
-.dashboard-brand-name {
-  margin-top: 9px;
-  font-size: 16px;
-  letter-spacing: 1px;
+.dashboard-brand-image {
+  display: block;
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
 }
 
 .dashboard-nav {
@@ -754,36 +746,37 @@ button {
 }
 
 .item-category {
-  font-size: 9px;
+  color: #3d468f;
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .item-card h3 {
   margin: 8px 0 5px;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 400;
 }
 
 .item-card p {
   margin: 0 0 6px;
-  color: #858a87;
+  color: #3f4643;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .item-card small {
   display: block;
-  min-height: 27px;
   margin-bottom: 11px;
-  color: #9a9e9b;
+  color: #3f4643;
   font-family: var(--mono);
-  font-size: 9px;
-  line-height: 1.4;
+  font-size: 11px;
+  line-height: 1.5;
 }
 
 .item-card strong {
   display: inline-block;
   color: #080f76;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 400;
 }
 

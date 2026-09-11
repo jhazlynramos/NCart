@@ -63,25 +63,20 @@ button {
   text-decoration: none;
 }
 
-.dashboard-brand-mark {
-  color: #15115b;
-  font-family: Georgia, serif;
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 0.8;
-  text-shadow: 3px 2px 0 #dfab21;
-}
-
-.dashboard-brand-name {
-  margin-top: 9px;
-  font-size: 16px;
-  letter-spacing: 1px;
+.dashboard-brand-image {
+  display: block;
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
 }
 
 .dashboard-nav {
   display: grid;
   gap: 10px;
   margin-top: 42px;
+  min-height: 0;
+  padding-bottom: 58px;
+  overflow-y: auto;
 }
 
 .dashboard-nav-link {
@@ -250,7 +245,7 @@ button {
 }
 
 .conversation-list-copy strong {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -258,7 +253,7 @@ button {
 .conversation-list-item time {
   color: #858a87;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .conversation-list-item time {

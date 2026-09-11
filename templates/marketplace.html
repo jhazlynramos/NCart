@@ -31,6 +31,18 @@
         <button class="report-submit" type="submit">Submit report</button>
       </form>
     </div>
+    <div class="message-modal report-confirm-modal" id="report-confirm-modal" hidden role="dialog" aria-modal="true" aria-labelledby="report-confirm-title">
+      <div class="message-dialog report-confirm-dialog">
+        <button class="message-close" id="report-confirm-close" type="button" aria-label="Close report confirmation">&times;</button>
+        <div class="report-alert-icon" aria-hidden="true">!</div>
+        <h2 class="message-title" id="report-confirm-title">Report</h2>
+        <p class="message-text">Are you sure you want<br>to report this item?</p>
+        <div class="message-actions report-confirm-actions">
+          <button class="report-no-button" id="report-confirm-no" type="button">No</button>
+          <button class="message-button" id="report-confirm-yes" type="button">Yes</button>
+        </div>
+      </div>
+    </div>
     <div class="message-modal cart-confirm-modal" id="cart-confirm-modal" hidden role="dialog" aria-modal="true" aria-labelledby="cart-confirm-title">
       <div class="message-dialog cart-confirm-dialog">
         <button class="message-close" id="cart-confirm-close" type="button" aria-label="Close add to cart confirmation">&times;</button>
@@ -62,8 +74,7 @@
     <main class="dashboard-shell">
       <aside class="dashboard-sidebar">
         <a class="dashboard-brand" href="/home"
-          ><span class="dashboard-brand-mark">N</span
-          ><span class="dashboard-brand-name">NCART</span></a
+          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a
         >
         <nav class="dashboard-nav">
           <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
@@ -77,6 +88,8 @@
             ><span>▰</span>Messages</a
           ><a class="dashboard-nav-link" href="/orders"
             ><span>▤</span>My Orders</a
+          ><a class="dashboard-nav-link" href="/reports"
+            ><span>ⓘ</span>Reports</a
           ><a class="dashboard-nav-link" href="/profile"
             ><span>◉</span>Profile</a
           >
@@ -177,6 +190,10 @@
       const itemDetailSlot = document.querySelector("#item-detail-slot");
       const itemDetailBack = document.querySelector("#item-detail-back");
       const reportModal = document.querySelector("#report-modal");
+      const reportConfirmModal = document.querySelector("#report-confirm-modal");
+      const reportConfirmClose = document.querySelector("#report-confirm-close");
+      const reportConfirmNo = document.querySelector("#report-confirm-no");
+      const reportConfirmYes = document.querySelector("#report-confirm-yes");
       const cartConfirmModal = document.querySelector("#cart-confirm-modal");
       const cartConfirmClose = document.querySelector("#cart-confirm-close");
       const cartConfirmContinue = document.querySelector("#cart-confirm-continue");
@@ -214,6 +231,7 @@
       const sellerItemActions = document.querySelector("#seller-item-actions");
       const buyerItemActions = [document.querySelector("#item-detail-interest"), document.querySelector("#item-detail-buy-now"), messageSellerButton, reportButton];
       let viewerId = null;
+      let pendingReport = null;
       const readCart = () => {
         try {
           const saved = JSON.parse(localStorage.getItem(cartStorageKey) || "[]");
@@ -350,6 +368,19 @@
         reportModal.classList.remove("is-visible");
         reportModal.hidden = true;
         reportForm.reset();
+      };
+      const closeReportConfirmModal = () => {
+        reportConfirmModal.classList.remove("is-visible");
+        reportConfirmModal.hidden = true;
+        pendingReport = null;
+      };
+      const savePendingReport = () => {
+        const reports = JSON.parse(localStorage.getItem("ncart-reports") || "[]");
+        reports.unshift(pendingReport);
+        localStorage.setItem("ncart-reports", JSON.stringify(reports.slice(0, 25)));
+        sessionStorage.setItem("ncart-report-success", "1");
+        closeReportConfirmModal();
+        window.location.href = "/reports";
       };
       const openReportModal = () => {
         reportModal.hidden = false;
@@ -501,6 +532,8 @@
           const description = escapeHtml(listing.description);
           const condition = escapeHtml(listing.item_condition);
           const seller = escapeHtml(listing.seller_name || "NCart seller");
+          const sellerLocation = escapeHtml(listing.seller_location || "");
+          const sellerBio = escapeHtml(listing.seller_bio || "");
           const sellerId = escapeHtml(listing.seller_id);
           const price = escapeHtml(listing.price);
           const image = listing.image_url
@@ -509,10 +542,26 @@
           const imageWrap = image
             ? `<div class="item-image-wrap">${image}<button class="favorite-button" type="button" aria-label="Add ${title} to favorites" aria-pressed="false">♥</button></div>`
             : `<div class="item-image-wrap"><button class="favorite-button" type="button" aria-label="Add ${title} to favorites" aria-pressed="false">♥</button></div>`;
-          return `<article class="item-card" tabindex="0" data-listing-id="${listing.id}" data-seller-id="${sellerId}" data-search="${escapeHtml(`${listing.title} ${listing.category} ${listing.item_condition} ${listing.description} ${listing.seller_name || ""}`.toLowerCase())}" data-title="${title}" data-category="${escapeHtml(listing.category.toLowerCase())}" data-category-label="${category}" data-condition="${condition}" data-seller="${seller}" data-description="${description}" data-price="₱${price}" data-image="${escapeHtml(listing.image_url || "")}">${imageWrap}<div><span class="item-category">${category}</span><h3>${title}</h3><p>Sold by ${seller}</p><small>${description}</small><strong>₱${price}</strong></div></article>`;
+          const sellerAvatar = listing.seller_image_url
+            ? `<img class="seller-avatar seller-avatar-image" src="${escapeHtml(listing.seller_image_url)}" alt="${seller}" data-fallback="${seller.charAt(0) || "N"}">`
+            : `<span class="seller-avatar seller-avatar-placeholder">${seller.charAt(0) || "N"}</span>`;
+          const sellerDetails = [sellerLocation, sellerBio].filter(Boolean).join(" · ");
+          const isOwnListing = viewerId !== null && Number(viewerId) === Number(listing.seller_id);
+          const sellerPreview = isOwnListing
+            ? ""
+            : `<div class="seller-preview">${sellerAvatar}<span><p>Sold by ${seller}</p>${sellerDetails ? `<small>${sellerDetails}</small>` : ""}</span></div>`;
+          return `<article class="item-card" tabindex="0" data-listing-id="${listing.id}" data-seller-id="${sellerId}" data-search="${escapeHtml(`${listing.title} ${listing.category} ${listing.item_condition} ${listing.description} ${listing.seller_name || ""}`.toLowerCase())}" data-title="${title}" data-category="${escapeHtml(listing.category.toLowerCase())}" data-category-label="${category}" data-condition="${condition}" data-seller="${seller}" data-description="${description}" data-price="₱${price}" data-image="${escapeHtml(listing.image_url || "")}">${imageWrap}<div><span class="item-category">${category}</span><h3>${title}</h3>${sellerPreview}<small class="item-description">${description}</small><strong>₱${price}</strong></div></article>`;
         }).join("");
         marketplaceEmpty.hidden = data.listings.length > 0;
         marketplaceGrid.hidden = data.listings.length === 0;
+        marketplaceGrid.querySelectorAll(".seller-avatar-image").forEach((avatar) => {
+          avatar.addEventListener("error", () => {
+            const fallback = document.createElement("span");
+            fallback.className = "seller-avatar seller-avatar-placeholder";
+            fallback.textContent = avatar.dataset.fallback || "N";
+            avatar.replaceWith(fallback);
+          }, { once: true });
+        });
         marketplaceGrid.querySelectorAll(".item-card").forEach(setupItemCard);
         applyMarketplaceFilters();
       };
@@ -580,9 +629,20 @@
           reportForm.reportValidity();
           return;
         }
+        pendingReport = {
+          ownerId: viewerId,
+          title: itemModalTitle.textContent || "Reported item",
+          reason: reportReason.value,
+          details: reportDetails.value.trim(),
+          time: "Just now",
+        };
         closeReportModal();
-        window.alert("Thank you. Your report has been submitted.");
+        reportConfirmModal.hidden = false;
+        reportConfirmModal.classList.add("is-visible");
       });
+      reportConfirmClose.addEventListener("click", closeReportConfirmModal);
+      reportConfirmNo.addEventListener("click", closeReportConfirmModal);
+      reportConfirmYes.addEventListener("click", savePendingReport);
 
       categoryFilterRow.addEventListener("click", (event) => {
         const filter = event.target.closest("[data-category-filter]");

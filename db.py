@@ -50,6 +50,21 @@ def initialize_database():
             if statement:
                 cursor.execute(statement)
         try:
+            cursor.execute("ALTER TABLE users ADD COLUMN profile_image_url VARCHAR(500) NULL AFTER password_hash")
+        except mysql.connector.Error as error:
+            if error.errno != 1060:
+                raise
+        try:
+            cursor.execute("ALTER TABLE users ADD COLUMN bio VARCHAR(500) NULL AFTER profile_image_url")
+        except mysql.connector.Error as error:
+            if error.errno != 1060:
+                raise
+        try:
+            cursor.execute("ALTER TABLE users ADD COLUMN location VARCHAR(160) NULL AFTER bio")
+        except mysql.connector.Error as error:
+            if error.errno != 1060:
+                raise
+        try:
             cursor.execute("ALTER TABLE listings ADD COLUMN user_id BIGINT UNSIGNED NULL AFTER id")
         except mysql.connector.Error as error:
             if error.errno != 1060:
@@ -172,10 +187,29 @@ def find_user_by_id(user_id):
         cursor = connection.cursor(dictionary=True)
         try:
             cursor.execute(
-                "SELECT id, full_name, email FROM users WHERE id = %s",
+                "SELECT id, full_name, email, profile_image_url, bio, location FROM users WHERE id = %s",
                 (user_id,),
             )
             return cursor.fetchone()
+        finally:
+            cursor.close()
+
+
+def update_user_profile(user_id, full_name, bio, location, profile_image_url=None):
+    with get_connection() as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                """
+                UPDATE users
+                SET full_name = %s, bio = %s, location = %s,
+                    profile_image_url = COALESCE(%s, profile_image_url)
+                WHERE id = %s
+                """,
+                (full_name, bio or None, location or None, profile_image_url, user_id),
+            )
+            connection.commit()
+            return cursor.rowcount > 0
         finally:
             cursor.close()
 
@@ -241,7 +275,10 @@ def find_listings(user_id=None):
             query = """
                 SELECT l.id, l.user_id AS seller_id, l.title, l.category, l.item_condition,
                       l.description, l.price, l.image_url, l.created_at,
-                      COALESCE(u.full_name, 'NCart seller') AS seller_name
+                      COALESCE(u.full_name, 'NCart seller') AS seller_name,
+                      u.profile_image_url AS seller_image_url,
+                      u.bio AS seller_bio,
+                      u.location AS seller_location
                   FROM listings l
                   LEFT JOIN users u ON u.id = l.user_id
             """

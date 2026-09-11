@@ -178,7 +178,6 @@ button {
 .promise,
 .eyebrow,
 .helper,
-.mark-label,
 .status-message {
   font-family: var(--mono);
 }
@@ -266,37 +265,16 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 68px;
+  width: 150px;
   margin: 0 auto;
   color: #11115c;
 }
 
-.mark-symbol {
+.mark-image {
   display: block;
-  color: #121276;
-  font-family: Georgia, serif;
-  font-size: 72px;
-  font-weight: 700;
-  line-height: 0.9;
-  letter-spacing: -8px;
-  transform: translateX(-3px) skewY(-8deg);
-}
-
-.mark-symbol::before {
-  display: block;
-  position: absolute;
-  width: 22px;
-  height: 5px;
-  margin: 10px 0 0 -11px;
-  background: #dfab21;
-  box-shadow: -5px 7px 0 #dfab21;
-  content: "";
-}
-
-.mark-label {
-  margin-top: 10px;
-  font-size: 13px;
-  letter-spacing: 1px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .auth-copy {
@@ -450,22 +428,7 @@ button {
   }
 
   .mark {
-    width: 52px;
-  }
-
-  .mark-symbol {
-    font-size: 54px;
-  }
-
-  .mark-symbol::before {
-    width: 17px;
-    height: 3px;
-    margin-top: 7px;
-  }
-
-  .mark-label {
-    margin-top: 6px;
-    font-size: 9px;
+    width: 100px;
   }
 
   .auth-copy {

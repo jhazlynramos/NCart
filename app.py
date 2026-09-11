@@ -40,6 +40,7 @@ from db import (
     find_user_by_id,
     initialize_database,
     update_user_password,
+    update_user_profile,
     update_listing,
     update_order_status,
     remove_favorite,
@@ -113,6 +114,9 @@ class NCartHandler(SimpleHTTPRequestHandler):
         if route == "/api/listings":
             self.handle_listings_get()
             return
+        if route == "/api/profile":
+            self.handle_profile_get()
+            return
         if route == "/api/messages":
             self.handle_messages_get()
             return
@@ -146,6 +150,7 @@ class NCartHandler(SimpleHTTPRequestHandler):
             "/listings",
             "/messages",
             "/orders",
+            "/reports",
             "/profile",
         }:
             self.path = f"/templates{route}.html"
@@ -265,6 +270,9 @@ class NCartHandler(SimpleHTTPRequestHandler):
         if route == "/api/listings":
             self.handle_listing_create(body)
             return
+        if route == "/api/profile":
+            self.handle_profile_update(body)
+            return
         if route == "/api/messages":
             self.handle_message_create(body)
             return
@@ -292,6 +300,10 @@ class NCartHandler(SimpleHTTPRequestHandler):
         if route.startswith("/api/orders/"):
             length = int(self.headers.get("Content-Length", "0"))
             self.handle_order_status_update(route.removeprefix("/api/orders/"), self.rfile.read(length).decode())
+            return
+        if route == "/api/profile":
+            length = int(self.headers.get("Content-Length", "0"))
+            self.handle_profile_update(self.rfile.read(length).decode())
             return
         if not route.startswith("/api/listings/"):
             self.send_error(HTTPStatus.NOT_FOUND)
@@ -325,6 +337,39 @@ class NCartHandler(SimpleHTTPRequestHandler):
             listing["price"] = str(listing["price"])
             listing["created_at"] = listing["created_at"].isoformat()
         self.send_json({"viewer_id": int(user["id"]) if user else None, "listings": listings})
+
+    def handle_profile_get(self):
+        user = self.current_user()
+        if user is None:
+            self.send_json({"error": "Please log in first."}, HTTPStatus.UNAUTHORIZED)
+            return
+        self.send_json({"profile": user})
+
+    def handle_profile_update(self, body):
+        user = self.current_user()
+        if user is None:
+            self.send_json({"error": "Please log in first."}, HTTPStatus.UNAUTHORIZED)
+            return
+        try:
+            values = json.loads(body)
+            full_name = str(values.get("full_name", "")).strip()
+            bio = str(values.get("bio", "")).strip()
+            location = str(values.get("location", "")).strip()
+            image_data = str(values.get("image_data", "")).strip()
+            if not full_name or len(full_name) > 120 or len(bio) > 500 or len(location) > 160:
+                raise ValueError
+            image_url = self.save_uploaded_image(image_data, "profile") if image_data else None
+            if not update_user_profile(user["id"], full_name, bio, location, image_url):
+                self.send_json({"error": "Profile was not found."}, HTTPStatus.NOT_FOUND)
+                return
+            updated_profile = find_user_by_id(user["id"])
+        except (ValueError, TypeError, json.JSONDecodeError):
+            self.send_json({"error": "Enter a valid name and profile information."}, HTTPStatus.BAD_REQUEST)
+            return
+        except Error:
+            self.send_json({"error": "Database connection failed."}, HTTPStatus.INTERNAL_SERVER_ERROR)
+            return
+        self.send_json({"profile": updated_profile})
 
     def handle_favorites_get(self):
         user = self.current_user()
@@ -628,6 +673,10 @@ class NCartHandler(SimpleHTTPRequestHandler):
 
     @staticmethod
     def save_listing_image(image_data):
+        return NCartHandler.save_uploaded_image(image_data, "listing")
+
+    @staticmethod
+    def save_uploaded_image(image_data, prefix):
         if not image_data:
             return ""
         try:
@@ -643,7 +692,7 @@ class NCartHandler(SimpleHTTPRequestHandler):
         extension = {"image/jpeg": ".jpg", "image/png": ".png", "image/gif": ".gif", "image/webp": ".webp"}[mime_type]
         upload_directory = ROOT / "static" / "uploads"
         upload_directory.mkdir(parents=True, exist_ok=True)
-        filename = f"listing-{secrets.token_urlsafe(12)}{extension}"
+        filename = f"{prefix}-{secrets.token_urlsafe(12)}{extension}"
         (upload_directory / filename).write_bytes(image_bytes)
         return f"/static/uploads/{filename}"
 
@@ -802,7 +851,10 @@ class NCartHandler(SimpleHTTPRequestHandler):
             return None
         session = SESSIONS.get(token.value)
         if session:
-            return session
+            try:
+                return find_user_by_id(session["id"])
+            except Error:
+                return None
         session = read_signed_session(token.value)
         if not session:
             return None
