@@ -108,11 +108,7 @@ def split_unambiguous_legacy_name(full_name):
 
 
 def initialize_database():
-    server_config = {
-        key: value
-        for key, value in get_database_config().items()
-        if key != "database"
-    }
+    server_config = get_database_config()
 
     try:
         connection = mysql.connector.connect(**server_config)
@@ -140,6 +136,19 @@ def initialize_database():
 
         cursor.execute(
             """
+            SELECT DATABASE()
+            """
+        )
+        active_database = cursor.fetchone()[0]
+
+        if active_database != database_name:
+            raise RuntimeError(
+                f"Database mismatch: connected to '{active_database}', "
+                f"but configured database is '{database_name}'."
+            )
+
+        cursor.execute(
+            """
             ALTER TABLE cart_items
             MODIFY COLUMN listing_id BIGINT UNSIGNED NULL
             """
@@ -149,11 +158,10 @@ def initialize_database():
             """
             SELECT CONSTRAINT_NAME, DELETE_RULE
             FROM information_schema.REFERENTIAL_CONSTRAINTS
-            WHERE CONSTRAINT_SCHEMA = %s
+            WHERE CONSTRAINT_SCHEMA = DATABASE()
               AND TABLE_NAME = 'cart_items'
               AND CONSTRAINT_NAME = 'fk_cart_items_listing'
-            """,
-            (database_name,),
+            """
         )
         cart_listing_rule = cursor.fetchone()
 
@@ -170,27 +178,36 @@ def initialize_database():
             cursor.execute(
                 """
                 SELECT CONSTRAINT_NAME
-                FROM information_schema.KEY_COLUMN_USAGE
-                WHERE CONSTRAINT_SCHEMA = %s
-                  AND TABLE_NAME = 'cart_items'
-                  AND COLUMN_NAME = 'listing_id'
-                  AND REFERENCED_TABLE_NAME = 'listings'
-                """,
-                (database_name,),
+                FROM information_schema.REFERENTIAL_CONSTRAINTS
+                WHERE CONSTRAINT_SCHEMA = DATABASE()
+                  AND CONSTRAINT_NAME = 'fk_cart_items_listing'
+                """
             )
-            existing_listing_fk = cursor.fetchone()
+            named_listing_fk = cursor.fetchone()
 
-            if not existing_listing_fk:
+            if not named_listing_fk:
                 cursor.execute(
                     """
-                    ALTER TABLE cart_items
-                    ADD CONSTRAINT fk_cart_items_listing
-                    FOREIGN KEY (listing_id)
-                    REFERENCES listings (id)
-                    ON DELETE SET NULL
+                    SELECT CONSTRAINT_NAME
+                    FROM information_schema.KEY_COLUMN_USAGE
+                    WHERE CONSTRAINT_SCHEMA = DATABASE()
+                      AND TABLE_NAME = 'cart_items'
+                      AND COLUMN_NAME = 'listing_id'
+                      AND REFERENCED_TABLE_NAME = 'listings'
                     """
                 )
+                existing_listing_fk = cursor.fetchone()
 
+                if not existing_listing_fk:
+                    cursor.execute(
+                        """
+                        ALTER TABLE cart_items
+                        ADD CONSTRAINT fk_cart_items_listing
+                        FOREIGN KEY (listing_id)
+                        REFERENCES listings (id)
+                        ON DELETE SET NULL
+                        """
+                    )
 
 
         # Add image support to messages
