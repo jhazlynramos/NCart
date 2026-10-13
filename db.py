@@ -123,13 +123,21 @@ def initialize_database():
                 "to the password for NCART_DB_USER."
             ) from error
         raise
+
     cursor = connection.cursor()
     try:
-        schema = Path(__file__).with_name("schema.sql").read_text(encoding="utf-8")
+        schema = Path(__file__).with_name("schema.sql").read_text(
+            encoding="utf-8"
+        )
+
         for statement in schema.split(";"):
             statement = statement.strip()
             if statement:
                 cursor.execute(statement)
+
+        # Fix cart_items foreign key constraint
+        database_name = get_database_config()["database"]
+
         cursor.execute(
             """
             SELECT DELETE_RULE
@@ -138,28 +146,64 @@ def initialize_database():
               AND TABLE_NAME = 'cart_items'
               AND CONSTRAINT_NAME = 'fk_cart_items_listing'
             """,
-            (DATABASE_CONFIG["database"],),
+            (database_name,),
         )
         cart_listing_rule = cursor.fetchone()
+
+        cursor.execute(
+            """
+            ALTER TABLE cart_items
+            MODIFY COLUMN listing_id BIGINT UNSIGNED NULL
+            """
+        )
+
         if cart_listing_rule and cart_listing_rule[0] != "SET NULL":
-            cursor.execute("ALTER TABLE cart_items DROP FOREIGN KEY fk_cart_items_listing")
+            cursor.execute(
+                """
+                ALTER TABLE cart_items
+                DROP FOREIGN KEY fk_cart_items_listing
+                """
+            )
             cart_listing_rule = None
-        cursor.execute("ALTER TABLE cart_items MODIFY COLUMN listing_id BIGINT UNSIGNED NULL")
+
         if not cart_listing_rule:
             cursor.execute(
-                "ALTER TABLE cart_items ADD CONSTRAINT fk_cart_items_listing "
-                "FOREIGN KEY (listing_id) REFERENCES listings (id) ON DELETE SET NULL"
+                """
+                ALTER TABLE cart_items
+                ADD CONSTRAINT fk_cart_items_listing
+                FOREIGN KEY (listing_id)
+                REFERENCES listings (id)
+                ON DELETE SET NULL
+                """
             )
+
+
+        # Add image support to messages
         try:
-            cursor.execute("ALTER TABLE messages ADD COLUMN image_url VARCHAR(500) NULL AFTER body")
+            cursor.execute(
+                """
+                ALTER TABLE messages
+                ADD COLUMN image_url VARCHAR(500) NULL AFTER body
+                """
+            )
         except mysql.connector.Error as error:
             if error.errno != 1060:
                 raise
+
+        # Add profile image support to users
         try:
-            cursor.execute("ALTER TABLE users ADD COLUMN profile_image_url VARCHAR(500) NULL AFTER password_hash")
+            cursor.execute(
+                """
+                ALTER TABLE users
+                ADD COLUMN profile_image_url VARCHAR(500) NULL
+                AFTER password_hash
+                """
+            )
         except mysql.connector.Error as error:
             if error.errno != 1060:
                 raise
+
+        # Add user profile and account fields
         for statement in (
             "ALTER TABLE users ADD COLUMN cover_image_url VARCHAR(500) NULL AFTER profile_image_url",
             "ALTER TABLE users ADD COLUMN username VARCHAR(32) NULL AFTER cover_image_url",
@@ -172,34 +216,59 @@ def initialize_database():
             except mysql.connector.Error as error:
                 if error.errno != 1060:
                     raise
-        cursor.execute("UPDATE users SET username = CONCAT('user', id) WHERE username IS NULL")
+
+        cursor.execute(
+            "UPDATE users SET username = CONCAT('user', id) WHERE username IS NULL"
+        )
+
         try:
-            cursor.execute("ALTER TABLE users ADD UNIQUE KEY uq_users_username (username)")
+            cursor.execute(
+                "ALTER TABLE users ADD UNIQUE KEY uq_users_username (username)"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1061:
                 raise
+
         try:
-            cursor.execute("ALTER TABLE users ADD COLUMN bio VARCHAR(500) NULL AFTER profile_image_url")
+            cursor.execute(
+                "ALTER TABLE users ADD COLUMN bio VARCHAR(500) NULL AFTER profile_image_url"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1060:
                 raise
+
         try:
-            cursor.execute("ALTER TABLE users ADD COLUMN location VARCHAR(160) NULL AFTER bio")
+            cursor.execute(
+                "ALTER TABLE users ADD COLUMN location VARCHAR(160) NULL AFTER bio"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1060:
                 raise
+
         try:
-            cursor.execute("ALTER TABLE users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'user' AFTER location")
+            cursor.execute(
+                "ALTER TABLE users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'user' AFTER location"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1060:
                 raise
-        cursor.execute("ALTER TABLE users MODIFY COLUMN role VARCHAR(20) NOT NULL DEFAULT 'buyer'")
+
+        cursor.execute(
+            "ALTER TABLE users MODIFY COLUMN role VARCHAR(20) NOT NULL DEFAULT 'buyer'"
+        )
+
         try:
-            cursor.execute("ALTER TABLE users ADD COLUMN account_status VARCHAR(20) NOT NULL DEFAULT 'active' AFTER role")
+            cursor.execute(
+                "ALTER TABLE users ADD COLUMN account_status VARCHAR(20) NOT NULL DEFAULT 'active' AFTER role"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1060:
                 raise
-        cursor.execute("ALTER TABLE users MODIFY COLUMN account_status VARCHAR(32) NOT NULL DEFAULT 'active'")
+
+        cursor.execute(
+            "ALTER TABLE users MODIFY COLUMN account_status VARCHAR(32) NOT NULL DEFAULT 'active'"
+        )
+
         for statement in (
             "ALTER TABLE users ADD COLUMN student_number VARCHAR(100) NULL AFTER account_status",
             "ALTER TABLE users ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'active' AFTER account_status",
@@ -231,6 +300,7 @@ def initialize_database():
             except mysql.connector.Error as error:
                 if error.errno != 1060:
                     raise
+
         cursor.execute(
             """
             UPDATE users
@@ -244,10 +314,10 @@ def initialize_database():
               AND approval_status = 'pending'
             """
         )
+
         for statement in (
             "ALTER TABLE users ADD UNIQUE KEY uq_users_student_number (student_number)",
-            "ALTER TABLE users ADD CONSTRAINT fk_users_confirmed_by "
-            "FOREIGN KEY (confirmed_by) REFERENCES users (id) ON DELETE SET NULL",
+            "ALTER TABLE users ADD CONSTRAINT fk_users_confirmed_by FOREIGN KEY (confirmed_by) REFERENCES users (id) ON DELETE SET NULL",
             "ALTER TABLE admin_registration_otps ADD COLUMN account_type VARCHAR(20) NOT NULL DEFAULT 'admin' AFTER password_hash",
             "ALTER TABLE admin_registration_otps ADD COLUMN student_number VARCHAR(100) NULL AFTER account_type",
             "ALTER TABLE admin_registration_otps ADD COLUMN student_id_image_path VARCHAR(255) NULL AFTER student_number",
@@ -261,6 +331,7 @@ def initialize_database():
             except mysql.connector.Error as error:
                 if error.errno not in {1060, 1061, 1826}:
                     raise
+
         cursor.execute(
             """
             UPDATE users
@@ -272,17 +343,19 @@ def initialize_database():
               AND TRIM(full_name) REGEXP '^[^[:space:]]+[[:space:]][^[:space:]]+$'
             """
         )
+
         cursor.execute(
             """
             INSERT IGNORE INTO admin_access_codes
                 (target_email, code_hash, status, created_at, expires_at,
                  used_by, used_at)
             SELECT target_email, code_hash,
-                   CASE WHEN used_at IS NULL THEN 'active' ELSE 'used' END,
-                   created_at, expires_at, used_by, used_at
+                CASE WHEN used_at IS NULL THEN 'active' ELSE 'used' END,
+                created_at, expires_at, used_by, used_at
             FROM admin_invitations
             """
         )
+
         try:
             cursor.execute(
                 "ALTER TABLE users ADD KEY idx_users_verification_status "
@@ -291,14 +364,20 @@ def initialize_database():
         except mysql.connector.Error as error:
             if error.errno != 1061:
                 raise
+
         try:
             cursor.execute(
-                "ALTER TABLE users ADD CONSTRAINT fk_users_verification_admin "
-                "FOREIGN KEY (verification_reviewed_by) REFERENCES users (id) ON DELETE SET NULL"
+                """
+                ALTER TABLE users
+                ADD CONSTRAINT fk_users_verification_admin
+                FOREIGN KEY (verification_reviewed_by)
+                REFERENCES users (id) ON DELETE SET NULL
+                """
             )
         except mysql.connector.Error as error:
             if error.errno != 1826:
                 raise
+
         for constraint in (
             "ALTER TABLE users ADD CONSTRAINT fk_users_approved_by "
             "FOREIGN KEY (approved_by) REFERENCES users (id) ON DELETE SET NULL",
@@ -310,19 +389,28 @@ def initialize_database():
             except mysql.connector.Error as error:
                 if error.errno != 1826:
                     raise
+
         try:
             cursor.execute(
-                "ALTER TABLE users ADD CONSTRAINT fk_users_admin_request_reviewer "
-                "FOREIGN KEY (admin_request_reviewed_by) REFERENCES users (id) ON DELETE SET NULL"
+                """
+                ALTER TABLE users
+                ADD CONSTRAINT fk_users_admin_request_reviewer
+                FOREIGN KEY (admin_request_reviewed_by)
+                REFERENCES users (id) ON DELETE SET NULL
+                """
             )
         except mysql.connector.Error as error:
             if error.errno != 1826:
                 raise
+
         try:
-            cursor.execute("ALTER TABLE listings ADD COLUMN user_id BIGINT UNSIGNED NULL AFTER id")
+            cursor.execute(
+                "ALTER TABLE listings ADD COLUMN user_id BIGINT UNSIGNED NULL AFTER id"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1060:
                 raise
+
         for column in (
             "ALTER TABLE listings ADD COLUMN quantity INT UNSIGNED NOT NULL DEFAULT 1 AFTER price",
             "ALTER TABLE listings ADD COLUMN is_flagged TINYINT(1) NOT NULL DEFAULT 0 AFTER image_url",
@@ -333,14 +421,19 @@ def initialize_database():
             except mysql.connector.Error as error:
                 if error.errno != 1060:
                     raise
+
         try:
-            cursor.execute("ALTER TABLE orders ADD COLUMN payment_method VARCHAR(40) NOT NULL DEFAULT 'Cash on Pick Up' AFTER total_price")
+            cursor.execute(
+                "ALTER TABLE orders ADD COLUMN payment_method VARCHAR(40) NOT NULL DEFAULT 'Cash on Pick Up' AFTER total_price"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1060:
                 raise
+
         cursor.execute(
             "ALTER TABLE orders ALTER COLUMN payment_method SET DEFAULT 'Cash on Pick Up'"
         )
+
         for statement in (
             "ALTER TABLE orders ADD COLUMN quantity INT UNSIGNED NOT NULL DEFAULT 1 AFTER listing_id",
             "ALTER TABLE orders ADD COLUMN stock_deducted TINYINT(1) NOT NULL DEFAULT 0 AFTER quantity",
@@ -357,6 +450,7 @@ def initialize_database():
             except mysql.connector.Error as error:
                 if error.errno != 1060:
                     raise
+
         try:
             cursor.execute(
                 "ALTER TABLE orders ADD KEY idx_orders_seller_payment_status "
@@ -365,20 +459,26 @@ def initialize_database():
         except mysql.connector.Error as error:
             if error.errno != 1061:
                 raise
+
         try:
             cursor.execute(
-                "ALTER TABLE orders ADD CONSTRAINT fk_orders_payment_verified_by "
-                "FOREIGN KEY (payment_verified_by) REFERENCES users (id) ON DELETE SET NULL"
+                """
+                ALTER TABLE orders
+                ADD CONSTRAINT fk_orders_payment_verified_by
+                FOREIGN KEY (payment_verified_by)
+                REFERENCES users (id) ON DELETE SET NULL
+                """
             )
         except mysql.connector.Error as error:
             if error.errno != 1826:
                 raise
+
         cursor.execute(
             """
             UPDATE orders
             SET payment_status = CASE
                 WHEN payment_method IN ('GCash', 'Bank Transfer')
-                     AND payment_reference_no IS NOT NULL THEN 'pending_verification'
+                    AND payment_reference_no IS NOT NULL THEN 'pending_verification'
                 WHEN payment_method IN ('GCash', 'Bank Transfer') THEN 'unsubmitted'
                 ELSE 'not_required'
             END
@@ -386,6 +486,7 @@ def initialize_database():
               AND payment_method IN ('GCash', 'Bank Transfer')
             """
         )
+
         cursor.execute(
             """
             UPDATE orders
@@ -397,59 +498,99 @@ def initialize_database():
                 WHEN 'received' THEN 'completed'
                 ELSE status
             END
-            WHERE status IN ('pending', 'paid', 'shipped', 'out_for_delivery', 'received')
+            WHERE status IN (
+                'pending', 'paid', 'shipped', 'out_for_delivery', 'received'
+            )
             """
         )
-        cursor.execute("ALTER TABLE orders ALTER COLUMN status SET DEFAULT 'order_placed'")
-        try:
-            cursor.execute("ALTER TABLE messages ADD COLUMN reply_to_id BIGINT UNSIGNED NULL AFTER body")
-        except mysql.connector.Error as error:
-            if error.errno != 1060:
-                raise
-        try:
-            cursor.execute("ALTER TABLE messages ADD COLUMN read_at TIMESTAMP NULL DEFAULT NULL AFTER body")
-        except mysql.connector.Error as error:
-            if error.errno != 1060:
-                raise
-        try:
-            cursor.execute("ALTER TABLE favorites ADD COLUMN user_id BIGINT UNSIGNED NULL AFTER id")
-        except mysql.connector.Error as error:
-            if error.errno != 1060:
-                raise
+
         cursor.execute(
-            "UPDATE favorites SET user_id = (SELECT id FROM users ORDER BY id LIMIT 1) WHERE user_id IS NULL"
+            "ALTER TABLE orders ALTER COLUMN status SET DEFAULT 'order_placed'"
         )
+
         try:
-            cursor.execute("ALTER TABLE favorites DROP FOREIGN KEY fk_favorites_listing")
+            cursor.execute(
+                "ALTER TABLE messages ADD COLUMN reply_to_id BIGINT UNSIGNED NULL AFTER body"
+            )
+        except mysql.connector.Error as error:
+            if error.errno != 1060:
+                raise
+
+        try:
+            cursor.execute(
+                "ALTER TABLE messages ADD COLUMN read_at TIMESTAMP NULL DEFAULT NULL AFTER body"
+            )
+        except mysql.connector.Error as error:
+            if error.errno != 1060:
+                raise
+
+        try:
+            cursor.execute(
+                "ALTER TABLE favorites ADD COLUMN user_id BIGINT UNSIGNED NULL AFTER id"
+            )
+        except mysql.connector.Error as error:
+            if error.errno != 1060:
+                raise
+
+        cursor.execute(
+            """
+            UPDATE favorites
+            SET user_id = (SELECT id FROM users ORDER BY id LIMIT 1)
+            WHERE user_id IS NULL
+            """
+        )
+
+        try:
+            cursor.execute(
+                "ALTER TABLE favorites DROP FOREIGN KEY fk_favorites_listing"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1091:
                 raise
+
         try:
-            cursor.execute("ALTER TABLE favorites DROP INDEX uq_favorites_listing")
+            cursor.execute(
+                "ALTER TABLE favorites DROP INDEX uq_favorites_listing"
+            )
         except mysql.connector.Error as error:
             if error.errno != 1091:
                 raise
+
         try:
-            cursor.execute("ALTER TABLE favorites ADD UNIQUE KEY uq_favorites_user_listing (user_id, listing_id)")
+            cursor.execute(
+                """
+                ALTER TABLE favorites
+                ADD UNIQUE KEY uq_favorites_user_listing (user_id, listing_id)
+                """
+            )
         except mysql.connector.Error as error:
             if error.errno != 1061:
                 raise
+
         try:
             cursor.execute(
-                "ALTER TABLE favorites ADD CONSTRAINT fk_favorites_listing "
-                "FOREIGN KEY (listing_id) REFERENCES listings (id) ON DELETE CASCADE"
+                """
+                ALTER TABLE favorites
+                ADD CONSTRAINT fk_favorites_listing
+                FOREIGN KEY (listing_id) REFERENCES listings (id) ON DELETE CASCADE
+                """
             )
         except mysql.connector.Error as error:
             if error.errno != 1826:
                 raise
+
         try:
             cursor.execute(
-                "ALTER TABLE favorites ADD CONSTRAINT fk_favorites_user "
-                "FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE"
+                """
+                ALTER TABLE favorites
+                ADD CONSTRAINT fk_favorites_user
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+                """
             )
         except mysql.connector.Error as error:
             if error.errno != 1826:
                 raise
+
         cursor.execute(
             """
             UPDATE listings
@@ -457,10 +598,13 @@ def initialize_database():
             WHERE user_id IS NULL
             """
         )
+
         connection.commit()
+
     finally:
         cursor.close()
         connection.close()
+
 
 
 def get_pool():
