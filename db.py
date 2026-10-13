@@ -169,13 +169,28 @@ def initialize_database():
         if not cart_listing_rule:
             cursor.execute(
                 """
-                ALTER TABLE cart_items
-                ADD CONSTRAINT fk_cart_items_listing
-                FOREIGN KEY (listing_id)
-                REFERENCES listings (id)
-                ON DELETE SET NULL
-                """
+                SELECT CONSTRAINT_NAME
+                FROM information_schema.KEY_COLUMN_USAGE
+                WHERE CONSTRAINT_SCHEMA = %s
+                  AND TABLE_NAME = 'cart_items'
+                  AND COLUMN_NAME = 'listing_id'
+                  AND REFERENCED_TABLE_NAME = 'listings'
+                """,
+                (database_name,),
             )
+            existing_listing_fk = cursor.fetchone()
+
+            if not existing_listing_fk:
+                cursor.execute(
+                    """
+                    ALTER TABLE cart_items
+                    ADD CONSTRAINT fk_cart_items_listing
+                    FOREIGN KEY (listing_id)
+                    REFERENCES listings (id)
+                    ON DELETE SET NULL
+                    """
+                )
+
 
 
         # Add image support to messages
