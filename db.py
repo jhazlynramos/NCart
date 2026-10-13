@@ -140,7 +140,14 @@ def initialize_database():
 
         cursor.execute(
             """
-            SELECT DELETE_RULE
+            ALTER TABLE cart_items
+            MODIFY COLUMN listing_id BIGINT UNSIGNED NULL
+            """
+        )
+
+        cursor.execute(
+            """
+            SELECT CONSTRAINT_NAME, DELETE_RULE
             FROM information_schema.REFERENTIAL_CONSTRAINTS
             WHERE CONSTRAINT_SCHEMA = %s
               AND TABLE_NAME = 'cart_items'
@@ -150,14 +157,7 @@ def initialize_database():
         )
         cart_listing_rule = cursor.fetchone()
 
-        cursor.execute(
-            """
-            ALTER TABLE cart_items
-            MODIFY COLUMN listing_id BIGINT UNSIGNED NULL
-            """
-        )
-
-        if cart_listing_rule and cart_listing_rule[0] != "SET NULL":
+        if cart_listing_rule and cart_listing_rule[1] != "SET NULL":
             cursor.execute(
                 """
                 ALTER TABLE cart_items
