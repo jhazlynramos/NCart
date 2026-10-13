@@ -1,8 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 :root {
   --ink: #111534;
   --paper: #f4f4f2;
-  --mono: "DM Mono", "Courier New", monospace;
-  --serif: "Libre Baskerville", Georgia, serif;
+  --sans: "Poppins", "Segoe UI", Arial, sans-serif;
+  --mono: "Poppins", "Segoe UI", Arial, sans-serif;
+  --serif: "Poppins", "Segoe UI", Arial, sans-serif;
   --white: #ffffff;
 }
 
@@ -138,20 +141,27 @@ button {
 .login-page {
   display: grid;
   min-height: 100dvh;
-  place-items: center;
+  place-items: center start;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 16px;
-  background: #eeeeec;
+  padding: 16px clamp(20px, 4vw, 64px);
+  background-color: #9da8ad;
+  background-image: url("/static/assets/norzagaray-college-building.png");
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: 145% auto;
+  background-attachment: fixed;
 }
 
 .login-card {
   width: min(100%, 480px);
   padding: 28px 32px 24px;
-  border: 1px solid #aeb4b1;
-  border-radius: 9px;
-  background: #ffffff;
-  box-shadow: 0 5px 12px rgba(17, 21, 20, 0.28), 0 1px 2px rgba(17, 21, 20, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .back-link,
@@ -234,6 +244,23 @@ button {
 
 .login-form input::placeholder {
   color: #a1a8a5;
+}
+
+.login-form label.show-password {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: -7px 0 12px;
+  color: #6d6a63;
+  cursor: pointer;
+}
+
+.login-form label.show-password input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  padding: 0;
+  accent-color: #2f64a3;
 }
 
 .login-submit-row {
@@ -355,6 +382,70 @@ button {
   }
 }
 
+@media (max-width: 720px) {
+  .login-page {
+    background-position: center;
+    background-size: cover;
+  }
+}
+
+:root .login-page .login-card:not(.register-card) :is(
+  .back-link,
+  .login-eyebrow,
+  .login-copy h1,
+  .login-helper,
+  .login-form label,
+  .forgot-link,
+  .login-divider,
+  .signup-prompt,
+  .signup-prompt a
+) {
+  color: #000000;
+}
+
+:root .login-page .login-card:not(.register-card) .login-form input:not([type="checkbox"]) {
+  color: #000000;
+}
+
+:root .login-page .login-card:not(.register-card) .login-form input::placeholder {
+  color: #000000;
+  opacity: 0.62;
+}
+
+:root .login-page .login-card:not(.register-card) .login-social {
+  color: #000000;
+}
+
+:root[data-theme="dark"] .login-page .login-card:not(.register-card) :is(
+  .back-link,
+  .login-eyebrow,
+  .login-copy h1,
+  .login-helper,
+  .login-form label,
+  .forgot-link,
+  .login-divider,
+  .signup-prompt,
+  .signup-prompt a
+) {
+  color: #F2F2F2 !important;
+}
+
+:root[data-theme="dark"] .login-page .login-card:not(.register-card) .login-form input:not([type="checkbox"]) {
+  color: #F2F2F2;
+}
+
+:root[data-theme="dark"] .login-page .login-card:not(.register-card) .login-form input::placeholder {
+  color: #F2F2F2;
+  opacity: 0.72;
+}
+
+@media (min-width: 721px) and (max-width: 1200px) {
+  .login-page {
+    background-position: left center;
+    background-size: 145% auto;
+  }
+}
+
 @media (min-width: 721px) and (max-height: 720px) {
   .login-card {
     padding-top: 20px;
@@ -381,7 +472,7 @@ button {
 
 @media (max-height: 500px) {
   .login-page {
-    padding: 8px;
+    padding: 8px clamp(24px, 9vw, 140px);
   }
 }
 

@@ -1,10 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 :root {
   --ink: #111534;
   --muted: #9696a1;
   --paper: #f4f4f2;
   --white: #ffffff;
-  --mono: "DM Mono", "Courier New", monospace;
-  --serif: "Libre Baskerville", Georgia, serif;
+  --sans: "Poppins", "Segoe UI", Arial, sans-serif;
+  --mono: "Poppins", "Segoe UI", Arial, sans-serif;
+  --serif: "Poppins", "Segoe UI", Arial, sans-serif;
 }
 
 * {
@@ -24,13 +27,25 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--sans);
 }
 
 button {
   border: 0;
   font: inherit;
   cursor: pointer;
+}
+
+button,
+a,
+input,
+label,
+span,
+p,
+small,
+strong,
+textarea {
+  font-family: var(--sans);
 }
 
 .message-modal {
@@ -77,7 +92,7 @@ button {
   height: 25px;
   color: #071375;
   background: transparent;
-  font-family: Arial, sans-serif;
+  font-family: var(--sans);
   font-size: 27px;
   font-weight: 300;
   line-height: 20px;
@@ -92,7 +107,7 @@ button {
   border: 4px solid #071375;
   border-radius: 50%;
   color: #071375;
-  font-family: Arial, sans-serif;
+  font-family: var(--sans);
   font-size: 39px;
   font-weight: 700;
   line-height: 1;
@@ -112,7 +127,7 @@ button {
   margin: 0;
   color: #080808;
   font-size: 26px;
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .message-text {
@@ -121,6 +136,7 @@ button {
   color: #111111;
   font-size: 12px;
   line-height: 1.5;
+  font-weight: 400;
 }
 
 .message-button {
@@ -130,29 +146,96 @@ button {
   color: #ffffff;
   background: #071375;
   font-size: 15px;
+  font-weight: 600;
 }
 
 .message-button:hover {
   background: #101f9c;
 }
 
+.admin-otp-dialog {
+  width: min(100%, 390px);
+  min-height: 0;
+  padding-top: 24px;
+}
+
+.admin-otp-dialog .message-text {
+  margin: 12px 0;
+}
+
+.admin-otp-label {
+  color: #333b3b;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.admin-otp-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #b8bfbd;
+  border-radius: 5px;
+  color: #202626;
+  font-family: var(--sans);
+  font-size: 20px;
+  letter-spacing: 0.35em;
+  text-align: center;
+}
+
+.admin-otp-input:focus {
+  border-color: #080f76;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgba(8, 15, 118, 0.1);
+}
+
+.admin-otp-error {
+  min-height: 18px;
+  margin: 0;
+  color: #a23b3b;
+  font-size: 11px;
+  text-align: left;
+}
+
+.admin-otp-resend {
+  color: #080f76;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.admin-otp-resend:disabled {
+  color: #8c9390;
+  cursor: not-allowed;
+}
+
 .login-page {
   display: grid;
   min-height: 100dvh;
-  place-items: center;
+  place-items: center start;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 16px;
-  background: #eeeeec;
+  padding: 16px clamp(20px, 4vw, 64px);
+
+  background-color: #9da8ad;
+  background-image: url("/static/assets/norzagaray-college-building.png");
+
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 145% auto;
+  background-attachment: fixed;
 }
 
 .login-card {
   width: min(100%, 480px);
   padding: 28px 32px 24px;
-  border: 1px solid #aeb4b1;
-  border-radius: 9px;
-  background: #ffffff;
-  box-shadow: 0 5px 12px rgba(17, 21, 20, 0.28), 0 1px 2px rgba(17, 21, 20, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .back-link,
@@ -162,12 +245,13 @@ button {
 .login-divider,
 .signup-prompt,
 .login-status {
-  font-family: var(--mono);
+  font-family: var(--sans);
 }
 
 .back-link {
   color: #3f4646;
   font-size: 10px;
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -184,6 +268,7 @@ button {
   margin: 0 0 8px;
   color: #303838;
   font-size: 10px;
+  font-weight: 600;
   text-transform: uppercase;
 }
 
@@ -191,7 +276,7 @@ button {
   margin: 0;
   color: #14191b;
   font-size: clamp(31px, 5vw, 40px);
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: -1.2px;
   line-height: 1.15;
 }
@@ -200,6 +285,7 @@ button {
   margin: 10px 0 0;
   color: #8c9390;
   font-size: 10px;
+  font-weight: 400;
 }
 
 .login-form {
@@ -211,6 +297,7 @@ button {
   margin-bottom: 7px;
   color: #333b3b;
   font-size: 10px;
+  font-weight: 600;
 }
 
 .login-form input {
@@ -222,8 +309,9 @@ button {
   border-radius: 3px;
   outline: 0;
   color: #202626;
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 11px;
+  font-weight: 400;
 }
 
 .login-form input:focus {
@@ -248,6 +336,7 @@ button {
   color: var(--white);
   background: #080f76;
   font-size: 15px;
+  font-weight: 600;
 }
 
 .login-submit:hover {
@@ -261,6 +350,7 @@ button {
   margin: 24px 0 13px;
   color: #a0a8a5;
   font-size: 9px;
+  font-weight: 600;
   text-align: center;
 }
 
@@ -284,7 +374,7 @@ button {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  font-family: Arial, sans-serif;
+  font-family: var(--sans);
   font-size: 14px;
   font-weight: 700;
 }
@@ -297,6 +387,7 @@ button {
   margin: 18px 0 0;
   color: #596260;
   font-size: 9px;
+  font-weight: 500;
   text-align: center;
 }
 
@@ -310,6 +401,7 @@ button {
   margin: 8px 0 0;
   color: #4d5aa1;
   font-size: 7px;
+  font-weight: 600;
   text-align: center;
   opacity: 0;
 }
@@ -325,6 +417,12 @@ button {
 .register-card {
   width: min(100%, 680px);
   padding: 28px 48px 24px;
+}
+
+@media (min-width: 721px) {
+  .register-card {
+    width: min(680px, 44vw);
+  }
 }
 
 .register-card .login-copy {
@@ -348,12 +446,86 @@ button {
   background: #ffffff;
   box-shadow: 0 3px 10px rgba(17, 21, 52, 0.12);
   font-size: 16px;
+  font-weight: 600;
 }
 
 .register-form {
   width: 100%;
   min-width: 0;
   margin-top: 20px;
+}
+
+.student-id-help {
+  margin: -4px 0 12px;
+  color: #69716d;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.account-type-fieldset {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  align-items: center;
+  column-gap: 18px;
+  row-gap: 6px;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.account-type-fieldset legend {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+  color: #333b3b;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.register-form .account-type-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.register-form .account-type-option input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: #080f76;
+}
+
+.account-type-fields {
+  display: grid;
+  min-width: 0;
+}
+
+.account-type-fields-title {
+  margin: 0 0 10px;
+  color: #303838;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.register-form .account-type-fields textarea {
+  width: 100%;
+  min-height: 86px;
+  margin-bottom: 9px;
+  padding: 9px 12px;
+  border: 1px solid #b8bfbd;
+  border-radius: 3px;
+  color: #202626;
+  font-family: var(--sans);
+  font-size: 11px;
+  resize: vertical;
+}
+
+.register-form .account-type-fields textarea:focus {
+  border-color: #080f76;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgba(8, 15, 118, 0.1);
 }
 
 .name-row {
@@ -371,6 +543,13 @@ button {
   box-sizing: border-box;
   height: 34px;
   margin-bottom: 9px;
+}
+
+.student-number-error {
+  margin: -5px 0 9px;
+  color: #a23b3b;
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .login-form label.show-password {
@@ -470,16 +649,54 @@ button {
 
 @media (max-height: 500px) {
   .login-page {
-    padding: 8px;
+    padding: 8px clamp(24px, 9vw, 140px);
   }
 }
 
 @media (max-width: 720px) {
   .login-page {
     padding: 16px;
+    background-position: center;
+    background-size: cover;
   }
 
   .login-card {
     padding: 14px 15px 12px;
   }
+}
+
+:root .login-page .register-card :is(
+  .back-link,
+  .login-eyebrow,
+  .login-copy h1,
+  .login-helper,
+  .account-type-fieldset legend,
+  .account-type-option,
+  .register-form > label,
+  .account-type-fields-title,
+  .student-id-help,
+  .password-rules,
+  .show-password,
+  .register-social,
+  .signup-prompt,
+  .signup-prompt a,
+  .login-divider,
+  .admin-otp-label,
+  .admin-otp-resend:disabled,
+  .message-title,
+  .message-text
+) {
+  color: #000000 !important;
+}
+
+:root .login-page .register-card.register-card .register-form input::placeholder,
+:root .login-page .register-card.register-card .admin-otp-input::placeholder {
+  color: #000000 !important;
+  opacity: 1;
+}
+
+:root .login-page .register-card.register-card .register-form input[readonly],
+:root .login-page .register-card.register-card .register-form input:disabled,
+:root .login-page .register-card.register-card .admin-otp-input:disabled {
+  color: #000000 !important;
 }

@@ -1,14 +1,18 @@
 ﻿<!doctype html>
-<script src="/static/logout.js?v=2" defer></script>
+<script src="/static/logout.js?v=3" defer></script>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NCart | My Listings</title>
-    <link rel="stylesheet" href="/static/listings.css?v=1" />
+    <script src="/static/initial-render.js?v=3"></script>
+    <title>NCart | Posted Items</title>
+    <link rel="stylesheet" href="/static/listings.css?v=8" />
+    <link rel="stylesheet" href="/static/sidebar.css?v=20" />
+    <link rel="stylesheet" href="/static/theme.css?v=13" />
+    <script src="/static/sidebar.js?v=19" defer></script>
   </head>
   <body class="dashboard-page dashboard-listings-page">
-  <script src="/static/logout.js?v=2" defer></script>
+  <script src="/static/logout.js?v=3" defer></script>
     <div class="message-modal crop-modal" id="crop-modal" hidden role="dialog" aria-modal="true" aria-labelledby="crop-title">
       <div class="crop-dialog">
         <div class="listing-form-heading">
@@ -26,13 +30,13 @@
     <div class="message-modal saving-modal" id="saving-modal" hidden role="status" aria-live="polite">
       <div class="saving-dialog">
         <span class="saving-spinner" aria-hidden="true"></span>
-        <strong id="saving-message">Preparing your listing...</strong>
+        <strong id="saving-message">Preparing your posted item...</strong>
       </div>
     </div>
     <div class="message-modal listing-error-modal" id="listing-error-modal" hidden role="alertdialog" aria-modal="true" aria-labelledby="listing-error-title" aria-describedby="listing-error-message">
       <div class="listing-error-dialog">
         <span class="listing-error-icon" aria-hidden="true">!</span>
-        <h2 id="listing-error-title">Unable to save listing</h2>
+        <h2 id="listing-error-title">Unable to save posted item</h2>
         <p id="listing-error-message"></p>
         <button class="dashboard-primary" id="close-listing-error" type="button">OK</button>
       </div>
@@ -48,50 +52,38 @@
     <main class="dashboard-shell">
       <aside class="dashboard-sidebar">
         <a class="dashboard-brand" href="/home"
-          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a
+          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png?v=4" alt="NCart"></a
         >
         <nav class="dashboard-nav">
-          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          <a class="dashboard-nav-link" href="/home"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg></span>Home</a
           ><a class="dashboard-nav-link" href="/marketplace"
-            ><span>▣</span>Marketplace</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 4.5 4h15l1.5 6"/><path d="M5 10v11h14V10"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 21v-6h6v6"/></svg></span>Marketplace</a
           ><a class="dashboard-nav-link" href="/favorites"
-            ><span>♥</span>Favorites</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Favorites</a
           ><a class="dashboard-nav-link is-active" href="/listings"
-            ><span>🛒</span>My Listings</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m20.6 13.4-9.6-9.6H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>My Listings</a
           ><a class="dashboard-nav-link" href="/messages"
-            ><span>▰</span>Messages</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span>Messages</a
           ><a class="dashboard-nav-link" href="/orders"
-            ><span>▤</span>My Orders</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>My Orders</a
           ><a class="dashboard-nav-link" href="/reports"
-            ><span>ⓘ</span>Reports</a
-          ><a class="dashboard-nav-link" href="/profile"
-            ><span>◉</span>Profile</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 18v-3"/><path d="M12 18v-6"/><path d="M16 18v-4"/></svg></span>Reports</a
           >
         </nav>
-        <a
-          class="dashboard-nav-link dashboard-logout"
-          href="/logout"
-          onclick="return confirm('Are you sure you want to log out?');"
-          ><span>↪</span>Logout</a
-        >
       </aside>
-      <section class="dashboard-content">
-        <header class="dashboard-header">
-          <label class="dashboard-search" for="search"
-            ><span>⌕</span
-            ><input id="search" type="search" placeholder="Search items"
-          /></label>
-        </header>
+      <section class="dashboard-content dashboard-inline-search-content">
         <div class="dashboard-views">
           <section class="dashboard-view is-visible">
-            <div class="dashboard-view-heading">
+            <div class="dashboard-view-heading has-inline-search">
               <div>
                 <p class="dashboard-kicker">Your activity</p>
-                <h1>My Listings</h1>
+                <h1>Posted Items</h1>
               </div>
-              <button class="dashboard-primary" id="show-post-form" type="button">
-                Post an Item
-              </button>
+              <div class="dashboard-feature-actions">
+                <button class="dashboard-primary" id="show-post-form" type="button">
+                  Post an Item
+                </button>
+              </div>
             </div>
             <div class="marketplace-detail-slot" id="listing-detail-slot">
               <div class="marketplace-detail-view" id="listing-detail-view" hidden>
@@ -103,6 +95,7 @@
                     <h2 class="message-title" id="listing-detail-title"></h2>
                     <strong class="item-modal-price" id="listing-detail-price"></strong>
                     <div class="listing-detail-meta">
+                      <p><strong>Stock:</strong> <span id="listing-detail-stock"></span></p>
                       <p><strong>Category:</strong> <span id="listing-detail-category-copy"></span></p>
                       <p><strong>Condition:</strong> <span id="listing-detail-condition"></span></p>
                     </div>
@@ -123,25 +116,25 @@
                 </div>
                 <div class="listing-form-grid">
                   <label>Item name<input name="title" required maxlength="160" placeholder="e.g. Biology textbook"></label>
-                  <label>Category<select id="category-select" name="category" required><option value="">Choose a category</option><option>Textbooks</option><option>School Supplies</option><option>Daily Essentials</option><option value="__add_category__">Add Category</option></select></label>
-                  <label class="custom-category-field" id="custom-category-field" hidden>New Category<input id="custom-category" name="custom_category" maxlength="80" placeholder="e.g. Dorm essentials"></label>
-                  <label>Condition<input name="condition" required maxlength="80" placeholder="e.g. Good condition"></label>
+                  <label>Category<select id="category-select" name="category" required><option value="" disabled selected>Choose a category</option><option value="Books">Books</option><option value="Clothing">Clothing</option><option value="Electronics">Electronics</option><option value="School Supplies">School Supplies</option><option value="Accessories">Accessories</option><option value="Bags">Bags</option><option value="Others">Others</option></select></label>
+                  <label>Condition<select name="condition" required><option value="" disabled selected>Select Condition</option><option value="New">New</option><option value="Like New">Like New</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Used">Used</option></select></label>
                   <label>Price (PHP)<input name="price" required min="0" step="0.01" type="number" placeholder="450"></label>
+                  <label>Quantity / Stock<input name="quantity" required min="0" step="1" type="number" value="1" placeholder="5"></label>
                 </div>
-                <label>Description<textarea name="description" required maxlength="1000" rows="3" placeholder="Describe the item and pickup details"></textarea></label>
+                <label>Description<textarea name="description" maxlength="1000" rows="3" placeholder="Describe the item and pickup details"></textarea></label>
                 <div class="image-upload-section">
                   <span class="listing-field-title">Image</span>
                   <label class="image-upload-box" for="listing-image"><img class="image-upload-preview" id="listing-image-preview" alt="Selected listing preview" hidden><span class="image-upload-icon">↑</span><strong>Upload image</strong><small>PNG, JPG, GIF, or WEBP up to 5 MB</small><input id="listing-image" name="image" type="file" accept="image/png,image/jpeg,image/gif,image/webp" /></label>
                 </div>
                 <p class="selected-image" id="selected-image" aria-live="polite"></p>
-                <button class="dashboard-primary" type="submit">Save listing</button>
+                <button class="dashboard-primary" type="submit">Save posted item</button>
                 <p class="listing-status" id="listing-status" role="status"></p>
               </form>
             </div>
             <div class="item-grid" id="listing-grid"></div>
             <div class="empty-state" id="listing-empty">
               <span>▱</span>
-              <h2>No listings yet.</h2>
+              <h2>No posted items yet.</h2>
               <p>
                 Turn unused school essentials into something useful for another
                 student.
@@ -169,12 +162,12 @@
       const listingDetailTitle = document.querySelector("#listing-detail-title");
       const listingDetailCondition = document.querySelector("#listing-detail-condition");
       const listingDetailDescription = document.querySelector("#listing-detail-description-text");
+      const listingDetailDescriptionSection = listingDetailDescription.closest(".listing-detail-description");
       const listingDetailPrice = document.querySelector("#listing-detail-price");
+      const listingDetailStock = document.querySelector("#listing-detail-stock");
       let selectedListing = null;
       let editingListingId = null;
       const categorySelect = document.querySelector("#category-select");
-      const customCategoryField = document.querySelector("#custom-category-field");
-      const customCategory = document.querySelector("#custom-category");
       const imageInput = document.querySelector("#listing-image");
       const imagePreview = document.querySelector("#listing-image-preview");
       const selectedImage = document.querySelector("#selected-image");
@@ -261,8 +254,11 @@
         listingDetailCategoryCopy.textContent = listing.category;
         listingDetailTitle.textContent = listing.title;
         listingDetailCondition.textContent = listing.item_condition;
-        listingDetailDescription.textContent = listing.description;
+        const description = String(listing.description || "").trim();
+        listingDetailDescription.textContent = description;
+        listingDetailDescriptionSection.hidden = !description;
         listingDetailPrice.textContent = `₱${listing.price}`;
+        listingDetailStock.textContent = Number(listing.quantity) > 0 ? `${Number(listing.quantity)} available` : "Out of Stock";
         listingDetailView.hidden = false;
         listingGrid.hidden = true;
         listingEmpty.hidden = true;
@@ -276,19 +272,11 @@
         document.querySelector("#listing-form button[type=submit]").textContent = "Save changes";
         listingForm.elements.title.value = selectedListing.title;
         categorySelect.value = selectedListing.category;
-        if (categorySelect.value !== selectedListing.category) {
-          categorySelect.value = "__add_category__";
-          customCategoryField.hidden = false;
-          customCategory.required = true;
-          customCategory.value = selectedListing.category;
-        } else {
-          customCategoryField.hidden = true;
-          customCategory.required = false;
-          customCategory.value = "";
-        }
+        if (!categorySelect.value) categorySelect.value = "Others";
         listingForm.elements.condition.value = selectedListing.item_condition;
         listingForm.elements.price.value = selectedListing.price;
-        listingForm.elements.description.value = selectedListing.description;
+        listingForm.elements.quantity.value = selectedListing.quantity;
+        listingForm.elements.description.value = String(selectedListing.description || "");
         imageInput.value = "";
         croppedImageData = "";
         selectedImage.textContent = selectedListing.image_url ? "Current image will be kept unless replaced" : "";
@@ -304,12 +292,12 @@
       const readApiResponse = async (response) => {
         const body = await response.text();
         if (!response.headers.get("content-type")?.includes("application/json")) {
-          throw new Error(`Listings service returned HTTP ${response.status}. Restart the NCart server.`);
+          throw new Error(`Posted items service returned HTTP ${response.status}. Restart the NCart server.`);
         }
         try {
           return JSON.parse(body);
         } catch {
-          throw new Error("Listings service returned an invalid response.");
+          throw new Error("Posted items service returned an invalid response.");
         }
       };
       const fetchWithTimeout = async (url, options = {}) => {
@@ -318,7 +306,7 @@
         try {
           return await fetch(url, { ...options, signal: controller.signal });
         } catch (error) {
-          if (error.name === "AbortError") throw new Error("The listing service took too long to respond.");
+          if (error.name === "AbortError") throw new Error("The posted items service took too long to respond.");
           throw error;
         } finally {
           clearTimeout(timeout);
@@ -347,13 +335,6 @@
         promise,
         new Promise((resolve, reject) => setTimeout(() => reject(new Error(message)), milliseconds)),
       ]);
-      const titleCase = (value) => value.trim().toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase());
-      categorySelect.addEventListener("change", () => {
-        const isCustom = categorySelect.value === "__add_category__";
-        customCategoryField.hidden = !isCustom;
-        customCategory.required = isCustom;
-        if (isCustom) customCategory.focus();
-      });
       imageInput.addEventListener("change", () => {
         const imageFile = imageInput.files[0];
         selectedImage.textContent = imageFile ? imageFile.name : "";
@@ -418,35 +399,18 @@
       const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
       })[character]);
-      const addExistingCategories = (listings) => {
-        const addCategoryOption = categorySelect.querySelector('option[value="__add_category__"]');
-        const existingCategories = new Set(
-          Array.from(categorySelect.options).map((option) => option.value.toLowerCase()),
-        );
-        [...new Map(
-          listings
-            .map((listing) => String(listing.category || "").trim())
-            .filter(Boolean)
-            .map((category) => [category.toLowerCase(), category]),
-        ).values()].forEach((category) => {
-          if (existingCategories.has(category.toLowerCase())) return;
-          const option = document.createElement("option");
-          option.value = category;
-          option.textContent = category;
-          categorySelect.insertBefore(option, addCategoryOption);
-          existingCategories.add(category.toLowerCase());
-        });
-      };
       const renderListings = async () => {
         const response = await fetchWithTimeout("/api/listings?mine=1");
         const data = await readApiResponse(response);
-        if (!response.ok) throw new Error(data.error || "Could not load listings.");
-        addExistingCategories(data.listings);
-        listingGrid.innerHTML = data.listings.map((listing) => `
-          <article class="item-card listing-card" tabindex="0" data-listing-id="${listing.id}">
-            ${listing.image_url ? `<img class="item-image" src="${escapeHtml(listing.image_url)}" alt="${escapeHtml(listing.title)}">` : ""}
-            <div><span class="item-category">${escapeHtml(listing.category)}</span><h3>${escapeHtml(listing.title)}</h3><p>${escapeHtml(listing.item_condition)}</p><small>${escapeHtml(listing.description)}</small><strong>₱${escapeHtml(listing.price)}</strong></div>
-          </article>`).join("");
+        if (!response.ok) throw new Error(data.error || "Could not load posted items.");
+        listingGrid.innerHTML = data.listings.map((listing) => {
+          const description = String(listing.description || "").trim();
+          return `
+            <article class="item-card listing-card" tabindex="0" data-listing-id="${listing.id}">
+              ${listing.image_url ? `<img class="item-image" src="${escapeHtml(listing.image_url)}" alt="${escapeHtml(listing.title)}">` : ""}
+              <div><span class="item-category">${escapeHtml(listing.category)}</span><h3>${escapeHtml(listing.title)}</h3><p>${escapeHtml(listing.item_condition)}</p>${description ? `<small>${escapeHtml(description)}</small>` : ""}<strong>₱${escapeHtml(listing.price)}</strong><small class="listing-stock${Number(listing.quantity) === 0 ? " is-out-of-stock" : ""}">${Number(listing.quantity) > 0 ? `${Number(listing.quantity)} available` : "Out of Stock"}</small></div>
+            </article>`;
+        }).join("");
         listingGrid.querySelectorAll(".listing-card").forEach((card, index) => {
           const listing = data.listings[index];
           card.addEventListener("click", () => openListingDetail(listing));
@@ -465,14 +429,11 @@
         editingListingId = null;
         listingForm.reset();
         croppedImageData = "";
-        customCategoryField.hidden = true;
-        customCategory.required = false;
-        customCategory.value = "";
         selectedImage.textContent = "";
         imagePreview.hidden = true;
         imagePreview.removeAttribute("src");
         document.querySelector("#listing-modal-title").textContent = "Post an Item";
-        document.querySelector("#listing-form button[type=submit]").textContent = "Save listing";
+        document.querySelector("#listing-form button[type=submit]").textContent = "Save posted item";
         listingModal.hidden = false;
         listingGrid.hidden = true;
         listingEmpty.hidden = true;
@@ -506,21 +467,22 @@
         if (saveInProgress) return;
         if (!listingForm.checkValidity()) {
           listingForm.reportValidity();
-          showListingError("Complete all required fields before saving the listing.");
+          showListingError("Complete all required fields before saving the posted item.");
           return;
         }
         saveInProgress = true;
         const saveButton = listingForm.querySelector("button[type=submit]");
         saveButton.disabled = true;
-        listingStatus.textContent = "Preparing your listing...";
-        savingMessage.textContent = "Preparing your listing...";
+        listingStatus.textContent = "Preparing your posted item...";
+        savingMessage.textContent = "Preparing your posted item...";
         listingStatus.className = "listing-status";
         savingModal.hidden = false;
         savingModal.classList.add("is-visible");
         try {
           const values = Object.fromEntries(new FormData(listingForm));
-          if (values.category === "__add_category__") values.category = titleCase(values.custom_category);
-          delete values.custom_category;
+          if (values.category === "__add_category__" || values.category === "Add Category") {
+            values.category = "Others";
+          }
           const imageFile = imageInput.files[0];
           delete values.image;
           if (croppedImageData) {
@@ -536,16 +498,16 @@
           const saveUrl = editingListingId ? `/api/listings/${editingListingId}` : "/api/listings";
           const requestBody = JSON.stringify(values);
           if (requestBody.length > 3 * 1024 * 1024) {
-            throw new Error("The listing data is too large. Please use a smaller cropped image.");
+            throw new Error("The posted item data is too large. Please use a smaller cropped image.");
           }
           const response = await fetchWithTimeout(saveUrl, { method: editingListingId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: requestBody });
           const data = await readApiResponse(response);
-          if (!response.ok) throw new Error(data.error || "Could not save listing.");
+          if (!response.ok) throw new Error(data.error || "Could not save posted item.");
           listingForm.reset();
           croppedImageData = "";
           editingListingId = null;
           document.querySelector("#listing-modal-title").textContent = "Post an Item";
-          document.querySelector("#listing-form button[type=submit]").textContent = "Save listing";
+          document.querySelector("#listing-form button[type=submit]").textContent = "Save posted item";
           selectedImage.textContent = "";
           imagePreview.hidden = true;
           imagePreview.removeAttribute("src");
@@ -556,10 +518,10 @@
           try {
             await renderListings();
           } catch (error) {
-            showListingError(`Item saved, but the listings could not refresh: ${error.message}`);
+            showListingError(`Item saved, but your posted items could not refresh: ${error.message}`);
           }
         } catch (error) {
-          const message = error.message || "Could not save listing.";
+          const message = error.message || "Could not save posted item.";
           listingStatus.textContent = message;
           listingStatus.classList.add("is-error");
           showListingError(message);

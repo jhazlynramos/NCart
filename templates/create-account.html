@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Create an NCart account">
+  <script src="/static/initial-render.js?v=3"></script>
   <title>Create an account | NCart</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/create-account.css?v=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/create-account.css?v=19">
+  <link rel="stylesheet" href="/static/theme.css?v=15">
 </head>
 <body class="login-page">
   <div class="message-modal" id="message-modal" hidden role="dialog" aria-modal="true" aria-labelledby="message-title" aria-describedby="message-text">
@@ -26,31 +28,44 @@
     <div class="login-copy">
       <p class="login-eyebrow">Join the exchange</p>
       <h1 id="register-title">Create your account</h1>
-      <p class="login-helper">Set up your student marketplace profile.</p>
+      <p class="login-helper">Choose Student or Admin account registration.</p>
     </div>
 
-    <form class="login-form register-form" id="register-form" action="/register" method="post">
-      <div class="name-row">
-        <div class="name-field">
-          <label for="surname">Surname</label>
-          <input id="surname" name="surname" type="text" placeholder="Surname" autocomplete="family-name" required>
-        </div>
-        <div class="name-field">
-          <label for="first-name">First Name</label>
-          <input id="first-name" name="first_name" type="text" placeholder="First name" autocomplete="given-name" required>
-        </div>
-      </div>
+    <form class="login-form register-form" id="register-form" action="/register" method="post" enctype="multipart/form-data">
+      <fieldset class="account-type-fieldset">
+        <legend>Account Type</legend>
+        <label class="account-type-option" for="account-type-student">
+          <input id="account-type-student" type="radio" name="account_type" value="student" checked required>
+          Student Account
+        </label>
+        <label class="account-type-option" for="account-type-admin">
+          <input id="account-type-admin" type="radio" name="account_type" value="admin" required>
+          Admin Account
+        </label>
+      </fieldset>
 
-      <label for="middle-name">Middle Name</label>
-      <input id="middle-name" name="middle_name" type="text" placeholder="Middle name" autocomplete="additional-name" required>
-      <label class="show-password no-middle-name" for="no-middle-name">
-        <input id="no-middle-name" name="no_middle_name" type="checkbox" value="1">
-        I have no middle name
-      </label>
+      <label for="first-name">First Name</label>
+      <input id="first-name" name="first_name" type="text" placeholder="Enter your first name" autocomplete="given-name" maxlength="120" required>
 
-      <label for="register-email">Email Address</label>
+      <label for="middle-name">Middle Name (Optional)</label>
+      <input id="middle-name" name="middle_name" type="text" placeholder="Enter your middle name (optional)" autocomplete="additional-name" maxlength="120">
+
+      <label for="last-name">Last Name</label>
+      <input id="last-name" name="last_name" type="text" placeholder="Enter your last name" autocomplete="family-name" maxlength="120" required>
+
+      <label for="register-email" id="register-email-label">School Email or Email</label>
       <input id="register-email" name="email" type="email" placeholder="you@school.edu" autocomplete="email" required>
       <input id="google-token" name="google_token" type="hidden">
+
+      <section class="account-type-fields" id="student-account-fields" aria-labelledby="student-fields-title">
+        <h2 class="account-type-fields-title" id="student-fields-title">Student details</h2>
+        <label for="student-number">Student Number</label>
+        <input id="student-number" name="student_number" type="text" placeholder="0000-0000" autocomplete="off" inputmode="numeric" pattern="\d{4}-\d{4}" title="Student Number must follow the format 0000-0000." aria-describedby="student-number-error" maxlength="9" required>
+        <p class="student-number-error" id="student-number-error" role="alert" hidden>Student Number must follow the format 0000-0000.</p>
+        <label for="student-id-image">Upload Student ID</label>
+        <input id="student-id-image" name="student_id_image" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="student-id-help">
+        <p class="student-id-help" id="student-id-help">Optional: Upload a clear JPG, PNG, or WebP image (maximum 5 MB) for the existing Student ID review.</p>
+      </section>
 
       <label for="register-password">Password</label>
       <input id="register-password" name="password" type="password" placeholder="Create a strong password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}" title="Use at least 8 characters with an uppercase letter, lowercase letter, number, and special character." autocomplete="new-password" required>
@@ -71,8 +86,20 @@
 
       <button class="login-submit" type="submit">Create Account</button>
     </form>
-
-    <div class="login-divider"><span>or</span></div>
+    <div class="login-divider"><span>or</span>    </div>
+    <div class="message-modal" id="admin-otp-modal" hidden role="dialog" aria-modal="true" aria-labelledby="admin-otp-title" aria-describedby="admin-otp-description">
+      <form class="message-dialog admin-otp-dialog" id="admin-otp-form">
+        <button class="message-close" id="admin-otp-close" type="button" aria-label="Close">&times;</button>
+        <div class="message-icon" id="admin-otp-icon" aria-hidden="true">!</div>
+        <h2 class="message-title" id="admin-otp-title">Verify your email</h2>
+        <p class="message-text" id="admin-otp-description">Enter the six-digit code sent to your email. The code expires in five minutes.</p>
+        <label class="admin-otp-label" for="admin-otp-input">One-Time Password</label>
+        <input class="admin-otp-input" id="admin-otp-input" name="otp" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+        <p class="admin-otp-error" id="admin-otp-error" role="alert" aria-live="assertive"></p>
+        <button class="message-button" id="admin-otp-verify" type="submit">Verify OTP and Create Account</button>
+        <button class="admin-otp-resend" id="admin-otp-resend" type="button" disabled>Resend OTP (60s)</button>
+      </form>
+    </div>
 
     <div class="login-socials">
       <button class="register-social" type="button" data-provider="Google"><span class="social-icon google-icon">G</span>Google</button>
@@ -129,22 +156,289 @@
     const googleName = params.get('google_name');
     const googleGivenName = params.get('google_given_name');
     const googleFamilyName = params.get('google_family_name');
+    const isAdminVerification = params.get('admin_verification') === '1';
+    const adminVerificationEmail = params.get('email') || '';
     if (googleToken && googleEmail) {
       document.querySelector('#google-token').value = googleToken;
       document.querySelector('#register-email').value = googleEmail;
       document.querySelector('#register-email').readOnly = true;
       document.querySelector('#register-email').title = 'This email was verified by Google and cannot be changed.';
       if (googleGivenName) document.querySelector('#first-name').value = googleGivenName;
-      if (googleFamilyName) document.querySelector('#surname').value = googleFamilyName;
-      if (googleName) document.querySelector('.login-helper').textContent = `Welcome, ${googleName}. Complete your student marketplace profile.`;
+      if (googleFamilyName) document.querySelector('#last-name').value = googleFamilyName;
+      if (googleName) document.querySelector('.login-helper').textContent = `Welcome, ${googleName}. Complete your NCart buyer profile.`;
     }
-
+    if (params.get('retry_verification') === '1' && params.get('email')) {
+      document.querySelector('#register-email').value = params.get('email');
+    }
     const registerForm = document.querySelector('#register-form');
     const password = document.querySelector('#register-password');
     const confirmation = document.querySelector('#confirm-password');
+    const studentNumberInput = document.querySelector('#student-number');
+    const studentNumberError = document.querySelector('#student-number-error');
+    const studentNumberPattern = /^\d{4}-\d{4}$/;
+    const studentNumberFormatMessage = 'Student Number must follow the format 0000-0000.';
+    let studentNumberTouched = false;
+    const isStudentAccountSelected = () =>
+      registerForm?.querySelector('input[name="account_type"]:checked')?.value === 'student';
+    const getStudentNumberDigitsBefore = (value, position) =>
+      value.slice(0, position).replace(/[^0-9]/g, '').length;
+    const formatStudentNumber = (digits) =>
+      digits.length > 4 ? `${digits.slice(0, 4)}-${digits.slice(4)}` : digits;
+    const updateStudentNumberValidity = (showMessage = studentNumberTouched) => {
+      if (!isStudentAccountSelected()) {
+        studentNumberInput.setCustomValidity('');
+        studentNumberInput.removeAttribute('aria-invalid');
+        studentNumberError.hidden = true;
+        return;
+      }
+      const invalidFormat = studentNumberInput.value.length > 0
+        && !studentNumberPattern.test(studentNumberInput.value);
+      studentNumberInput.setCustomValidity(invalidFormat ? studentNumberFormatMessage : '');
+      if (invalidFormat) {
+        studentNumberInput.setAttribute('aria-invalid', 'true');
+      } else {
+        studentNumberInput.removeAttribute('aria-invalid');
+      }
+      studentNumberError.hidden = !(invalidFormat && showMessage);
+    };
+    studentNumberInput.addEventListener('beforeinput', (event) => {
+      if (!event.inputType.startsWith('insert') || event.inputType === 'insertFromPaste'
+        || event.data === null || event.isComposing) return;
+      if (!/^[0-9]+$/.test(event.data)) {
+        event.preventDefault();
+        return;
+      }
+      const value = studentNumberInput.value;
+      const start = studentNumberInput.selectionStart ?? value.length;
+      const end = studentNumberInput.selectionEnd ?? start;
+      const digits = value.replace(/[^0-9]/g, '');
+      const replacedDigits = getStudentNumberDigitsBefore(value, end)
+        - getStudentNumberDigitsBefore(value, start);
+      if (digits.length - replacedDigits + event.data.length > 8) {
+        event.preventDefault();
+      }
+    });
+    studentNumberInput.addEventListener('paste', (event) => {
+      event.preventDefault();
+      const pastedDigits = event.clipboardData.getData('text').replace(/[^0-9]/g, '');
+      if (!pastedDigits) return;
+      const value = studentNumberInput.value;
+      const start = studentNumberInput.selectionStart ?? value.length;
+      const end = studentNumberInput.selectionEnd ?? start;
+      const digits = value.replace(/[^0-9]/g, '');
+      const digitsBeforeStart = getStudentNumberDigitsBefore(value, start);
+      const digitsBeforeEnd = getStudentNumberDigitsBefore(value, end);
+      const prefix = digits.slice(0, digitsBeforeStart);
+      const suffix = digits.slice(digitsBeforeEnd);
+      const insertedDigits = pastedDigits.slice(0, Math.max(0, 8 - prefix.length - suffix.length));
+      const nextDigits = `${prefix}${insertedDigits}${suffix}`;
+      studentNumberInput.value = formatStudentNumber(nextDigits);
+      const caretDigitCount = prefix.length + insertedDigits.length;
+      const caretPosition = caretDigitCount + (nextDigits.length > 4 && caretDigitCount >= 4 ? 1 : 0);
+      studentNumberInput.setSelectionRange(caretPosition, caretPosition);
+      updateStudentNumberValidity();
+    });
+    studentNumberInput.addEventListener('input', () => {
+      const value = studentNumberInput.value;
+      const selectionStart = studentNumberInput.selectionStart ?? value.length;
+      const selectionEnd = studentNumberInput.selectionEnd ?? selectionStart;
+      const digitsBeforeStart = getStudentNumberDigitsBefore(value, selectionStart);
+      const digitsBeforeEnd = getStudentNumberDigitsBefore(value, selectionEnd);
+      const digits = value.replace(/[^0-9]/g, '').slice(0, 8);
+      studentNumberInput.value = formatStudentNumber(digits);
+      const caretPosition = digitsBeforeStart + (digits.length > 4 && digitsBeforeStart >= 4 ? 1 : 0);
+      const caretEnd = digitsBeforeEnd + (digits.length > 4 && digitsBeforeEnd >= 4 ? 1 : 0);
+      studentNumberInput.setSelectionRange(caretPosition, caretEnd);
+      updateStudentNumberValidity();
+    });
+    studentNumberInput.addEventListener('blur', () => {
+      studentNumberTouched = true;
+      updateStudentNumberValidity(true);
+    });
+    studentNumberInput.addEventListener('invalid', () => {
+      studentNumberTouched = true;
+      updateStudentNumberValidity(true);
+    });
     const showPassword = document.querySelector('#show-password');
-    const middleName = document.querySelector('#middle-name');
-    const noMiddleName = document.querySelector('#no-middle-name');
+    const studentAccountFields = document.querySelector('#student-account-fields');
+    const studentIdImage = document.querySelector('#student-id-image');
+    const accountTypeChoices = document.querySelectorAll('input[name="account_type"]');
+    const emailLabel = document.querySelector('#register-email-label');
+    const adminOtpModal = document.querySelector('#admin-otp-modal');
+    const adminOtpForm = document.querySelector('#admin-otp-form');
+    const adminOtpInput = document.querySelector('#admin-otp-input');
+    const adminOtpError = document.querySelector('#admin-otp-error');
+    const adminOtpResend = document.querySelector('#admin-otp-resend');
+    const adminOtpVerify = document.querySelector('#admin-otp-verify');
+    const adminOtpEmail = document.querySelector('#register-email');
+    if (isAdminVerification) {
+      document.querySelector('#account-type-admin').checked = true;
+    }
+    let pendingOtpEmail = '';
+    let resendTimer;
+    const updateAccountTypeFields = () => {
+      const isAdmin = registerForm.querySelector('input[name="account_type"]:checked')?.value === 'admin';
+      studentAccountFields.hidden = isAdmin;
+      document.querySelector('.login-helper').textContent = isAdmin
+        ? 'Submit your Admin registration for review. An email verification code will be sent after approval.'
+        : 'Register with your Student Number, verify your email, and await administrator approval.';
+      emailLabel.textContent = isAdmin ? 'Official Admin Email' : 'School Email or Email';
+      document.querySelector('#register-email').placeholder = isAdmin ? 'Enter your official email' : 'you@school.edu';
+      studentNumberInput.disabled = isAdmin;
+      studentNumberInput.required = !isAdmin;
+      studentIdImage.disabled = isAdmin;
+      studentIdImage.required = false;
+      updateStudentNumberValidity(false);
+      document.querySelector('#register-form .login-submit').textContent =
+        isAdmin ? 'Register Admin Account' : 'Create Student Account';
+    };
+    updateAccountTypeFields();
+    if (isAdminVerification && adminVerificationEmail) {
+      adminOtpEmail.value = adminVerificationEmail;
+      adminOtpEmail.readOnly = true;
+      adminOtpEmail.title = 'This is the email address where your Admin verification code was sent.';
+      document.querySelector('#admin-otp-title').textContent = 'Verify your approved Admin account';
+      document.querySelector('#admin-otp-description').textContent =
+        'Enter the six-digit code sent after your Admin registration was approved. The code expires in five minutes.';
+    }
+    accountTypeChoices.forEach((choice) => choice.addEventListener('change', () => {
+      studentNumberTouched = false;
+      updateAccountTypeFields();
+    }));
+    if (params.get('retry_verification') === '1') {
+      document.querySelector('.login-helper').textContent = 'Your Student ID could not be verified. Submit a new valid ID image to request another review.';
+    } else if (googleName) {
+      document.querySelector('.login-helper').textContent = `Welcome, ${googleName}. Complete your NCart buyer profile.`;
+    }
+    if (params.get('retry_verification') === '1' && params.get('email')) {
+      adminOtpEmail.value = params.get('email');
+    }
+    const closeAdminOtpModal = () => {
+      adminOtpModal.classList.remove('is-visible');
+      adminOtpModal.hidden = true;
+      adminOtpEmail.readOnly = false;
+      if (resendTimer) window.clearInterval(resendTimer);
+    };
+    const startOtpResendCooldown = (seconds = 60) => {
+      if (resendTimer) window.clearInterval(resendTimer);
+      let remaining = Math.max(0, Number(seconds) || 60);
+      adminOtpResend.disabled = remaining > 0;
+      const updateButton = () => {
+        adminOtpResend.textContent = remaining > 0 ? `Resend OTP (${remaining}s)` : 'Resend OTP';
+        adminOtpResend.disabled = remaining > 0;
+      };
+      updateButton();
+      resendTimer = window.setInterval(() => {
+        remaining -= 1;
+        updateButton();
+        if (remaining <= 0) window.clearInterval(resendTimer);
+      }, 1000);
+    };
+    const openAdminOtpModal = (email, retryAfter = 60) => {
+      pendingOtpEmail = email;
+      adminOtpEmail.readOnly = true;
+      adminOtpError.textContent = '';
+      adminOtpInput.value = '';
+      adminOtpModal.hidden = false;
+      adminOtpModal.classList.add('is-visible');
+      startOtpResendCooldown(retryAfter);
+      adminOtpInput.focus();
+    };
+    if (isAdminVerification && adminVerificationEmail) {
+      openAdminOtpModal(adminVerificationEmail);
+    }
+    document.querySelector('#admin-otp-close').addEventListener('click', closeAdminOtpModal);
+    adminOtpModal.addEventListener('click', (event) => {
+      if (event.target === adminOtpModal) closeAdminOtpModal();
+    });
+    registerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      ['#first-name', '#middle-name', '#last-name'].forEach((selector) => {
+        const input = document.querySelector(selector);
+        input.value = input.value.trim();
+      });
+      const selectedType = registerForm.querySelector('input[name="account_type"]:checked')?.value || '';
+      if (!['student', 'admin'].includes(selectedType)) {
+        showModal('Select Student or Admin as your account type.');
+        return;
+      }
+      updateStudentNumberValidity(selectedType === 'student');
+      if (!registerForm.reportValidity()) return;
+      const submitButton = registerForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      try {
+        const registrationData = new FormData(registerForm);
+        if (selectedType === 'admin') {
+          registrationData.delete('student_number');
+          registrationData.delete('student_id_image');
+        }
+        const response = await fetch('/api/admin-registration/send-otp', {
+          method: 'POST',
+          body: registrationData,
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Could not send the verification code.');
+        if (selectedType === 'admin') {
+          showStatus(data.message);
+          showModal(data.message, false);
+          return;
+        }
+        document.querySelector('#admin-otp-title').textContent = 'Verify your email';
+        document.querySelector('#admin-otp-description').textContent =
+          `Enter the six-digit code sent to your email to verify your ${selectedType} account. The code expires in five minutes.`;
+        adminOtpVerify.textContent = selectedType === 'admin'
+          ? 'Verify OTP and Activate Admin Account'
+          : 'Verify OTP and Create Account';
+        openAdminOtpModal(adminOtpEmail.value.trim().toLowerCase(), data.retry_after);
+      } catch (error) {
+        showModal(error instanceof Error ? error.message : 'Could not send the verification code.');
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+    adminOtpForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!adminOtpForm.reportValidity()) return;
+      adminOtpError.textContent = '';
+      adminOtpVerify.disabled = true;
+      try {
+        const response = await fetch('/api/admin-registration/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: pendingOtpEmail, otp: adminOtpInput.value.trim() }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Could not verify the code.');
+        window.location.assign(data.redirect);
+      } catch (error) {
+        adminOtpError.textContent = error instanceof Error ? error.message : 'Could not verify the code.';
+        adminOtpInput.select();
+      } finally {
+        adminOtpVerify.disabled = false;
+      }
+    });
+    adminOtpResend.addEventListener('click', async () => {
+      adminOtpResend.disabled = true;
+      adminOtpError.textContent = '';
+      try {
+        const response = await fetch('/api/admin-registration/resend-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: pendingOtpEmail }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          if (data.retry_after) startOtpResendCooldown(data.retry_after);
+          throw new Error(data.error || 'Could not resend the verification code.');
+        }
+        adminOtpInput.value = '';
+        adminOtpInput.focus();
+        startOtpResendCooldown(data.retry_after);
+      } catch (error) {
+        adminOtpError.textContent = error instanceof Error ? error.message : 'Could not resend the verification code.';
+        if (!resendTimer) adminOtpResend.disabled = false;
+      }
+    });
     let invalidMessageShown = false;
     const passwordRules = {
       length: (value) => value.length >= 8,
@@ -154,7 +448,8 @@
       special: (value) => /[^A-Za-z\d]/.test(value),
     };
 
-    registerForm.addEventListener('invalid', () => {
+    registerForm.addEventListener('invalid', (event) => {
+      if (event.target === studentNumberInput) return;
       if (!invalidMessageShown) {
         showModal('Please correct the highlighted fields before creating your account.');
         invalidMessageShown = true;
@@ -171,20 +466,20 @@
         const passed = check(password.value);
         item.classList.toggle('is-valid', passed);
       });
+      confirmation.setCustomValidity(
+        confirmation.value && confirmation.value !== password.value ? 'Passwords do not match.' : '',
+      );
+    });
+    confirmation.addEventListener('input', () => {
+      confirmation.setCustomValidity(
+        confirmation.value && confirmation.value !== password.value ? 'Passwords do not match.' : '',
+      );
     });
 
     showPassword.addEventListener('change', () => {
       const type = showPassword.checked ? 'text' : 'password';
       password.type = type;
       confirmation.type = type;
-    });
-
-    noMiddleName.addEventListener('change', () => {
-      middleName.disabled = noMiddleName.checked;
-      middleName.required = !noMiddleName.checked;
-      if (noMiddleName.checked) {
-        middleName.value = '';
-      }
     });
 
     document.querySelectorAll('[data-provider]').forEach((button) => {

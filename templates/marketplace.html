@@ -1,19 +1,23 @@
 ﻿<!doctype html>
-<script src="/static/logout.js?v=2" defer></script>
+<script src="/static/logout.js?v=3" defer></script>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/static/initial-render.js?v=3"></script>
     <title>NCart | Marketplace</title>
-    <link rel="stylesheet" href="/static/marketplace.css?v=1" />
+    <link rel="stylesheet" href="/static/marketplace.css?v=12" />
+    <link rel="stylesheet" href="/static/sidebar.css?v=20" />
+    <link rel="stylesheet" href="/static/theme.css?v=13" />
+    <script src="/static/sidebar.js?v=19" defer></script>
   </head>
-  <body class="dashboard-page">
+  <body class="dashboard-page marketplace-page">
     <div class="message-modal report-modal" id="report-modal" hidden role="dialog" aria-modal="true" aria-labelledby="report-modal-title">
       <form class="report-dialog" id="report-form">
         <button class="report-back" id="report-back" type="button">&#8592; Back</button>
-        <button class="report-close" id="report-close" type="button" aria-label="Close report form">&times;</button>
+        <button class="report-close" id="report-close" type="button" aria-label="Close complaint form">&times;</button>
         <p class="report-brand">KEEP NCART HELPFUL</p>
-        <h1 id="report-modal-title">Report this item</h1>
+        <h1 id="report-modal-title">Submit a complaint</h1>
         <p class="report-subtitle">Tell us what is wrong</p>
         <label class="report-field">Reason
           <select id="report-reason" required>
@@ -28,15 +32,16 @@
         <label class="report-field">Additional details
           <textarea id="report-details" rows="4" placeholder="Add any useful details..."></textarea>
         </label>
-        <button class="report-submit" type="submit">Submit report</button>
+        <button class="report-submit" type="submit">Submit complaint</button>
       </form>
     </div>
     <div class="message-modal report-confirm-modal" id="report-confirm-modal" hidden role="dialog" aria-modal="true" aria-labelledby="report-confirm-title">
       <div class="message-dialog report-confirm-dialog">
-        <button class="message-close" id="report-confirm-close" type="button" aria-label="Close report confirmation">&times;</button>
+        <button class="message-close" id="report-confirm-close" type="button" aria-label="Close complaint confirmation">&times;</button>
         <div class="report-alert-icon" aria-hidden="true">!</div>
-        <h2 class="message-title" id="report-confirm-title">Report</h2>
-        <p class="message-text">Are you sure you want<br>to report this item?</p>
+        <h2 class="message-title" id="report-confirm-title">Submit Complaint</h2>
+        <p class="message-text">Are you sure you want<br>to submit this complaint?</p>
+        <p class="report-submit-error" id="report-submit-error" role="alert" hidden></p>
         <div class="message-actions report-confirm-actions">
           <button class="report-no-button" id="report-confirm-no" type="button">No</button>
           <button class="message-button" id="report-confirm-yes" type="button">Yes</button>
@@ -48,7 +53,7 @@
         <button class="message-close" id="cart-confirm-close" type="button" aria-label="Close add to cart confirmation">&times;</button>
         <div class="message-icon" aria-hidden="true">✓</div>
         <h2 class="message-title" id="cart-confirm-title">Added to cart</h2>
-        <p class="message-text">This item is now in your cart. You can continue shopping or go to checkout.</p>
+        <p class="message-text" id="cart-confirm-message">This item is now in your cart. You can continue shopping or go to checkout.</p>
         <div class="message-actions cart-confirm-actions">
           <button class="message-button" id="cart-confirm-continue" type="button">Continue</button>
           <button class="message-button cart-confirm-link" id="cart-confirm-checkout" type="button">Checkout</button>
@@ -70,75 +75,46 @@
         <button class="seller-chat-send" id="seller-chat-send" type="button">Send</button>
       </div>
     </aside>
-  <script src="/static/logout.js?v=2" defer></script>
+  <script src="/static/logout.js?v=3" defer></script>
     <main class="dashboard-shell">
       <aside class="dashboard-sidebar">
         <a class="dashboard-brand" href="/home"
-          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a
+          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png?v=4" alt="NCart"></a
         >
         <nav class="dashboard-nav">
-          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          <a class="dashboard-nav-link" href="/home"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg></span>Home</a
           ><a class="dashboard-nav-link is-active" href="/marketplace"
-            ><span>▣</span>Marketplace</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 4.5 4h15l1.5 6"/><path d="M5 10v11h14V10"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 21v-6h6v6"/></svg></span>Marketplace</a
           ><a class="dashboard-nav-link" href="/favorites"
-            ><span>♥</span>Favorites</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Favorites</a
           ><a class="dashboard-nav-link" href="/listings"
-            ><span>🛒</span>My Listings</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m20.6 13.4-9.6-9.6H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>My Listings</a
           ><a class="dashboard-nav-link" href="/messages"
-            ><span>▰</span>Messages</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span>Messages</a
           ><a class="dashboard-nav-link" href="/orders"
-            ><span>▤</span>My Orders</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>My Orders</a
           ><a class="dashboard-nav-link" href="/reports"
-            ><span>ⓘ</span>Reports</a
-          ><a class="dashboard-nav-link" href="/profile"
-            ><span>◉</span>Profile</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 18v-3"/><path d="M12 18v-6"/><path d="M16 18v-4"/></svg></span>Reports</a
           >
         </nav>
-        <a
-          class="dashboard-nav-link dashboard-logout"
-          href="/logout"
-          onclick="return confirm('Are you sure you want to log out?');"
-          ><span>↪</span>Logout</a
-        >
       </aside>
-      <section class="dashboard-content">
-        <header class="dashboard-header">
-          <label class="dashboard-search" for="search"
-            ><span>⌕</span
-            ><input id="search" type="search" placeholder="Search marketplace"
-          /></label>
-          <div class="dashboard-header-actions">
-            <button class="dashboard-cart-button" id="marketplace-cart-button" type="button" aria-expanded="false" aria-controls="marketplace-cart-panel">
-              <span class="dashboard-cart-icon">🛒</span>
-              <span class="dashboard-cart-label">Cart</span>
-              <span class="dashboard-cart-count" id="marketplace-cart-count">0</span>
-            </button>
-          </div>
-        </header>
-        <aside class="marketplace-cart-panel" id="marketplace-cart-panel" hidden aria-label="Shopping cart" aria-live="polite">
-          <div class="marketplace-cart-header">
-            <div>
-              <span class="dashboard-kicker">Cart</span>
-              <h2>Your items</h2>
-            </div>
-            <button class="marketplace-cart-close" id="marketplace-cart-close" type="button" aria-label="Close cart">&times;</button>
-          </div>
-          <div class="marketplace-cart-items" id="marketplace-cart-items"></div>
-          <div class="marketplace-cart-footer">
-            <div class="marketplace-cart-total"><span>Total</span><strong id="marketplace-cart-total">₱0.00</strong></div>
-            <button class="message-button marketplace-cart-checkout" id="marketplace-cart-checkout" type="button">Checkout</button>
-          </div>
-        </aside>
+      <section class="dashboard-content dashboard-inline-search-content">
         <div class="dashboard-views">
           <section class="dashboard-view is-visible">
-            <div class="dashboard-view-heading">
+            <div class="dashboard-view-heading has-inline-search">
               <div>
                 <p class="dashboard-kicker">Campus exchange</p>
                 <h1>Marketplace</h1>
               </div>
-              <a class="dashboard-primary" href="/listings">
-                Post an item
-              </a>
+              <div class="dashboard-feature-actions">
+                <label class="dashboard-search" for="search"
+                  ><span>⌕</span
+                  ><input id="search" type="search" placeholder="Search marketplace"
+                /></label>
+                <a class="dashboard-primary" href="/listings">
+                  Post an item
+                </a>
+              </div>
             </div>
             <div class="dashboard-filter-row" id="category-filters">
               <button class="dashboard-filter is-selected" type="button" data-category-filter="">All items</button>
@@ -153,10 +129,20 @@
                     <h2 class="message-title" id="item-modal-title"></h2>
                     <strong class="item-modal-price" id="item-modal-price"></strong>
                     <div class="listing-detail-meta">
-                      <p><strong>Seller:</strong> <span id="item-modal-seller"></span></p>
+                      <p><strong>Seller:</strong> <a class="seller-profile-link" id="item-modal-seller" href="#"></a></p>
                       <p><strong>Category:</strong> <span id="item-modal-category-copy"></span></p>
                       <p><strong>Condition:</strong> <span id="item-modal-condition"></span></p>
+                      <p><strong>Stock:</strong> <span id="item-modal-stock"></span></p>
                     </div>
+                    <div class="purchase-quantity" id="purchase-quantity">
+                      <label for="purchase-quantity-input">Quantity</label>
+                      <div class="quantity-stepper">
+                        <button type="button" id="purchase-quantity-decrease" aria-label="Decrease quantity">−</button>
+                        <input id="purchase-quantity-input" type="number" min="1" step="1" value="1" inputmode="numeric">
+                        <button type="button" id="purchase-quantity-increase" aria-label="Increase quantity">+</button>
+                      </div>
+                    </div>
+                    <p class="out-of-stock-message" id="item-out-of-stock" hidden>Out of Stock</p>
                     <div class="listing-detail-description">
                       <h3>Description</h3>
                       <p id="item-modal-description"></p>
@@ -165,7 +151,7 @@
                       <button class="message-button" id="item-detail-interest" type="button">Add to cart</button>
                       <button class="message-button" id="item-detail-buy-now" type="button">Buy now</button>
                       <button class="message-button" id="item-detail-message" type="button">Message Seller</button>
-                      <button class="message-button marketplace-report-button" id="item-detail-report" type="button">Report Item</button>
+                      <button class="message-button marketplace-report-button" id="item-detail-report" type="button">File Complaint</button>
                       <span class="seller-item-actions" id="seller-item-actions" hidden>Your item</span>
                     </div>
                   </div>
@@ -178,14 +164,35 @@
               <h2>No items listed yet.</h2>
               <p>Be the first to post something for your campus community.</p>
             </div>
+            <nav class="marketplace-pagination" id="marketplace-pagination" aria-label="Marketplace pages" hidden></nav>
           </section>
         </div>
       </section>
+      <button class="dashboard-cart-button" id="marketplace-cart-button" type="button" aria-expanded="false" aria-controls="marketplace-cart-panel">
+        <span class="dashboard-cart-icon">🛒</span>
+        <span class="dashboard-cart-label">Cart</span>
+        <span class="dashboard-cart-count" id="marketplace-cart-count">0</span>
+      </button>
+      <aside class="marketplace-cart-panel" id="marketplace-cart-panel" hidden aria-label="Shopping cart" aria-live="polite">
+        <div class="marketplace-cart-header">
+          <div>
+            <span class="dashboard-kicker">Cart</span>
+            <h2>Your items</h2>
+          </div>
+          <button class="marketplace-cart-close" id="marketplace-cart-close" type="button" aria-label="Close cart">&times;</button>
+        </div>
+        <div class="marketplace-cart-items" id="marketplace-cart-items"></div>
+        <div class="marketplace-cart-footer">
+          <div class="marketplace-cart-total"><span>Total</span><strong id="marketplace-cart-total">₱0.00</strong></div>
+          <button class="message-button marketplace-cart-checkout" id="marketplace-cart-checkout" type="button">Checkout</button>
+        </div>
+      </aside>
     </main>
     <script>
       const search = document.querySelector("#search");
       const marketplaceGrid = document.querySelector("#marketplace-grid");
       const marketplaceEmpty = document.querySelector("#marketplace-empty");
+      const marketplacePagination = document.querySelector("#marketplace-pagination");
       const itemDetailView = document.querySelector("#item-detail-view");
       const itemDetailSlot = document.querySelector("#item-detail-slot");
       const itemDetailBack = document.querySelector("#item-detail-back");
@@ -194,6 +201,7 @@
       const reportConfirmClose = document.querySelector("#report-confirm-close");
       const reportConfirmNo = document.querySelector("#report-confirm-no");
       const reportConfirmYes = document.querySelector("#report-confirm-yes");
+      const reportSubmitError = document.querySelector("#report-submit-error");
       const cartConfirmModal = document.querySelector("#cart-confirm-modal");
       const cartConfirmClose = document.querySelector("#cart-confirm-close");
       const cartConfirmContinue = document.querySelector("#cart-confirm-continue");
@@ -218,8 +226,6 @@
       const sellerChatDraft = document.querySelector("#seller-chat-draft");
       const sellerChatOpen = document.querySelector("#seller-chat-open");
       const sellerChatSend = document.querySelector("#seller-chat-send");
-      const cartStorageKey = "ncart-cart";
-      const checkoutStorageKey = "ncart-checkout-active";
       const itemModalImage = document.querySelector("#item-modal-image");
       const itemModalCategory = document.querySelector("#item-modal-category");
       const itemModalCategoryCopy = document.querySelector("#item-modal-category-copy");
@@ -227,47 +233,66 @@
       const itemModalSeller = document.querySelector("#item-modal-seller");
       const itemModalTitle = document.querySelector("#item-modal-title");
       const itemModalDescription = document.querySelector("#item-modal-description");
+      const itemModalDescriptionSection = itemModalDescription.closest(".listing-detail-description");
       const itemModalPrice = document.querySelector("#item-modal-price");
+      const itemModalStock = document.querySelector("#item-modal-stock");
+      const purchaseQuantity = document.querySelector("#purchase-quantity");
+      const purchaseQuantityInput = document.querySelector("#purchase-quantity-input");
+      const purchaseQuantityDecrease = document.querySelector("#purchase-quantity-decrease");
+      const purchaseQuantityIncrease = document.querySelector("#purchase-quantity-increase");
+      const itemOutOfStock = document.querySelector("#item-out-of-stock");
       const sellerItemActions = document.querySelector("#seller-item-actions");
       const buyerItemActions = [document.querySelector("#item-detail-interest"), document.querySelector("#item-detail-buy-now"), messageSellerButton, reportButton];
       let viewerId = null;
       let pendingReport = null;
-      const readCart = () => {
-        try {
-          const saved = JSON.parse(localStorage.getItem(cartStorageKey) || "[]");
-          return Array.isArray(saved) ? saved : [];
-        } catch {
-          return [];
-        }
-      };
-      const saveCart = (items) => localStorage.setItem(cartStorageKey, JSON.stringify(items));
+      let currentPage = 1;
+      let totalPages = 0;
+      let favoritesLoaded = false;
+      let marketplaceRequestId = 0;
+      let deepLinkListingId = new URLSearchParams(window.location.search).get("listing");
+      let cartEntries = [];
       const formatCartMoney = (value) => `₱${Number(value || 0).toFixed(2)}`;
       const updateCartTotal = () => {
         const selectedItems = Array.from(marketplaceCartItems.querySelectorAll(".marketplace-cart-checkbox:checked"));
-        const total = selectedItems.reduce((sum, checkbox) => sum + Number(checkbox.dataset.price || 0), 0);
-        marketplaceCartCount.textContent = String(readCart().length);
+        const total = selectedItems.reduce((sum, checkbox) => {
+          const cartItem = checkbox.closest(".marketplace-cart-item");
+          return sum + Number(checkbox.dataset.price || 0) * Number(cartItem?.querySelector(".cart-quantity-input")?.value || 1);
+        }, 0);
+        marketplaceCartCount.textContent = String(cartEntries.reduce((sum, item) => sum + Number(item.cart_quantity || 0), 0));
         document.querySelector("#marketplace-cart-total").textContent = formatCartMoney(total);
         marketplaceCartCheckout.disabled = selectedItems.length === 0;
       };
-      const renderCartPanel = () => {
-        const cart = readCart();
-        const itemCount = cart.length;
+      const renderCartPanel = async () => {
+        const response = await fetch("/api/cart", { cache: "no-store" });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not load your cart.");
+        cartEntries = data.items || [];
+        const itemCount = Number(data.count || 0);
         marketplaceCartCount.textContent = String(itemCount);
-        if (!itemCount) {
+        window.dispatchEvent(new CustomEvent("ncart:cart-updated", { detail: { count: itemCount } }));
+        if (!cartEntries.length) {
           marketplaceCartItems.innerHTML = '<div class="marketplace-cart-empty"><span>🛒</span><p>Your cart is empty.</p></div>';
           updateCartTotal();
           return;
         }
-        marketplaceCartItems.innerHTML = cart.map((entry) => {
-          const image = entry.image ? `<img src="${escapeHtml(entry.image)}" alt="${escapeHtml(entry.title)}">` : '<div class="marketplace-cart-thumb placeholder">No image</div>';
+        marketplaceCartItems.innerHTML = cartEntries.map((entry) => {
+          const image = entry.image_url ? `<img src="${escapeHtml(entry.image_url)}" alt="${escapeHtml(entry.title || "Unavailable item")}">` : '<div class="marketplace-cart-thumb placeholder">No image</div>';
+          const stock = Math.max(0, Number(entry.available_quantity) || 0);
+          const quantity = Number(entry.cart_quantity) || 1;
           return `
-            <div class="marketplace-cart-item" data-listing-id="${escapeHtml(entry.listingId || "")}">
-              <input class="marketplace-cart-checkbox" type="checkbox" checked aria-label="Select ${escapeHtml(entry.title || "item")} for checkout" data-price="${escapeHtml(entry.price || "0")}">
+            <div class="marketplace-cart-item" data-cart-item-id="${entry.cart_item_id}" data-listing-id="${entry.listing_id || ""}" data-stock="${stock}">
+              <input class="marketplace-cart-checkbox" type="checkbox"${entry.is_available ? " checked" : " disabled"} aria-label="Select ${escapeHtml(entry.title || "item")} for checkout" data-price="${escapeHtml(entry.price || "0")}">
               ${image}
               <span class="marketplace-cart-copy">
-                <strong>${escapeHtml(entry.title || "Item")}</strong>
+                <strong>${escapeHtml(entry.title || "Unavailable item")}</strong>
                 <small>${escapeHtml(entry.category || "General")}</small>
-                <em>${escapeHtml(entry.price ? `₱${entry.price}` : "₱0")}</em>
+                <em>${escapeHtml(entry.price ? `₱${entry.price}` : "₱0")} each</em>
+                <span class="cart-quantity-control">
+                  <button type="button" class="cart-quantity-decrease" aria-label="Decrease ${escapeHtml(entry.title || "item")} quantity"${quantity <= 1 || stock === 0 ? " disabled" : ""}>−</button>
+                  <input class="cart-quantity-input" type="number" min="1" max="${stock || 1}" step="1" value="${quantity}" aria-label="${escapeHtml(entry.title || "item")} quantity"${stock === 0 ? " disabled" : ""}>
+                  <button type="button" class="cart-quantity-increase" aria-label="Increase ${escapeHtml(entry.title || "item")} quantity"${quantity >= stock || stock === 0 ? " disabled" : ""}>+</button>
+                  <small>${entry.is_available ? `${stock} available` : escapeHtml(entry.availability_message)}</small>
+                </span>
               </span>
             </div>
           `;
@@ -275,7 +300,7 @@
         updateCartTotal();
       };
       const openCartPanel = () => {
-        renderCartPanel();
+        renderCartPanel().catch((error) => console.error(error));
         marketplaceCartPanel.hidden = false;
         marketplaceCartButton.setAttribute("aria-expanded", "true");
       };
@@ -300,6 +325,8 @@
         price: itemModalPrice.textContent.replace(/[^0-9.]/g, ""),
         image: itemModalImage.src,
         sellerName: itemModalSeller.textContent,
+        quantity: Number(purchaseQuantityInput.value),
+        stock: Number(itemDetailView.dataset.stock || 0),
       });
       const showCartConfirmModal = () => {
         cartConfirmModal.hidden = false;
@@ -309,35 +336,55 @@
         cartConfirmModal.classList.remove("is-visible");
         cartConfirmModal.hidden = true;
       };
-      const addToCart = () => {
+      const addToCart = async () => {
         const item = getCartItemFromDetail();
-        if (!item.listingId) return;
-        localStorage.removeItem(checkoutStorageKey);
-        const cart = readCart();
-        if (!cart.some((entry) => String(entry.listingId) === String(item.listingId))) {
-          cart.push(item);
-          saveCart(cart);
+        if (!item.listingId || item.stock < 1) return;
+        try {
+          const response = await fetch("/api/cart", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ listing_id: Number(item.listingId), quantity: item.quantity }),
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || "Could not add this item to your cart.");
+          window.dispatchEvent(new CustomEvent("ncart:cart-updated", { detail: { count: data.count } }));
+          document.querySelector("#cart-confirm-title").textContent = "Added to cart";
+          document.querySelector("#cart-confirm-message").textContent = "This item is now in your cart. You can continue shopping or go to checkout.";
+          showCartConfirmModal();
+          void renderCartPanel().catch((error) => console.error(error));
+        } catch (error) {
+          document.querySelector("#cart-confirm-title").textContent = "Could not add item";
+          document.querySelector("#cart-confirm-message").textContent = error.message;
+          showCartConfirmModal();
         }
-        renderCartPanel();
-        showCartConfirmModal();
       };
-      const buyNow = () => {
+      const buyNow = async () => {
         const item = getCartItemFromDetail();
-        if (!item.listingId) return;
-        const cart = readCart();
-        const next = cart.some((entry) => String(entry.listingId) === String(item.listingId))
-          ? cart
-          : [...cart, item];
-        saveCart(next);
-        localStorage.setItem(checkoutStorageKey, "1");
-        window.location.href = "/orders";
+        if (!item.listingId || item.stock < 1) return;
+        try {
+          const response = await fetch("/api/cart", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ listing_id: Number(item.listingId), quantity: item.quantity, replace_quantity: true }),
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || "Could not add this item to your cart.");
+          window.location.href = `/orders?checkout=1&cart_item_ids=${encodeURIComponent(data.cart_item_id)}`;
+        } catch (error) {
+          document.querySelector("#cart-confirm-title").textContent = "Could not start checkout";
+          document.querySelector("#cart-confirm-message").textContent = error.message;
+          showCartConfirmModal();
+        }
       };
       const categoryFilterRow = document.querySelector("#category-filters");
       const favoriteIds = new Set();
-      let selectedCategory = "";
+      const marketplaceParameters = new URLSearchParams(window.location.search);
+      let selectedCategory = (marketplaceParameters.get("category") || "").toLowerCase();
+      search.value = marketplaceParameters.get("search") || "";
       const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
       })[character]);
+      const verifiedBadgeMarkup = '<svg class="verified-badge" viewBox="0 0 20 20" role="img" aria-label="Administrator-approved account"><circle cx="10" cy="10" r="8.25"></circle><path d="m6.3 10.1 2.4 2.4 5-5.1"></path></svg>';
       const readApiResponse = async (response) => {
         const body = await response.text();
         if (!response.headers.get("content-type")?.includes("application/json")) {
@@ -361,6 +408,7 @@
       const closeItemDetail = () => {
         itemDetailView.hidden = true;
         marketplaceGrid.hidden = false;
+        marketplacePagination.hidden = totalPages === 0;
         document.querySelector("#category-filters").hidden = false;
         document.querySelector(".dashboard-view-heading").hidden = false;
       };
@@ -374,10 +422,25 @@
         reportConfirmModal.hidden = true;
         pendingReport = null;
       };
-      const savePendingReport = () => {
-        const reports = JSON.parse(localStorage.getItem("ncart-reports") || "[]");
-        reports.unshift(pendingReport);
-        localStorage.setItem("ncart-reports", JSON.stringify(reports.slice(0, 25)));
+      const savePendingReport = async () => {
+        if (!pendingReport) return;
+        reportConfirmYes.disabled = true;
+        reportSubmitError.hidden = true;
+        try {
+          const response = await fetch("/api/reports", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(pendingReport),
+          });
+          const data = await readApiResponse(response);
+          if (!response.ok) throw new Error(data.error || "Could not submit complaint.");
+        } catch (error) {
+          reportSubmitError.textContent = error.message;
+          reportSubmitError.hidden = false;
+          return;
+        } finally {
+          reportConfirmYes.disabled = false;
+        }
         sessionStorage.setItem("ncart-report-success", "1");
         closeReportConfirmModal();
         window.location.href = "/reports";
@@ -391,7 +454,10 @@
         const response = await fetch("/api/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ listing_id: listingId }),
+          body: JSON.stringify({
+            listing_id: listingId,
+            quantity: Number(purchaseQuantityInput.value),
+          }),
         });
         const data = await readApiResponse(response);
         if (!response.ok) throw new Error(data.error || "Could not place order.");
@@ -422,23 +488,9 @@
         localStorage.setItem("ncart-active-conversation", JSON.stringify(conversation));
         window.location.href = "/messages";
       };
-      const applyMarketplaceFilters = () => {
-        const query = search.value.trim().toLowerCase();
-        document.querySelectorAll(".item-card").forEach((item) => {
-          const matchesCategory = !selectedCategory || item.dataset.category === selectedCategory;
-          const matchesSearch = !query || item.dataset.search.includes(query);
-          item.hidden = !matchesCategory || !matchesSearch;
-        });
-        const hasVisibleItems = Array.from(document.querySelectorAll(".item-card")).some((item) => !item.hidden);
-        marketplaceEmpty.hidden = hasVisibleItems;
-        if (hasVisibleItems) marketplaceGrid.hidden = false;
-      };
-      const addMarketplaceCategoryFilters = (listings) => {
-        const categories = listings
-          .map((listing) => String(listing.category || "").trim())
-          .filter(Boolean);
+      const addMarketplaceCategoryFilters = (categories) => {
         categoryFilterRow.innerHTML = '<button class="dashboard-filter is-selected" type="button" data-category-filter="">All items</button>';
-        [...new Map(categories.map((category) => [category.toLowerCase(), category])).values()].forEach((category) => {
+        categories.forEach((category) => {
           const button = document.createElement("button");
           button.className = "dashboard-filter";
           button.type = "button";
@@ -447,24 +499,92 @@
           categoryFilterRow.append(button);
         });
       };
+      const renderMarketplacePagination = () => {
+        marketplacePagination.replaceChildren();
+        marketplacePagination.hidden = totalPages === 0;
+        if (totalPages === 0) return;
+        const addButton = (label, page, options = {}) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "marketplace-page-button";
+          button.textContent = label;
+          button.disabled = Boolean(options.disabled);
+          if (options.current) {
+            button.classList.add("is-current");
+            button.setAttribute("aria-current", "page");
+          }
+          button.addEventListener("click", () => {
+            if (button.disabled || page === currentPage) return;
+            currentPage = page;
+            void loadMarketplacePage();
+            marketplaceGrid.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+          marketplacePagination.append(button);
+        };
+        const addEllipsis = () => {
+          const ellipsis = document.createElement("span");
+          ellipsis.className = "marketplace-page-ellipsis";
+          ellipsis.textContent = "…";
+          marketplacePagination.append(ellipsis);
+        };
+        addButton("← Previous", currentPage - 1, { disabled: currentPage === 1 });
+        const pages = new Set();
+        const firstVisiblePage = currentPage <= 3
+          ? 1
+          : currentPage >= totalPages - 2
+            ? Math.max(1, totalPages - 3)
+            : currentPage - 1;
+        const lastVisiblePage = currentPage <= 3
+          ? Math.min(totalPages, 4)
+          : currentPage >= totalPages - 2
+            ? totalPages
+            : currentPage + 1;
+        pages.add(1);
+        pages.add(totalPages);
+        for (let page = firstVisiblePage; page <= lastVisiblePage; page += 1) {
+          pages.add(page);
+        }
+        let previousPage = 0;
+        [...pages].sort((left, right) => left - right).forEach((page) => {
+          if (previousPage && page - previousPage > 1) addEllipsis();
+          addButton(String(page), page, { current: page === currentPage });
+          previousPage = page;
+        });
+        addButton("Next →", currentPage + 1, { disabled: currentPage === totalPages });
+      };
       const openItemDetail = (card) => {
         itemModalImage.src = card.dataset.image;
         itemModalImage.alt = card.dataset.title;
         itemModalImage.hidden = !card.dataset.image;
         itemModalCategory.textContent = card.dataset.categoryLabel;
-        itemModalSeller.textContent = card.dataset.seller;
+        itemModalSeller.innerHTML = `${escapeHtml(card.dataset.seller)}${card.dataset.sellerVerified === "true" ? verifiedBadgeMarkup : ""}`;
+        itemModalSeller.href = `/users/${encodeURIComponent(card.dataset.sellerId)}`;
         itemModalCategoryCopy.textContent = card.dataset.categoryLabel;
         itemModalCondition.textContent = card.dataset.condition;
         itemModalTitle.textContent = card.dataset.title;
-        itemModalDescription.textContent = card.dataset.description;
+        itemModalDescription.textContent = card.dataset.description || "";
+        itemModalDescriptionSection.hidden = !itemModalDescription.textContent.trim();
         itemModalPrice.textContent = card.dataset.price;
+        const stock = Math.max(0, Number(card.dataset.stock) || 0);
+        itemModalStock.textContent = stock > 0 ? `${stock} available` : "Out of Stock";
+        itemDetailView.dataset.stock = String(stock);
+        purchaseQuantityInput.max = String(stock);
+        purchaseQuantityInput.value = stock > 0 ? "1" : "0";
+        purchaseQuantityInput.disabled = stock === 0;
+        purchaseQuantityDecrease.disabled = stock <= 1;
+        purchaseQuantityIncrease.disabled = stock <= 1;
+        purchaseQuantity.hidden = Number(viewerId) === Number(card.dataset.sellerId);
+        itemOutOfStock.hidden = stock > 0 || Number(viewerId) === Number(card.dataset.sellerId);
         itemDetailView.dataset.listingId = card.dataset.listingId;
         itemDetailView.dataset.sellerId = card.dataset.sellerId;
         const isOwnListing = Number(viewerId) === Number(card.dataset.sellerId);
         buyerItemActions.forEach((button) => { button.hidden = isOwnListing; });
+        document.querySelector("#item-detail-interest").disabled = stock === 0;
+        document.querySelector("#item-detail-buy-now").disabled = stock === 0;
         sellerItemActions.hidden = !isOwnListing;
         itemDetailView.hidden = false;
         marketplaceGrid.hidden = true;
+        marketplacePagination.hidden = true;
         marketplaceEmpty.hidden = true;
         document.querySelector("#category-filters").hidden = true;
         document.querySelector(".dashboard-view-heading").hidden = true;
@@ -497,9 +617,10 @@
           }
         });
         card.addEventListener("click", (event) => {
-          if (!event.target.closest(".item-buy, .favorite-button")) openItemDetail(card);
+          if (!event.target.closest(".item-buy, .favorite-button, a")) openItemDetail(card);
         });
         card.addEventListener("keydown", (event) => {
+          if (event.target.closest("a")) return;
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             openItemDetail(card);
@@ -507,41 +628,60 @@
         });
       };
       const renderMarketplace = async () => {
-        const [listingsResponse, favoritesResponse] = await Promise.all([
-          fetch("/api/listings"),
-          fetch("/api/favorites"),
-        ]);
+        const requestId = ++marketplaceRequestId;
+        const parameters = new URLSearchParams({
+          page: String(currentPage),
+          category: selectedCategory,
+          search: search.value.trim(),
+        });
+        if (deepLinkListingId) parameters.set("listing", deepLinkListingId);
+        const requests = [fetch(`/api/listings?${parameters}`)];
+        if (!favoritesLoaded) requests.push(fetch("/api/favorites"));
+        const [listingsResponse, favoritesResponse] = await Promise.all(requests);
         const data = await readApiResponse(listingsResponse);
         if (!listingsResponse.ok) throw new Error(data.error || "Could not load marketplace listings.");
+        if (requestId !== marketplaceRequestId) return;
 
         let favoriteData = { favorite_ids: [] };
-        if (favoritesResponse.ok) {
+        if (favoritesResponse && favoritesResponse.ok) {
           favoriteData = await readApiResponse(favoritesResponse);
-        } else if (favoritesResponse.status !== 401) {
+        } else if (favoritesResponse && favoritesResponse.status !== 401) {
           const favoriteError = await readApiResponse(favoritesResponse).catch(() => ({ error: "Could not load favorites." }));
           throw new Error(favoriteError.error || "Could not load favorites.");
         }
 
         viewerId = data.viewer_id;
-        favoriteIds.clear();
-        (favoriteData.favorite_ids || []).forEach((listingId) => favoriteIds.add(Number(listingId)));
-        addMarketplaceCategoryFilters(data.listings);
+        if (!favoritesLoaded) {
+          favoriteIds.clear();
+          (favoriteData.favorite_ids || []).forEach((listingId) => favoriteIds.add(Number(listingId)));
+          favoritesLoaded = true;
+        }
+        currentPage = data.pagination.page;
+        totalPages = data.pagination.total_pages;
+        addMarketplaceCategoryFilters(data.categories || []);
+        categoryFilterRow.querySelectorAll("[data-category-filter]").forEach((button) => {
+          button.classList.toggle("is-selected", button.dataset.categoryFilter === selectedCategory);
+        });
         marketplaceGrid.innerHTML = data.listings.map((listing) => {
           const title = escapeHtml(listing.title);
           const category = escapeHtml(listing.category);
-          const description = escapeHtml(listing.description);
+          const descriptionText = String(listing.description || "").trim();
+          const description = escapeHtml(descriptionText);
           const condition = escapeHtml(listing.item_condition);
           const seller = escapeHtml(listing.seller_name || "NCart seller");
+          const sellerVerifiedBadge = listing.seller_verified ? verifiedBadgeMarkup : "";
           const sellerLocation = escapeHtml(listing.seller_location || "");
           const sellerBio = escapeHtml(listing.seller_bio || "");
           const sellerId = escapeHtml(listing.seller_id);
+          const sellerProfileHref = `/users/${encodeURIComponent(String(listing.seller_id))}`;
           const price = escapeHtml(listing.price);
+          const stock = Math.max(0, Number(listing.quantity) || 0);
           const image = listing.image_url
             ? `<img class="item-image" src="${escapeHtml(listing.image_url)}" alt="${title}">`
             : "";
           const imageWrap = image
             ? `<div class="item-image-wrap">${image}<button class="favorite-button" type="button" aria-label="Add ${title} to favorites" aria-pressed="false">♥</button></div>`
-            : `<div class="item-image-wrap"><button class="favorite-button" type="button" aria-label="Add ${title} to favorites" aria-pressed="false">♥</button></div>`;
+            : `<div class="item-image-wrap"><div class="item-image-placeholder" role="img" aria-label="No image available">No image available</div><button class="favorite-button" type="button" aria-label="Add ${title} to favorites" aria-pressed="false">♥</button></div>`;
           const sellerAvatar = listing.seller_image_url
             ? `<img class="seller-avatar seller-avatar-image" src="${escapeHtml(listing.seller_image_url)}" alt="${seller}" data-fallback="${seller.charAt(0) || "N"}">`
             : `<span class="seller-avatar seller-avatar-placeholder">${seller.charAt(0) || "N"}</span>`;
@@ -549,11 +689,19 @@
           const isOwnListing = viewerId !== null && Number(viewerId) === Number(listing.seller_id);
           const sellerPreview = isOwnListing
             ? ""
-            : `<div class="seller-preview">${sellerAvatar}<span><p>Sold by ${seller}</p>${sellerDetails ? `<small>${sellerDetails}</small>` : ""}</span></div>`;
-          return `<article class="item-card" tabindex="0" data-listing-id="${listing.id}" data-seller-id="${sellerId}" data-search="${escapeHtml(`${listing.title} ${listing.category} ${listing.item_condition} ${listing.description} ${listing.seller_name || ""}`.toLowerCase())}" data-title="${title}" data-category="${escapeHtml(listing.category.toLowerCase())}" data-category-label="${category}" data-condition="${condition}" data-seller="${seller}" data-description="${description}" data-price="₱${price}" data-image="${escapeHtml(listing.image_url || "")}">${imageWrap}<div><span class="item-category">${category}</span><h3>${title}</h3>${sellerPreview}<small class="item-description">${description}</small><strong>₱${price}</strong></div></article>`;
+            : `<div class="seller-preview"><a class="seller-profile-link seller-avatar-link" href="${sellerProfileHref}" aria-label="View ${seller}'s profile">${sellerAvatar}</a><span><p>Sold by <a class="seller-profile-link" href="${sellerProfileHref}">${seller}${sellerVerifiedBadge}</a></p>${sellerDetails ? `<small>${sellerDetails}</small>` : ""}</span></div>`;
+          return `<article class="item-card${stock === 0 ? " is-out-of-stock" : ""}" tabindex="0" data-listing-id="${listing.id}" data-seller-id="${sellerId}" data-seller-verified="${listing.seller_verified ? "true" : "false"}" data-stock="${stock}" data-search="${escapeHtml(`${listing.title} ${listing.category} ${listing.item_condition} ${descriptionText} ${listing.seller_name || ""}`.toLowerCase())}" data-title="${title}" data-category="${escapeHtml(listing.category.toLowerCase())}" data-category-label="${category}" data-condition="${condition}" data-seller="${seller}" data-description="${description}" data-price="₱${price}" data-image="${escapeHtml(listing.image_url || "")}">${imageWrap}<div><span class="item-category">${category}</span><h3>${title}</h3>${sellerPreview}${description ? `<small class="item-description">${description}</small>` : ""}<strong>₱${price}</strong><small class="listing-stock">${stock > 0 ? `${stock} available` : "Out of Stock"}</small></div></article>`;
         }).join("");
         marketplaceEmpty.hidden = data.listings.length > 0;
         marketplaceGrid.hidden = data.listings.length === 0;
+        if (data.pagination.total_items === 0) {
+          marketplaceEmpty.querySelector("h2").textContent = search.value.trim() || selectedCategory
+            ? "No matching items."
+            : "No items listed yet.";
+          marketplaceEmpty.querySelector("p").textContent = search.value.trim() || selectedCategory
+            ? "Try changing your search or category filter."
+            : "Be the first to post something for your campus community.";
+        }
         marketplaceGrid.querySelectorAll(".seller-avatar-image").forEach((avatar) => {
           avatar.addEventListener("error", () => {
             const fallback = document.createElement("span");
@@ -563,8 +711,24 @@
           }, { once: true });
         });
         marketplaceGrid.querySelectorAll(".item-card").forEach(setupItemCard);
-        applyMarketplaceFilters();
+        renderMarketplacePagination();
+        if (deepLinkListingId) {
+          const targetCard = Array.from(marketplaceGrid.querySelectorAll(".item-card"))
+            .find((card) => card.dataset.listingId === deepLinkListingId);
+          deepLinkListingId = null;
+          if (targetCard) {
+            openItemDetail(targetCard);
+            window.history.replaceState({}, "", "/marketplace");
+          }
+        }
       };
+      const loadMarketplacePage = () => renderMarketplace().catch((error) => {
+        marketplaceGrid.hidden = true;
+        marketplacePagination.hidden = true;
+        marketplaceEmpty.hidden = false;
+        marketplaceEmpty.querySelector("h2").textContent = "Marketplace unavailable.";
+        marketplaceEmpty.querySelector("p").textContent = error.message;
+      });
       itemDetailBack.addEventListener("click", closeItemDetail);
       marketplaceCartButton.addEventListener("click", () => {
         if (marketplaceCartPanel.hidden) openCartPanel();
@@ -572,23 +736,56 @@
       });
       marketplaceCartClose.addEventListener("click", closeCartPanel);
       marketplaceCartCheckout.addEventListener("click", () => {
-        const selectedIds = new Set(Array.from(marketplaceCartItems.querySelectorAll(".marketplace-cart-checkbox:checked"))
-          .map((checkbox) => checkbox.closest(".marketplace-cart-item")?.dataset.listingId));
-        if (!selectedIds.size) return;
-        saveCart(readCart().filter((item) => selectedIds.has(String(item.listingId))));
-        localStorage.setItem(checkoutStorageKey, "1");
+        const selectedIds = Array.from(marketplaceCartItems.querySelectorAll(".marketplace-cart-checkbox:checked"))
+          .map((checkbox) => checkbox.closest(".marketplace-cart-item")?.dataset.cartItemId)
+          .filter(Boolean);
+        if (!selectedIds.length) return;
         closeCartPanel();
-        window.location.href = "/orders";
+        window.location.href = `/orders?checkout=1&cart_item_ids=${encodeURIComponent(selectedIds.join(","))}`;
       });
       marketplaceCartItems.addEventListener("click", (event) => {
         if (event.target.closest(".marketplace-cart-checkbox")) {
           updateCartTotal();
           return;
         }
+        const quantityButton = event.target.closest(".cart-quantity-decrease, .cart-quantity-increase");
+        if (quantityButton) {
+          const cartItem = quantityButton.closest(".marketplace-cart-item");
+          const input = cartItem.querySelector(".cart-quantity-input");
+          input.value = String(Number(input.value) + (quantityButton.classList.contains("cart-quantity-increase") ? 1 : -1));
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          event.stopPropagation();
+          return;
+        }
         const cartItem = event.target.closest(".marketplace-cart-item");
-        if (!cartItem) return;
+        if (!cartItem || event.target.closest(".cart-quantity-control")) return;
         const listingId = cartItem.dataset.listingId;
         if (listingId) openCartItem(listingId);
+      });
+      marketplaceCartItems.addEventListener("change", (event) => {
+        if (event.target.matches(".cart-quantity-input")) {
+          const cartItem = event.target.closest(".marketplace-cart-item");
+          const quantity = Number(event.target.value);
+          if (!Number.isInteger(quantity) || quantity < 1) return;
+          fetch(`/api/cart/${encodeURIComponent(cartItem.dataset.cartItemId)}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ quantity }),
+          }).then(async (response) => {
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "Could not update cart quantity.");
+            window.dispatchEvent(new CustomEvent("ncart:cart-updated", { detail: { count: data.count } }));
+            await renderCartPanel();
+          }).catch((error) => {
+            console.error(error);
+            document.querySelector("#cart-confirm-title").textContent = "Could not update quantity";
+            document.querySelector("#cart-confirm-message").textContent = error.message;
+            showCartConfirmModal();
+            void renderCartPanel();
+          });
+          return;
+        }
+        if (event.target.matches(".marketplace-cart-checkbox")) updateCartTotal();
       });
       document.addEventListener("click", (event) => {
         if (!marketplaceCartPanel.hidden && !marketplaceCartPanel.contains(event.target) && !marketplaceCartButton.contains(event.target)) {
@@ -599,8 +796,7 @@
       cartConfirmContinue.addEventListener("click", hideCartConfirmModal);
       cartConfirmCheckout.addEventListener("click", () => {
         hideCartConfirmModal();
-        localStorage.setItem(checkoutStorageKey, "1");
-        window.location.href = "/orders";
+        window.location.href = "/cart";
       });
       cartConfirmModal.addEventListener("click", (event) => {
         if (event.target === cartConfirmModal) hideCartConfirmModal();
@@ -617,6 +813,23 @@
       });
       document.querySelector("#item-detail-interest").addEventListener("click", addToCart);
       document.querySelector("#item-detail-buy-now").addEventListener("click", buyNow);
+      purchaseQuantityDecrease.addEventListener("click", () => {
+        purchaseQuantityInput.value = String(Math.max(1, Number(purchaseQuantityInput.value) - 1));
+        purchaseQuantityIncrease.disabled = Number(purchaseQuantityInput.value) >= Number(purchaseQuantityInput.max);
+        purchaseQuantityDecrease.disabled = Number(purchaseQuantityInput.value) <= 1;
+      });
+      purchaseQuantityIncrease.addEventListener("click", () => {
+        purchaseQuantityInput.value = String(Math.min(Number(purchaseQuantityInput.max), Number(purchaseQuantityInput.value) + 1));
+        purchaseQuantityIncrease.disabled = Number(purchaseQuantityInput.value) >= Number(purchaseQuantityInput.max);
+        purchaseQuantityDecrease.disabled = Number(purchaseQuantityInput.value) <= 1;
+      });
+      purchaseQuantityInput.addEventListener("change", () => {
+        const stock = Number(purchaseQuantityInput.max);
+        const quantity = Math.max(1, Math.min(stock, Number(purchaseQuantityInput.value) || 1));
+        purchaseQuantityInput.value = String(quantity);
+        purchaseQuantityIncrease.disabled = quantity >= stock;
+        purchaseQuantityDecrease.disabled = quantity <= 1;
+      });
       reportButton.addEventListener("click", openReportModal);
       reportBack.addEventListener("click", closeReportModal);
       reportClose.addEventListener("click", closeReportModal);
@@ -630,11 +843,9 @@
           return;
         }
         pendingReport = {
-          ownerId: viewerId,
-          title: itemModalTitle.textContent || "Reported item",
+          listing_id: Number(itemDetailView.dataset.listingId),
           reason: reportReason.value,
-          details: reportDetails.value.trim(),
-          time: "Just now",
+          description: reportDetails.value.trim(),
         };
         closeReportModal();
         reportConfirmModal.hidden = false;
@@ -642,7 +853,7 @@
       });
       reportConfirmClose.addEventListener("click", closeReportConfirmModal);
       reportConfirmNo.addEventListener("click", closeReportConfirmModal);
-      reportConfirmYes.addEventListener("click", savePendingReport);
+      reportConfirmYes.addEventListener("click", () => { void savePendingReport(); });
 
       categoryFilterRow.addEventListener("click", (event) => {
         const filter = event.target.closest("[data-category-filter]");
@@ -651,15 +862,19 @@
         categoryFilterRow.querySelectorAll("[data-category-filter]").forEach((button) => {
           button.classList.toggle("is-selected", button === filter);
         });
-        applyMarketplaceFilters();
+        currentPage = 1;
+        void loadMarketplacePage();
       });
-      search.addEventListener("input", applyMarketplaceFilters);
-      renderCartPanel();
-      renderMarketplace().catch((error) => {
-        marketplaceEmpty.hidden = false;
-        marketplaceEmpty.querySelector("h2").textContent = "Marketplace unavailable.";
-        marketplaceEmpty.querySelector("p").textContent = error.message;
+      let searchTimer = null;
+      search.addEventListener("input", () => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => {
+          currentPage = 1;
+          void loadMarketplacePage();
+        }, 250);
       });
+      void renderCartPanel().catch((error) => console.error(error));
+      void loadMarketplacePage();
     </script>
   </body>
 </html>

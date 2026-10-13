@@ -3,105 +3,379 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NCart | Reports</title>
-    <link rel="stylesheet" href="/static/reports.css?v=1">
+    <script src="/static/initial-render.js?v=3"></script>
+    <title>NCart | Complaints</title>
+    <link rel="stylesheet" href="/static/reports.css?v=9">
+    <link rel="stylesheet" href="/static/sidebar.css?v=20">
+    <link rel="stylesheet" href="/static/theme.css?v=13">
+    <script src="/static/sidebar.js?v=19" defer></script>
   </head>
   <body class="dashboard-page reports-page">
     <div class="reports-success-modal" id="reports-success-modal" hidden role="dialog" aria-modal="true" aria-labelledby="reports-success-title">
       <div class="reports-success-dialog">
-        <button class="reports-success-close" id="reports-success-close" type="button" aria-label="Close report success">&times;</button>
+        <button class="reports-success-close" id="reports-success-close" type="button" aria-label="Close complaint confirmation">&times;</button>
         <div class="reports-success-icon" aria-hidden="true">!</div>
-        <h2 id="reports-success-title">Report Success</h2>
-        <p>Your report was<br>submitted for review.</p>
+        <h2 id="reports-success-title">Complaint Submitted</h2>
+        <p>Your complaint was submitted successfully. An administrator will review it.</p>
         <button class="reports-success-okay" id="reports-success-okay" type="button">Okay</button>
       </div>
     </div>
     <main class="dashboard-shell">
       <aside class="dashboard-sidebar" aria-label="Main navigation">
-        <a class="dashboard-brand" href="/home" aria-label="NCart home"><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a>
+        <a class="dashboard-brand" href="/home" aria-label="NCart home"><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png?v=4" alt="NCart"></a>
         <nav class="dashboard-nav">
-          <a class="dashboard-nav-link" href="/home"><span aria-hidden="true">⌂</span>Home</a>
-          <a class="dashboard-nav-link" href="/marketplace"><span aria-hidden="true">▣</span>Marketplace</a>
-          <a class="dashboard-nav-link" href="/favorites"><span aria-hidden="true">♥</span>Favorites</a>
-          <a class="dashboard-nav-link" href="/listings"><span aria-hidden="true">🛒</span>My Listings</a>
-          <a class="dashboard-nav-link" href="/messages"><span aria-hidden="true">▰</span>Messages</a>
-          <a class="dashboard-nav-link" href="/orders"><span aria-hidden="true">▤</span>My Orders</a>
-          <a class="dashboard-nav-link is-active" href="/reports"><span aria-hidden="true">ⓘ</span>Reports</a>
-          <a class="dashboard-nav-link" href="/profile"><span aria-hidden="true">◉</span>Profile</a>
+          <a class="dashboard-nav-link" href="/home"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg></span>Home</a>
+          <a class="dashboard-nav-link" href="/marketplace"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 4.5 4h15l1.5 6"/><path d="M5 10v11h14V10"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 21v-6h6v6"/></svg></span>Marketplace</a>
+          <a class="dashboard-nav-link" href="/favorites"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Favorites</a>
+          <a class="dashboard-nav-link" href="/listings"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m20.6 13.4-9.6-9.6H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>My Listings</a>
+          <a class="dashboard-nav-link" href="/messages"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span>Messages</a>
+          <a class="dashboard-nav-link" href="/orders"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>My Orders</a>
+          <a class="dashboard-nav-link is-active" href="/reports"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 18v-3"/><path d="M12 18v-6"/><path d="M16 18v-4"/></svg></span>Reports</a>
         </nav>
-        <a class="dashboard-nav-link dashboard-logout" href="/logout"><span aria-hidden="true">↪</span>Logout</a>
       </aside>
-      <section class="dashboard-content">
-        <header class="dashboard-header">
-          <label class="dashboard-search" for="reports-search"><span aria-hidden="true">⌕</span><input id="reports-search" type="search" placeholder="Search items"></label>
-        </header>
+      <section class="dashboard-content dashboard-inline-search-content">
         <div class="dashboard-views">
           <section class="dashboard-view is-visible">
-            <div class="reports-heading">
+            <div class="reports-heading has-inline-search">
               <div>
                 <p class="reports-kicker">Safety center</p>
-                <h1>Reports</h1>
+                <h1>Complaints</h1>
                 <p class="reports-intro">Keep track of concerns you have sent to the NCart team.</p>
               </div>
-              <div class="reports-count"><strong id="reports-count">0</strong><span>submitted</span></div>
+              <div class="reports-count"><strong id="reports-count">0</strong><span id="reports-count-label">submitted</span></div>
             </div>
             <section class="reports-panel" aria-live="polite">
+              <div id="admin-report-tools" hidden>
+                <div class="admin-report-filters">
+                  <label>Status
+                    <select id="report-status-filter">
+                      <option value="">All statuses</option>
+                      <option value="pending">Pending</option>
+                      <option value="under_review">Under Review</option>
+                      <option value="approved">Approved</option>
+                      <option value="denied">Denied</option>
+                    </select>
+                  </label>
+                  <label>Search complaints
+                    <input id="admin-report-search" type="search" placeholder="ID, complainant, user, or posted item">
+                  </label>
+                  <label>Submitted date
+                    <input id="admin-report-date" type="date">
+                  </label>
+                  <label>Reason
+                    <select id="admin-report-reason">
+                      <option value="">All reasons</option>
+                      <option>Prohibited item</option>
+                      <option>Misleading information</option>
+                      <option>Inappropriate content</option>
+                      <option>Scam or fraud</option>
+                      <option>Other</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="admin-report-table-wrap">
+                  <table class="admin-report-table">
+                    <thead><tr><th>Complaint ID</th><th>Complainant</th><th>Involved User</th><th>Posted Item</th><th>Reason</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+                    <tbody id="admin-report-rows"></tbody>
+                  </table>
+                </div>
+              </div>
               <div id="reports-list" class="reports-list"></div>
+              <p id="reports-load-error" class="reports-load-error" role="alert" hidden></p>
               <div id="reports-empty" class="reports-empty">
                 <span class="reports-empty-icon" aria-hidden="true">i</span>
-                <strong>No reports yet</strong>
-                <p>When you report an item from Marketplace, it will appear here with its current status.</p>
+                <strong>No complaints yet</strong>
+                <p>When you submit a complaint about an item from Marketplace, it will appear here with its current status.</p>
               </div>
             </section>
+            <div class="report-review-modal" id="report-review-modal" hidden role="dialog" aria-modal="true" aria-labelledby="review-modal-title">
+              <section class="report-review-dialog">
+                <button class="report-review-close" id="review-modal-close" type="button" aria-label="Close complaint details">&times;</button>
+                <p class="reports-kicker">Admin review</p>
+                <h2 id="review-modal-title">Complaint details</h2>
+                <div id="review-report-details" class="review-report-details"></div>
+                <label class="review-note-label" for="review-admin-note">Admin note <span>(required to approve or deny)</span></label>
+                <textarea id="review-admin-note" rows="4" maxlength="5000" placeholder="Record the evidence-based reason for your decision."></textarea>
+                <label class="review-action-label" for="review-action">Action if approved</label>
+                <select id="review-action">
+                  <option value="none">Keep posted item/user active; resolve complaint</option>
+                  <option value="flag_listing">Flag posted item</option>
+                  <option value="hide_listing">Hide posted item</option>
+                  <option value="suspend_user">Suspend reported user</option>
+                </select>
+                <div class="review-history">
+                  <h3>Review history</h3>
+                  <div id="review-history-list"></div>
+                </div>
+                <p id="review-error" class="reports-load-error" role="alert" hidden></p>
+                <div class="review-actions">
+                  <button type="button" data-review-status="under_review">Mark as Under Review</button>
+                  <button type="button" data-review-status="denied">Deny Complaint</button>
+                  <button type="button" data-review-status="approved">Approve Complaint</button>
+                </div>
+              </section>
+            </div>
           </section>
         </div>
       </section>
     </main>
-    <script src="/static/logout.js?v=2" defer></script>
+    <script src="/static/logout.js?v=3" defer></script>
     <script>
       const reportsList = document.querySelector("#reports-list");
       const reportsEmpty = document.querySelector("#reports-empty");
-      const reportsSearch = document.querySelector("#reports-search");
       const reportsCount = document.querySelector("#reports-count");
+      const reportsCountLabel = document.querySelector("#reports-count-label");
       const reportsSuccessModal = document.querySelector("#reports-success-modal");
-      let viewerId = null;
+      const reportsLoadError = document.querySelector("#reports-load-error");
+      const adminReportTools = document.querySelector("#admin-report-tools");
+      const adminReportRows = document.querySelector("#admin-report-rows");
+      const reportReviewModal = document.querySelector("#report-review-modal");
+      const reviewReportDetails = document.querySelector("#review-report-details");
+      const reviewHistoryList = document.querySelector("#review-history-list");
+      const reviewNote = document.querySelector("#review-admin-note");
+      const reviewAction = document.querySelector("#review-action");
+      const reviewError = document.querySelector("#review-error");
+      const reportFilters = {
+        status: document.querySelector("#report-status-filter"),
+        search: document.querySelector("#admin-report-search"),
+        date: document.querySelector("#admin-report-date"),
+        reason: document.querySelector("#admin-report-reason"),
+      };
+      let adminMode = false;
+      let activeReportId = null;
       const closeReportsSuccess = () => {
         reportsSuccessModal.hidden = true;
         reportsSuccessModal.classList.remove("is-visible");
       };
       const escapeHtml = (value) => String(value).replace(/[&<>\"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]);
-      const renderReports = () => {
-        const query = reportsSearch.value.trim().toLowerCase();
-        const reports = JSON.parse(localStorage.getItem("ncart-reports") || "[]");
-        const ownReports = reports.filter((report) => Number(report.ownerId) === Number(viewerId));
-        const visibleReports = ownReports.filter((report) => `${report.title} ${report.reason}`.toLowerCase().includes(query));
-        reportsCount.textContent = ownReports.length;
-        reportsList.innerHTML = visibleReports.map((report) => `
+      const formatDate = (value) => value ? new Date(value).toLocaleString() : "—";
+      const readResponse = async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not load complaints.");
+        return data;
+      };
+      const showLoadError = (message) => {
+        reportsLoadError.textContent = message;
+        reportsLoadError.hidden = false;
+      };
+      const renderOwnReports = (reports) => {
+        reportsCount.textContent = String(reports.length);
+        reportsCountLabel.textContent = "submitted";
+        reportsList.innerHTML = reports.map((report) => `
           <article class="report-row">
             <div class="report-row-main">
-              <span class="report-row-label">Reported item</span>
-              <strong>${escapeHtml(report.title)}</strong>
-              <small>${escapeHtml(report.details || "No additional details provided.")}</small>
+              <span class="report-row-label">Complaint #${escapeHtml(report.id)} · Posted item</span>
+              <strong>${escapeHtml(report.listing_title)}</strong>
+              <small>${escapeHtml(report.description || "No additional details provided.")}</small>
             </div>
             <div class="report-row-meta">
               <span class="report-reason">${escapeHtml(report.reason)}</span>
-              <span class="report-status">Pending review</span>
-              <small>${escapeHtml(report.time || "Just now")}</small>
+              <span class="report-status status-${escapeHtml(report.status)}">${escapeHtml(report.status.replaceAll("_", " "))}</span>
+              <small>${escapeHtml(formatDate(report.created_at))}</small>
             </div>
           </article>`).join("");
         reportsEmpty.hidden = visibleReports.length > 0;
       };
-      reportsSearch.addEventListener("input", renderReports);
-      fetch("/api/profile").then(async (response) => {
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "Could not load your account.");
-        viewerId = data.profile.id;
-        renderReports();
-      }).catch(() => {
-        reportsCount.textContent = "0";
-        reportsList.innerHTML = "";
-        reportsEmpty.hidden = false;
+      const renderAdminReports = (reports) => {
+        adminReportRows.innerHTML = reports.map((report) => `
+          <tr>
+            <td>#${escapeHtml(report.id)}</td>
+            <td>${escapeHtml(report.reporter_name || "Deleted user")}</td>
+            <td>${escapeHtml(report.reported_user_name || "Deleted user")}</td>
+            <td>${escapeHtml(report.listing_title)}</td>
+            <td>${escapeHtml(report.reason)}</td>
+            <td><span class="report-status status-${escapeHtml(report.status)}">${escapeHtml(report.status.replaceAll("_", " "))}</span></td>
+            <td>${escapeHtml(formatDate(report.created_at))}</td>
+            <td><button class="review-report-button" type="button" data-review-report="${escapeHtml(report.id)}">Review</button></td>
+          </tr>`).join("");
+        reportsEmpty.hidden = reports.length > 0;
+        reportsEmpty.querySelector("strong").textContent = "No complaints found";
+        reportsEmpty.querySelector("p").textContent = "Try adjusting the filters or check back after a user submits a complaint.";
+      };
+      const loadAdminReports = async () => {
+        const query = new URLSearchParams();
+        Object.entries(reportFilters).forEach(([key, field]) => {
+          if (field.value.trim()) query.set(key, field.value.trim());
+        });
+        const [data, summaryData] = await Promise.all([
+          fetch(`/api/admin/reports?${query}`).then(readResponse),
+          fetch("/api/admin/reports/summary").then(readResponse),
+        ]);
+        reportsCount.textContent = String(summaryData.summary.pending);
+        reportsCountLabel.textContent = "pending";
+        renderAdminReports(data.reports);
+      };
+      const loadReports = async () => {
+        reportsLoadError.hidden = true;
+        try {
+          const adminCheck = await fetch("/api/admin/reports/summary");
+          if (adminCheck.ok) {
+            adminMode = true;
+            adminReportTools.hidden = false;
+            reportsList.hidden = true;
+            await loadAdminReports();
+            const requestedReportId = new URLSearchParams(window.location.search).get("report");
+            if (requestedReportId) void openReportReview(requestedReportId);
+            return;
+          }
+          if (adminCheck.status !== 403) {
+            const data = await adminCheck.json();
+            throw new Error(data.error || "Could not verify complaint access.");
+          }
+          const data = await readResponse(await fetch("/api/reports"));
+          adminMode = false;
+          adminReportTools.hidden = true;
+          reportsList.hidden = false;
+          reportsEmpty.querySelector("strong").textContent = "No complaints yet";
+          reportsEmpty.querySelector("p").textContent = "When you submit a complaint about an item from Marketplace, it will appear here with its current status.";
+          renderOwnReports(data.reports);
+        } catch (error) {
+          reportsList.innerHTML = "";
+          adminReportRows.innerHTML = "";
+          reportsEmpty.hidden = true;
+          showLoadError(error.message);
+        }
+      };
+      const renderReviewDetails = (report) => {
+        const listingTitle = report.current_listing_title || report.listing_title;
+        const listingImage = report.current_listing_image_url || report.listing_image_url;
+        const seller = report.current_listing_seller || report.reported_user_name || "Unavailable";
+        const listingPrice = report.current_listing_price ?? report.listing_price;
+        const listingCategory = report.current_listing_category || report.listing_category || "Unavailable";
+        const listingCondition = report.current_listing_condition || report.listing_condition || "Unavailable";
+        const listingDescription = report.current_listing_description || report.listing_description || "Unavailable";
+        const listingDate = report.current_listing_created_at || report.listing_created_at;
+        reviewReportDetails.innerHTML = `
+          <section class="review-detail-section">
+            <h3>Complaint information</h3>
+            <dl>
+              <dt>Complaint ID</dt><dd>#${escapeHtml(report.id)}</dd>
+              <dt>Reason</dt><dd>${escapeHtml(report.reason)}</dd>
+              <dt>Description</dt><dd>${escapeHtml(report.description || "No additional details provided.")}</dd>
+              <dt>Date submitted</dt><dd>${escapeHtml(formatDate(report.created_at))}</dd>
+              <dt>Current status</dt><dd>${escapeHtml(report.status.replaceAll("_", " "))}</dd>
+              <dt>Admin decision</dt><dd>${escapeHtml(report.admin_decision || "Not reviewed")}</dd>
+              <dt>Admin note</dt><dd>${escapeHtml(report.admin_note || "No admin note yet.")}</dd>
+              <dt>Reviewed by</dt><dd>${escapeHtml(report.reviewing_admin_name || "Not reviewed")}</dd>
+              <dt>Date reviewed</dt><dd>${escapeHtml(formatDate(report.reviewed_at))}</dd>
+              <dt>Action taken</dt><dd>${escapeHtml((report.action_taken || "none").replaceAll("_", " "))}</dd>
+            </dl>
+          </section>
+          <section class="review-detail-section">
+            <h3>Complainant</h3>
+            ${report.reporter_profile_image_url ? `<img class="review-profile-image" src="${escapeHtml(report.reporter_profile_image_url)}" alt="">` : ""}
+            <dl>
+              <dt>Name / email</dt><dd>${escapeHtml(report.reporter_name || "Deleted user")} · ${escapeHtml(report.reporter_email || "Unavailable")}</dd>
+              <dt>Profile</dt><dd>${escapeHtml(report.reporter_bio || "No bio")} · ${escapeHtml(report.reporter_location || "No location")}</dd>
+            </dl>
+          </section>
+          <section class="review-detail-section">
+            <h3>Reported user</h3>
+            ${report.reported_user_profile_image_url ? `<img class="review-profile-image" src="${escapeHtml(report.reported_user_profile_image_url)}" alt="">` : ""}
+            <dl>
+              <dt>Name / email</dt><dd>${escapeHtml(report.reported_user_name || "Deleted user")} · ${escapeHtml(report.reported_user_email || "Unavailable")}</dd>
+              <dt>Profile</dt><dd>${escapeHtml(report.reported_user_bio || "No bio")} · ${escapeHtml(report.reported_user_location || "No location")}</dd>
+              <dt>Account status</dt><dd>${escapeHtml(report.reported_user_account_status || "Unavailable")}</dd>
+              <dt>Other complaints</dt><dd>${escapeHtml(report.previous_reports)}</dd>
+            </dl>
+          </section>
+          <section class="review-detail-section">
+            <h3>Reported posted item</h3>
+            ${listingImage ? `<img class="review-listing-image" src="${escapeHtml(listingImage)}" alt="">` : ""}
+            <dl>
+              <dt>Title</dt><dd>${escapeHtml(listingTitle)}</dd>
+              <dt>Price</dt><dd>${escapeHtml(listingPrice ?? "Unavailable")}</dd>
+              <dt>Category / condition</dt><dd>${escapeHtml(listingCategory)} / ${escapeHtml(listingCondition)}</dd>
+              <dt>Description</dt><dd>${escapeHtml(listingDescription)}</dd>
+              <dt>Seller</dt><dd>${escapeHtml(seller)}</dd>
+              <dt>Date posted</dt><dd>${escapeHtml(formatDate(listingDate))}</dd>
+              <dt>Posted item moderation</dt><dd>${report.listing_id === null ? "Unavailable" : report.current_listing_is_hidden ? "Hidden" : report.current_listing_is_flagged ? "Flagged" : "Active"}</dd>
+            </dl>
+          </section>`;
+        reviewHistoryList.innerHTML = report.history.map((entry) => `
+          <article class="review-history-entry">
+            <strong>${escapeHtml(entry.previous_status.replaceAll("_", " "))} → ${escapeHtml(entry.new_status.replaceAll("_", " "))}</strong>
+            <span>${escapeHtml(entry.admin_name || "Former admin")} · ${escapeHtml(formatDate(entry.reviewed_at))}</span>
+            <p>${escapeHtml(entry.admin_note)}</p>
+            <small>Action: ${escapeHtml(entry.action_taken.replaceAll("_", " "))}</small>
+          </article>`).join("") || "<p>No review history yet.</p>";
+        reviewNote.value = report.admin_note || "";
+        reviewAction.value = report.action_taken || "none";
+        reviewAction.querySelector('[value="flag_listing"]').disabled = report.listing_id === null;
+        reviewAction.querySelector('[value="hide_listing"]').disabled = report.listing_id === null;
+        reviewAction.querySelector('[value="suspend_user"]').disabled = report.reported_user_id === null;
+        const resolved = report.status === "approved" || report.status === "denied";
+        reviewNote.disabled = resolved;
+        reviewAction.disabled = resolved;
+        document.querySelectorAll("[data-review-status]").forEach((button) => {
+          button.disabled = resolved;
+        });
+      };
+      const openReportReview = async (id) => {
+        reviewError.hidden = true;
+        reviewReportDetails.textContent = "Loading complaint details…";
+        reviewHistoryList.replaceChildren();
+        reportReviewModal.hidden = false;
+        activeReportId = id;
+        try {
+          const response = await fetch(`/api/admin/reports/${encodeURIComponent(id)}`);
+          const data = await readResponse(response);
+          renderReviewDetails(data.report);
+        } catch (error) {
+          reviewReportDetails.textContent = "";
+          reviewError.textContent = error.message;
+          reviewError.hidden = false;
+        }
+      };
+      const closeReviewModal = () => {
+        reportReviewModal.hidden = true;
+        activeReportId = null;
+      };
+      const reviewReport = async (status) => {
+        if (!activeReportId) return;
+        const note = reviewNote.value.trim();
+        if (status !== "under_review" && !note) {
+          reviewError.textContent = "Add an admin note before approving or denying this complaint.";
+          reviewError.hidden = false;
+          reviewNote.focus();
+          return;
+        }
+        const decision = status === "approved" ? "approve" : status === "denied" ? "deny" : "mark this complaint as under review";
+        if (status !== "under_review" && !window.confirm(`Are you sure you want to ${decision} this complaint?`)) return;
+        reviewError.hidden = true;
+        try {
+          const response = await fetch(`/api/admin/reports/${encodeURIComponent(activeReportId)}/review`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              status,
+              note,
+              action: status === "approved" ? reviewAction.value : "none",
+            }),
+          });
+          await readResponse(response);
+          closeReviewModal();
+          await loadAdminReports();
+        } catch (error) {
+          reviewError.textContent = error.message;
+          reviewError.hidden = false;
+        }
+      };
+      Object.values(reportFilters).forEach((field) => field.addEventListener("input", () => { void loadAdminReports(); }));
+      reportFilters.status.addEventListener("change", () => { void loadAdminReports(); });
+      reportFilters.reason.addEventListener("change", () => { void loadAdminReports(); });
+      adminReportRows.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-review-report]");
+        if (button) void openReportReview(button.dataset.reviewReport);
       });
+      document.querySelector("#review-modal-close").addEventListener("click", closeReviewModal);
+      document.querySelectorAll("[data-review-status]").forEach((button) => {
+        button.addEventListener("click", () => { void reviewReport(button.dataset.reviewStatus); });
+      });
+      reportReviewModal.addEventListener("click", (event) => {
+        if (event.target === reportReviewModal) closeReviewModal();
+      });
+      void loadReports();
       if (sessionStorage.getItem("ncart-report-success") === "1") {
         sessionStorage.removeItem("ncart-report-success");
         reportsSuccessModal.hidden = false;

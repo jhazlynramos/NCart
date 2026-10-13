@@ -1,0 +1,771 @@
+:root {
+  color-scheme: light;
+  --ink: #111534;
+  --paper: #f4f4f2;
+  --nc-page: #f7f7f5;
+  --nc-surface: #ffffff;
+  --nc-surface-raised: #f7f8fc;
+  --nc-surface-muted: #f0f2f4;
+  --nc-text: #202626;
+  --nc-secondary: #60676d;
+  --nc-muted: #60676d;
+  --nc-placeholder: #858a87;
+  --nc-border: #e5e7ef;
+  --auth-glass-bg: rgba(255, 255, 255, 0.16);
+  --auth-glass-border: rgba(255, 255, 255, 0.28);
+  --auth-glass-shadow: 0 12px 36px rgba(12, 20, 24, 0.18);
+  --auth-field-bg: rgba(255, 255, 255, 0.48);
+  --auth-field-border: rgba(40, 50, 50, 0.3);
+  --profile-background: #f7f8fc;
+  --profile-ink: #171a35;
+  --profile-border: #e5e7ef;
+  --profile-surface: #ffffff;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --dark-mode-primary-text: #F6A41F;
+  --ink: #F2F2F2;
+  --paper: #242424;
+  --nc-page: #242424;
+  --nc-surface: #363636;
+  --nc-surface-raised: #2D2D2D;
+  --nc-surface-muted: #303030;
+  --nc-text: #F2F2F2;
+  --nc-secondary: #B8B8B8;
+  --nc-muted: #B0B0B0;
+  --nc-placeholder: #929292;
+  --nc-border: #484848;
+  --auth-glass-bg: rgba(40, 40, 40, 0.45);
+  --auth-glass-border: rgba(255, 255, 255, 0.28);
+  --auth-glass-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+  --auth-field-bg: rgba(45, 45, 45, 0.78);
+  --auth-field-border: rgba(255, 255, 255, 0.24);
+  --profile-background: #242424;
+  --profile-ink: #F2F2F2;
+  --profile-border: #484848;
+  --profile-surface: #363636;
+}
+
+:root[data-theme="dark"] body {
+  color: var(--nc-text) !important;
+  background: var(--nc-page) !important;
+}
+
+:root[data-theme="dark"] body.login-page {
+  background-image:
+    linear-gradient(rgba(36, 36, 36, 0.38), rgba(36, 36, 36, 0.38)),
+    url("/static/assets/norzagaray-college-building.png") !important;
+  background-position: center, left center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover, 145% auto !important;
+  background-attachment: fixed !important;
+  background-color: #242424 !important;
+}
+
+.login-page .login-card {
+  border: 1px solid var(--auth-glass-border);
+  background-color: var(--auth-glass-bg);
+  box-shadow: var(--auth-glass-shadow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+@supports not ((backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px))) {
+  .login-page .login-card {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  :root[data-theme="dark"] .login-page .login-card {
+    background-color: rgba(40, 40, 40, 0.92);
+  }
+}
+
+:root .login-page .login-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+:root .login-page .register-form textarea,
+:root .login-page .admin-otp-input {
+  border-color: var(--auth-field-border);
+  background-color: var(--auth-field-bg);
+}
+
+:root .login-page .login-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus,
+:root .login-page .register-form textarea:focus,
+:root .login-page .admin-otp-input:focus {
+  border-color: #536bd5;
+  box-shadow: 0 0 0 3px rgba(83, 107, 213, 0.24);
+}
+
+@media (max-width: 720px) {
+  :root[data-theme="dark"] body.login-page {
+    background-position: center, center !important;
+    background-size: cover, cover !important;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1200px) {
+  :root[data-theme="dark"] body.login-page {
+    background-position: center, left center !important;
+    background-size: cover, 145% auto !important;
+  }
+}
+
+:root[data-theme="dark"] :is(
+  .dashboard-shell,
+  .dashboard-content,
+  .dashboard-sidebar,
+  .dashboard-header,
+  .dashboard-views,
+  .public-profile-content,
+  .shell,
+  .auth-panel
+) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-page) !important;
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] :is(.dashboard-sidebar, .dashboard-header) {
+  background-color: var(--nc-surface-muted) !important;
+}
+
+:root[data-theme="dark"] .auth-panel {
+  background-color: var(--nc-surface) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .dashboard-view,
+  .dashboard-views,
+  .public-profile-content,
+  .auth-copy,
+  .login-copy,
+  .login-card,
+  .register-card
+) {
+  color: var(--nc-text) !important;
+}
+
+:root[data-theme="dark"] .dashboard-page :is(
+  h1, h2, h3, h4, p, label, th, td, dt, dd
+) {
+  color: var(--nc-text) !important;
+}
+
+:root[data-theme="dark"] .dashboard-page :is(
+  .dashboard-kicker,
+  .reports-kicker,
+  [class*="intro"],
+  [class*="hint"],
+  [class*="meta"],
+  [class*="time"],
+  [class*="empty"],
+  [class*="subtitle"],
+  [class*="member-since"],
+  [class*="role"],
+  [class*="description"]
+) {
+  color: var(--nc-muted) !important;
+}
+
+:root[data-theme="dark"] .dashboard-welcome :is(h1, h2, p:not(.dashboard-kicker)) {
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .dashboard-nav-link:not(.is-active):not(:hover) {
+  color: var(--nc-text) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .home-category-card,
+  .home-recent-card,
+  .home-recent-status,
+  .dashboard-stat,
+  .dashboard-filter,
+  .marketplace-page-button,
+  .home-recent-seller,
+  .item-card,
+  .listing-form-view,
+  .listing-form,
+  .listing-form-grid,
+  .listing-field,
+  .marketplace-detail-panel,
+  .marketplace-cart-panel,
+  .marketplace-cart-item,
+  .report-dialog,
+  .report-review-dialog,
+  .seller-chat-preview,
+  .message-dialog,
+  .reports-success-dialog,
+  .listing-success-dialog,
+  .listing-error-dialog,
+  .crop-dialog,
+  .saving-dialog,
+  .order-card,
+  .order-rating-form,
+  .seller-orders-section,
+  .payment-verification-section,
+  .payment-submission-form,
+  .checkout-panel,
+  .checkout-item,
+  .checkout-summary,
+  .cart-item,
+  .cart-summary,
+  .cart-toolbar,
+  .cart-item-controls button,
+  .cart-item-controls input,
+  .cart-item-remove,
+  .profile-cover-card,
+  .profile-card,
+  .profile-info-item,
+  .profile-modal,
+  .profile-crop-dialog,
+  .secondary-button,
+  .social-button,
+  .login-social,
+  .public-profile-hero,
+  .public-profile-stat,
+  .public-profile-section,
+  .public-listing-card,
+  .public-review-card,
+  .admin-report-summary article,
+  .admin-recent-reports,
+  .admin-student-verifications,
+  .admin-pending-accounts,
+  .reports-panel,
+  .report-row
+) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface) !important;
+  border-color: var(--nc-border) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme="dark"] :is(
+  .cart-toolbar,
+  .cart-item,
+  .cart-summary,
+  .cart-item-controls button,
+  .cart-item-controls input,
+  .cart-item-remove
+) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface) !important;
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] .cart-item-image-placeholder {
+  color: var(--nc-muted) !important;
+  background-color: var(--nc-surface-muted) !important;
+}
+
+:root[data-theme="dark"] :is(.cart-item-price, .cart-summary strong) {
+  color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] .login-page .login-card,
+:root[data-theme="dark"] .login-page .register-card {
+  border-color: var(--auth-glass-border);
+  background-color: var(--auth-glass-bg);
+  box-shadow: var(--auth-glass-shadow);
+}
+
+:root[data-theme="dark"] :is(
+  .dashboard-search,
+  .home-search-field,
+  .conversation-search,
+  .dashboard-filter-row,
+  .checkout-field,
+  .report-field,
+  .profile-field,
+  .student-verification-reason,
+  .listing-field input,
+  .listing-field textarea,
+  .listing-field select
+) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface-raised) !important;
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] :is(input, textarea, select) {
+  color: var(--nc-text);
+  background-color: var(--nc-surface-raised);
+  border-color: var(--nc-border);
+  color-scheme: dark;
+}
+
+:root[data-theme="dark"] :is(input, textarea, select)::placeholder {
+  color: var(--nc-placeholder);
+  opacity: 1;
+}
+
+:root[data-theme="dark"] :is(input[type="checkbox"], input[type="radio"]) {
+  accent-color: #F6A41F;
+}
+
+:root[data-theme="dark"] :is(input, textarea, select):disabled {
+  color: var(--nc-muted);
+  background-color: #303030;
+  border-color: var(--nc-border);
+  opacity: 0.72;
+}
+
+:root[data-theme="dark"] select option {
+  color: var(--nc-text);
+  background-color: var(--nc-surface-raised);
+}
+
+:root[data-theme="dark"] :is(
+  .conversation-list,
+  .conversation-panel,
+  .conversation-thread,
+  .conversation-compose,
+  .conversation-list-item,
+  .reply-compose-preview,
+  .message-dialog,
+  .cart-confirm-dialog,
+  .report-confirm-dialog,
+  .order-track-dialog,
+  .order-cancel-dialog
+) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface) !important;
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .conversation-list-item:hover,
+  .conversation-list-item.is-active,
+  .reply-compose-preview,
+  .order-summary-row,
+  .checkout-items,
+  .tracking-step,
+  .cart-item-image-placeholder,
+  .profile-info-grid,
+  .profile-upload-preview,
+  .review-detail-section
+) {
+  background-color: var(--nc-surface-muted) !important;
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] .conversation-message:not(.is-sent) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface-raised) !important;
+}
+
+:root[data-theme="dark"] :is(.conversation-message-item, .conversation-message-quote) {
+  color: var(--nc-muted) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .notification-dropdown,
+  .account-dropdown,
+  .notification-page-list,
+  .notification-item
+) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface) !important;
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .notification-dropdown-header,
+  .notification-view-all,
+  .notification-item
+) {
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .marketplace-cart-header,
+  .marketplace-cart-footer,
+  .listing-detail-meta,
+  .profile-info-item,
+  .notification-dropdown-header,
+  .notification-view-all,
+  .account-dropdown-summary,
+  .account-menu-footer
+) {
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] .notification-item.unread {
+  background-color: #404040 !important;
+}
+
+:root[data-theme="dark"] :is(
+  .notification-item:hover,
+  .notification-item:focus-visible,
+  .account-menu-item:hover,
+  .account-menu-item:focus-visible,
+  .notification-view-all:hover,
+  .notification-view-all:focus-visible
+) {
+  background-color: #484848 !important;
+}
+
+:root[data-theme="dark"] :is(.notification-message, .notification-time, .notification-empty, .account-summary-role) {
+  color: var(--nc-muted) !important;
+}
+
+:root[data-theme="dark"] :is(.dashboard-header, .dashboard-sidebar, .dashboard-content, .dashboard-views) {
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] :is(.dashboard-header h1, .admin-dashboard-heading h2, .admin-recent-heading h2) {
+  color: var(--nc-text) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .account-dropdown-trigger,
+  .notification-header-trigger
+) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface-raised) !important;
+  border-color: var(--nc-border) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+:root[data-theme="dark"] :is(.account-dropdown-trigger:hover, .notification-header-trigger:hover) {
+  background-color: #484848 !important;
+}
+
+:root[data-theme="dark"] :is(
+  .dashboard-table,
+  .admin-report-table,
+  .student-verification-table,
+  .profile-info-grid,
+  table
+) {
+  color: var(--nc-text);
+  border-color: var(--nc-border);
+}
+
+:root[data-theme="dark"] :is(th, td, tr) {
+  border-color: var(--nc-border) !important;
+  background-color: var(--nc-surface) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .home-search-field,
+  .item-card,
+  .marketplace-detail-panel,
+  .profile-card,
+  .order-card,
+  .checkout-panel,
+  .reports-panel,
+  .report-row,
+  .public-profile-section,
+  .public-listing-card,
+  .public-review-card,
+  .admin-recent-reports,
+  .admin-student-verifications,
+  .admin-pending-accounts
+) :is(h1, h2, h3, h4, p, label, strong, small, span, dt, dd) {
+  color: inherit;
+}
+
+:root[data-theme="dark"] .dashboard-page :is(
+  .admin-load-error,
+  .profile-rejection,
+  .student-number-error,
+  .listing-error,
+  .payment-error
+) {
+  color: #ff9b91 !important;
+}
+
+:root[data-theme="dark"] .dashboard-page .empty-state {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface) !important;
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] .dashboard-page .empty-state p {
+  color: var(--nc-muted) !important;
+}
+
+:root[data-theme="dark"] .dashboard-page .empty-state > span {
+  color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] .marketplace-page .item-card :is(
+  .item-description,
+  .seller-preview p,
+  .seller-preview small,
+  p:not(.listing-stock),
+  small:not(.listing-stock)
+) {
+  color: var(--nc-secondary) !important;
+}
+
+:root[data-theme="dark"] .dashboard-page .item-image-placeholder {
+  color: var(--nc-muted);
+  background-color: var(--nc-surface-raised);
+}
+
+:root[data-theme="dark"] .login-page :is(h1, h2, h3, p, label, small) {
+  color: var(--nc-text) !important;
+}
+
+:root[data-theme="dark"] .login-page .brand-name {
+  color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] .login-page :is(
+  .login-helper,
+  .login-divider,
+  .signup-prompt,
+  .student-id-help,
+  .back-link,
+  .forgot-link
+) {
+  color: var(--nc-muted) !important;
+}
+
+:root[data-theme="dark"] .login-page .password-rules {
+  color: var(--nc-muted);
+}
+
+:root[data-theme="dark"] .login-page .password-rules .is-valid {
+  color: #a9c1ff;
+}
+
+:root[data-theme="dark"] .login-page :is(
+  .student-number-error,
+  .admin-otp-error,
+  .login-status.is-error
+) {
+  color: #ff9b91 !important;
+}
+
+:root[data-theme="dark"] .login-page .login-form input::placeholder,
+:root[data-theme="dark"] .login-page textarea::placeholder {
+  color: var(--nc-muted);
+  opacity: 1;
+}
+
+.account-theme-section {
+  padding: 7px 6px;
+  border-top: 1px solid #edf0ef;
+}
+
+:root[data-theme="dark"] .account-theme-section {
+  border-top: 1px solid var(--nc-border);
+}
+
+.account-theme-toggle {
+  display: flex;
+  width: 100%;
+  min-height: 42px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.account-theme-toggle:hover {
+  background: #f0f2f4;
+}
+
+.account-theme-toggle:focus-visible {
+  outline: 3px solid #7185ff;
+  outline-offset: 2px;
+}
+
+.account-theme-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.account-theme-icon-sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .account-theme-icon-moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .account-theme-icon-sun {
+  display: block;
+  color: #f4ca59;
+}
+
+.account-theme-state {
+  min-width: 25px;
+  margin-left: auto;
+  color: #66706f;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.account-theme-switch {
+  display: inline-flex;
+  width: 38px;
+  height: 22px;
+  flex: 0 0 38px;
+  align-items: center;
+  padding: 3px;
+  border: 1px solid #8b929d;
+  border-radius: 999px;
+  background: #dfe3e8;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.account-theme-switch > span {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+  transition: transform 160ms ease;
+}
+
+.account-theme-toggle[aria-checked="true"] .account-theme-switch {
+  border-color: #5266df;
+  background: #5266df;
+}
+
+.account-theme-toggle[aria-checked="true"] .account-theme-switch > span {
+  transform: translateX(16px);
+}
+
+:root[data-theme="dark"] .account-theme-toggle:hover {
+  background-color: #484848;
+}
+
+:root[data-theme="dark"] .account-theme-state {
+  color: var(--nc-muted);
+}
+
+:root[data-theme="dark"] .account-theme-switch {
+  border-color: #767676;
+  background: #484848;
+}
+
+:root[data-theme="dark"] .account-theme-toggle[aria-checked="true"] .account-theme-switch {
+  border-color: #F6A41F;
+  background: #80601e;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-theme-switch,
+  .account-theme-switch > span {
+    transition: none;
+  }
+}
+
+:root[data-theme="dark"] .dashboard-view :is(h1, h2, h3, h4):not(.message-title),
+:root[data-theme="dark"] .public-profile-content :is(h1, h2, h3, h4) {
+  color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] .dashboard-view .dashboard-welcome :is(h1, h2, h3, h4),
+:root[data-theme="dark"] .dashboard-feature-heading-icon {
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] :is(
+  .home-view-all,
+  .home-recent-price,
+  .dashboard-cart-button:not(:hover),
+  .marketplace-cart-copy em,
+  .marketplace-cart-total strong,
+  .item-modal-price,
+  .item-card strong,
+  .item-category,
+  .seller-profile-link:hover,
+  .seller-chat-kicker,
+  .seller-chat-send:not(:hover),
+  .conversation-heading .message-button:not(:hover),
+  .order-tracking-status,
+  .order-profile-link:hover,
+  .order-status:not(.is-paid):not(.is-shipped):not(.is-cancelled):not(.is-pending),
+  .order-payment-row strong,
+  .order-summary-row strong,
+  .order-card strong,
+  .order-track-button:not(:hover),
+  .checkout-summary strong,
+  .profile-info-item a:hover,
+  .public-profile-back:hover,
+  .public-profile-page .dashboard-nav-link:hover,
+  .admin-recent-heading a,
+  .report-reason,
+  .report-brand,
+  .notification-mark-all,
+  .notification-view-all
+) {
+  color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] .listing-form .image-upload-box {
+  color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] .dashboard-global-header .dashboard-global-brand {
+  color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .register-social,
+  .dashboard-sidebar-toggle,
+  .home-search-submit,
+  .dashboard-cart-button,
+  .notification-tab
+) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface-muted) !important;
+  border-color: var(--nc-border) !important;
+}
+
+:root[data-theme="dark"] :is(
+  .register-social:hover,
+  .register-social:focus-visible,
+  .dashboard-sidebar-toggle:hover,
+  .dashboard-sidebar-toggle:focus-visible,
+  .home-search-submit:hover,
+  .home-search-submit:focus-visible,
+  .dashboard-cart-button:hover,
+  .dashboard-cart-button:focus-visible,
+  .notification-tab:not(.is-active):hover,
+  .notification-tab:not(.is-active):focus-visible
+) {
+  color: var(--dark-mode-primary-text) !important;
+  background-color: #484848 !important;
+  border-color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] .notification-tab.is-active {
+  color: #ffffff !important;
+  background-color: #365aa8 !important;
+  border-color: #365aa8 !important;
+}
+
+:root[data-theme="dark"] :is(.home-search-submit, .dashboard-cart-button) {
+  color: var(--dark-mode-primary-text) !important;
+}
+
+:root[data-theme="dark"] :is(.cart-empty, .messages-workspace) {
+  color: var(--nc-text) !important;
+  background-color: var(--nc-surface) !important;
+  border-color: var(--nc-border) !important;
+}

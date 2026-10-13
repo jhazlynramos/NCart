@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="View a public NCart profile, listings, and transaction ratings.">
+    <script src="/static/initial-render.js?v=3"></script>
+    <title>NCart | Public Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/static/sidebar.css?v=20">
+    <link rel="stylesheet" href="/static/public-profile.css?v=2">
+    <link rel="stylesheet" href="/static/theme.css?v=13">
+  </head>
+  <body class="dashboard-page public-profile-page">
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/home">
+          <img class="dashboard-brand-image" src="/static/assets/NCart_logo.png?v=4" alt="NCart">
+        </a>
+        <nav class="dashboard-nav" aria-label="Main navigation">
+          <a class="dashboard-nav-link" href="/home"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg></span>Home</a>
+          <a class="dashboard-nav-link" href="/marketplace"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 4.5 4h15l1.5 6"/><path d="M5 10v11h14V10"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 21v-6h6v6"/></svg></span>Marketplace</a>
+          <a class="dashboard-nav-link" href="/favorites"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Favorites</a>
+          <a class="dashboard-nav-link" href="/listings"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m20.6 13.4-9.6-9.6H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>My Listings</a>
+          <a class="dashboard-nav-link" href="/messages"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span>Messages</a>
+          <a class="dashboard-nav-link" href="/orders"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>My Orders</a>
+          <a class="dashboard-nav-link" href="/reports"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 18v-3"/><path d="M12 18v-6"/><path d="M16 18v-4"/></svg></span>Complaints</a>
+        </nav>
+      </aside>
+
+      <section class="public-profile-content" aria-labelledby="public-profile-name">
+        <a class="public-profile-back" href="/marketplace">← Back to Marketplace</a>
+        <div class="public-profile-loading" id="public-profile-loading" role="status">Loading public profile…</div>
+        <div class="public-profile-error" id="public-profile-error" role="alert" hidden>
+          <h1>Profile unavailable</h1>
+          <p id="public-profile-error-message">This profile could not be found.</p>
+        </div>
+        <div id="public-profile" hidden>
+          <section class="public-profile-hero">
+            <div class="public-profile-avatar" id="public-profile-avatar">
+              <img id="public-profile-image" alt="" hidden>
+              <span id="public-profile-initial">N</span>
+            </div>
+            <div class="public-profile-identity">
+              <p class="public-profile-kicker">NCart member</p>
+              <h1><span id="public-profile-name">Member profile</span><svg class="public-profile-verified verified-badge" id="public-profile-verified" viewBox="0 0 20 20" role="img" aria-label="Administrator-approved account" hidden><circle cx="10" cy="10" r="8.25"></circle><path d="m6.3 10.1 2.4 2.4 5-5.1"></path></svg></h1>
+              <p class="public-profile-member-since" id="public-profile-member-since"></p>
+            </div>
+            <div class="public-profile-rating-summary">
+              <strong><span aria-hidden="true">★</span> <span id="public-profile-average">—</span></strong>
+              <span id="public-profile-rating-count">No ratings yet</span>
+            </div>
+          </section>
+
+          <section class="public-profile-stats" aria-label="Member activity">
+            <article class="public-profile-stat">
+              <strong id="public-profile-post-count">0</strong>
+              <span>Posts</span>
+            </article>
+            <article class="public-profile-stat">
+              <strong id="public-profile-transaction-count">0</strong>
+              <span>Completed Transactions</span>
+            </article>
+            <article class="public-profile-stat">
+              <strong id="public-profile-ratings-stat">0</strong>
+              <span>Ratings</span>
+            </article>
+          </section>
+
+          <section class="public-profile-section" aria-labelledby="public-listings-title">
+            <header class="public-profile-section-heading">
+              <div>
+                <p class="public-profile-kicker">For sale</p>
+                <h2 id="public-listings-title">Listings</h2>
+              </div>
+              <span id="public-listings-count"></span>
+            </header>
+            <div class="public-listings-grid" id="public-listings-grid"></div>
+            <p class="public-profile-empty" id="public-listings-empty" hidden>No public listings are available right now.</p>
+          </section>
+
+          <section class="public-profile-section public-reviews-section" aria-labelledby="public-reviews-title">
+            <header class="public-profile-section-heading">
+              <div>
+                <p class="public-profile-kicker">From completed transactions</p>
+                <h2 id="public-reviews-title">Ratings &amp; Reviews</h2>
+              </div>
+            </header>
+            <div class="public-reviews-list" id="public-reviews-list"></div>
+            <p class="public-profile-empty" id="public-reviews-empty" hidden>No ratings or reviews yet.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script>
+      (() => {
+        const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (character) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
+        })[character]);
+        const formatDate = (value, options) =>
+          new Intl.DateTimeFormat(undefined, options).format(new Date(value));
+        const starText = (value) => `${"★".repeat(value)}${"☆".repeat(5 - value)}`;
+        const profileId = window.location.pathname.match(/^\/users\/([0-9]+)\/?$/)?.[1]
+          || new URLSearchParams(window.location.search).get("user_id");
+        const loading = document.querySelector("#public-profile-loading");
+        const profileView = document.querySelector("#public-profile");
+        const errorView = document.querySelector("#public-profile-error");
+        const setUnavailable = (message) => {
+          loading.hidden = true;
+          errorView.hidden = false;
+          document.querySelector("#public-profile-error-message").textContent = message;
+        };
+
+        const renderProfile = (data) => {
+          const profile = data.profile;
+          document.querySelector("#public-profile-name").textContent = profile.full_name;
+          document.querySelector("#public-profile-initial").textContent =
+            profile.full_name.trim().charAt(0).toUpperCase() || "N";
+          const profileImage = document.querySelector("#public-profile-image");
+          if (profile.profile_image_url) {
+            profileImage.src = profile.profile_image_url;
+            profileImage.hidden = false;
+            profileImage.addEventListener("error", () => {
+              profileImage.hidden = true;
+            }, { once: true });
+          }
+          document.querySelector("#public-profile-verified").hidden = !profile.verified;
+          document.querySelector("#public-profile-average").textContent =
+            profile.average_rating === null ? "—" : Number(profile.average_rating).toFixed(1);
+          document.querySelector("#public-profile-rating-count").textContent =
+            `${profile.rating_count} ${profile.rating_count === 1 ? "Rating" : "Ratings"}`;
+          document.querySelector("#public-profile-post-count").textContent = profile.post_count;
+          document.querySelector("#public-profile-transaction-count").textContent =
+            profile.completed_transaction_count;
+          document.querySelector("#public-profile-ratings-stat").textContent = profile.rating_count;
+          document.querySelector("#public-profile-member-since").textContent =
+            `Member since ${formatDate(profile.created_at, { month: "long", year: "numeric" })}`;
+
+          const listingGrid = document.querySelector("#public-listings-grid");
+          listingGrid.innerHTML = data.listings.map((listing) => `
+            <article class="public-listing-card">
+              <div class="public-listing-image-wrap">
+                ${listing.image_url
+                  ? `<img src="${escapeHtml(listing.image_url)}" alt="${escapeHtml(listing.title)}">`
+                  : `<span class="public-listing-image-placeholder">No image</span>`}
+              </div>
+              <div class="public-listing-copy">
+                <h3>${escapeHtml(listing.title)}</h3>
+                <strong>₱${escapeHtml(listing.price)}</strong>
+                <p>${escapeHtml(listing.condition)} <span>·</span> ${escapeHtml(listing.status)}</p>
+                <small>Listed ${formatDate(listing.created_at, { month: "short", day: "numeric", year: "numeric" })}</small>
+              </div>
+            </article>
+          `).join("");
+          document.querySelector("#public-listings-count").textContent =
+            `${data.listings.length} ${data.listings.length === 1 ? "listing" : "listings"}`;
+          document.querySelector("#public-listings-empty").hidden = data.listings.length > 0;
+          listingGrid.hidden = data.listings.length === 0;
+
+          const reviewsList = document.querySelector("#public-reviews-list");
+          reviewsList.innerHTML = data.reviews.map((review) => `
+            <article class="public-review-card">
+              <div class="public-review-topline">
+                <strong class="public-review-stars" aria-label="${review.rating} out of 5 stars">${starText(review.rating)}</strong>
+                <span>Completed transaction</span>
+                <time datetime="${escapeHtml(review.created_at)}">${formatDate(review.created_at, { month: "short", day: "numeric", year: "numeric" })}</time>
+              </div>
+              ${review.review ? `<p class="public-review-text">“${escapeHtml(review.review)}”</p>` : `<p class="public-review-text public-review-no-comment">Rating from a completed transaction.</p>`}
+            </article>
+          `).join("");
+          document.querySelector("#public-reviews-empty").hidden = data.reviews.length > 0;
+          reviewsList.hidden = data.reviews.length === 0;
+          document.title = `NCart | ${profile.full_name}`;
+          loading.hidden = true;
+          profileView.hidden = false;
+        };
+
+        if (!profileId || !/^[0-9]+$/.test(profileId) || Number(profileId) < 1) {
+          setUnavailable("This profile could not be found.");
+          return;
+        }
+        fetch(`/api/users/${encodeURIComponent(profileId)}/profile`, { cache: "no-store" })
+          .then(async (response) => {
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "This profile could not be found.");
+            renderProfile(data);
+          })
+          .catch((error) => setUnavailable(error.message || "This profile could not be loaded."));
+      })();
+    </script>
+  </body>
+</html>

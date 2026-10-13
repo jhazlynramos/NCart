@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/initial-render.js?v=3"></script>
+    <title>NCart | Admin dashboard</title>
+    <link rel="stylesheet" href="/static/reports.css?v=5">
+    <link rel="stylesheet" href="/static/sidebar.css?v=20">
+    <link rel="stylesheet" href="/static/admin.css?v=6">
+    <link rel="stylesheet" href="/static/theme.css?v=13">
+    <script src="/static/sidebar.js?v=19" defer></script>
+    <script src="/static/admin.js?v=5" defer></script>
+    <script src="/static/student-verifications.js?v=1" defer></script>
+  </head>
+  <body class="dashboard-page admin-page">
+    <main class="dashboard-shell">
+      <aside class="dashboard-sidebar" aria-label="Main navigation">
+        <a class="dashboard-brand" href="/home" aria-label="NCart home"><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png?v=4" alt="NCart"></a>
+        <nav class="dashboard-nav">
+          <a class="dashboard-nav-link" href="/home"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg></span>Home</a>
+          <a class="dashboard-nav-link" href="/marketplace"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 4.5 4h15l1.5 6"/><path d="M5 10v11h14V10"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 21v-6h6v6"/></svg></span>Marketplace</a>
+          <a class="dashboard-nav-link" href="/favorites"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Favorites</a>
+          <a class="dashboard-nav-link" href="/listings"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m20.6 13.4-9.6-9.6H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>My Listings</a>
+          <a class="dashboard-nav-link" href="/messages"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span>Messages</a>
+          <a class="dashboard-nav-link" href="/orders"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>My Orders</a>
+          <a class="dashboard-nav-link" href="/reports"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 18v-3"/><path d="M12 18v-6"/><path d="M16 18v-4"/></svg></span>Reports</a>
+        </nav>
+
+      </aside>
+      <section class="dashboard-content">
+        <header class="dashboard-header"><h1>Admin dashboard</h1></header>
+        <div class="dashboard-views">
+          <section class="dashboard-view is-visible">
+            <p class="reports-kicker">Safety center</p>
+            <div class="admin-dashboard-heading">
+              <div>
+                <h2>Complaint overview</h2>
+                <p>Review complaints submitted by NCart users and record evidence-based decisions.</p>
+              </div>
+              <a class="admin-review-all" href="/reports">Review complaints</a>
+            </div>
+            <p class="admin-load-error" id="admin-load-error" role="alert" hidden></p>
+            <div class="admin-report-summary" id="admin-report-summary">
+              <article><span>Pending Complaints</span><strong id="summary-pending">—</strong></article>
+              <article><span>Under Review</span><strong id="summary-under-review">—</strong></article>
+              <article><span>Approved Complaints</span><strong id="summary-approved">—</strong></article>
+              <article><span>Denied Complaints</span><strong id="summary-denied">—</strong></article>
+            </div>
+            <section class="admin-recent-reports">
+              <div class="admin-recent-heading">
+                <h2>Recent Complaints</h2>
+                <a href="/reports">View all</a>
+              </div>
+              <div class="admin-report-table-wrap">
+                <table class="admin-report-table">
+                  <thead><tr><th>Complaint ID</th><th>Complainant</th><th>Involved User</th><th>Posted Item</th><th>Reason</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+                  <tbody id="admin-recent-rows"></tbody>
+                </table>
+              </div>
+              <p id="admin-recent-empty" class="admin-empty" hidden>No complaints have been submitted yet.</p>
+            </section>
+            <section class="admin-student-verifications">
+              <div class="admin-recent-heading">
+                <h2>Pending Student Verifications</h2>
+              </div>
+              <p class="student-verification-instructions">Compare the listed name and Student Number with the uploaded document. Check the school name or logo and any validity information before approving.</p>
+              <p class="admin-load-error" id="student-verification-error" role="alert" hidden></p>
+              <div class="student-verification-table-wrap">
+                <table class="admin-report-table">
+                  <thead><tr><th>Student</th><th>Email</th><th>Student Number</th><th>Submitted</th><th>Student ID image</th><th>Decision</th></tr></thead>
+                  <tbody id="student-verification-rows"></tbody>
+                </table>
+              </div>
+              <p class="admin-empty" id="student-verification-empty" hidden>No students are awaiting verification.</p>
+            </section>
+            <section class="admin-pending-accounts">
+              <div class="admin-recent-heading">
+                <h2>Pending Accounts <span class="admin-pending-count" id="pending-account-count">0</span></h2>
+              </div>
+              <p class="student-verification-instructions">Review pending Student accounts and Admin registrations. Approved Admins receive an email verification code before their account is activated.</p>
+              <p class="admin-load-error" id="pending-account-error" role="alert" hidden></p>
+              <div class="student-verification-table-wrap">
+                <table class="admin-report-table">
+                  <thead><tr><th>Full Name</th><th>Email</th><th>Account Type</th><th>Registration Date</th><th>Approval Status</th><th>Action</th></tr></thead>
+                  <tbody id="pending-account-rows"></tbody>
+                </table>
+              </div>
+              <p class="admin-empty" id="pending-account-empty" hidden>No accounts are awaiting confirmation.</p>
+            </section>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script src="/static/logout.js?v=3" defer></script>
+  </body>
+</html>

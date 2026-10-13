@@ -1,8 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 :root {
   --ink: #111534;
   --paper: #f4f4f2;
-  --mono: "DM Mono", "Courier New", monospace;
-  --serif: "Libre Baskerville", Georgia, serif;
+  --sans: "Poppins", "Segoe UI", Arial, sans-serif;
+  --mono: "Poppins", "Segoe UI", Arial, sans-serif;
+  --serif: "Poppins", "Segoe UI", Arial, sans-serif;
 }
 
 * {
@@ -171,13 +174,13 @@ button {
   height: calc(100% - 60px);
   min-height: 0;
   overflow: auto;
-  padding: 18px clamp(28px, 5vw, 76px);
+  padding: 18px clamp(28px, 3.5vw, 56px);
   background: #fbfbfa;
 }
 
 .dashboard-view {
   display: none;
-  max-width: 1060px;
+  max-width: none;
   animation: dashboard-view-in 180ms ease both;
 }
 
@@ -736,13 +739,13 @@ button {
 .item-image {
   display: block;
   width: 100%;
-  height: 125px;
+  height: 130px;
   object-fit: cover;
   object-position: center 42%;
 }
 
 .item-card > div:last-child {
-  padding: 15px;
+  padding: 16px;
 }
 
 .item-category {
@@ -778,6 +781,17 @@ button {
   color: #080f76;
   font-size: 18px;
   font-weight: 400;
+}
+
+.item-card .listing-stock {
+  margin-top: 3px;
+  margin-bottom: 0;
+  color: #5b625e;
+  font-size: 10px;
+}
+
+.item-card .listing-stock.is-out-of-stock {
+  color: #a12e2e;
 }
 
 .empty-state {
@@ -864,6 +878,22 @@ button {
   .item-grid {
     grid-template-columns: 1fr;
   }
+}
+
+@media (max-width: 720px) {
+  body { overflow-x: hidden; overflow-y: auto; }
+  .dashboard-page, .dashboard-shell { height: auto; min-height: 100dvh; }
+  .dashboard-shell { display: block; }
+  .dashboard-sidebar { display: block; padding: 10px 12px; border-right: 0; border-bottom: 1px solid #aeb4b1; }
+  .dashboard-brand { align-items: center; flex-direction: row; justify-content: flex-start; }
+  .dashboard-brand-image { width: 54px; height: 54px; }
+  .dashboard-nav { display: flex; gap: 6px; margin-top: 8px; padding: 0 0 2px; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+  .dashboard-nav-link { flex: 0 0 auto; min-height: 36px; width: auto; padding: 8px 10px; white-space: nowrap; }
+  .dashboard-logout { position: static; margin-top: 6px; }
+  .dashboard-content { overflow: visible; }
+  .dashboard-header { min-height: 58px; height: auto; padding: 10px 12px; }
+  .dashboard-search { width: 100%; }
+  .dashboard-views { height: auto; min-height: calc(100dvh - 130px); overflow: visible; padding: 20px 12px 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

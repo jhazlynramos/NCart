@@ -1,0 +1,452 @@
+.public-profile-page {
+  margin: 0;
+  color: #171a35;
+  background: #f7f8fc;
+  font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+}
+
+.public-profile-page,
+.public-profile-page * {
+  box-sizing: border-box;
+}
+
+.public-profile-page [hidden] {
+  display: none !important;
+}
+
+.public-profile-page.dashboard-page {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.public-profile-page .dashboard-shell {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  width: 100%;
+  height: 100dvh;
+  min-height: 640px;
+  overflow: hidden;
+  background: #f7f8fc;
+}
+
+.public-profile-page .dashboard-sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 24px;
+  border-right: 1px solid #e5e7ef;
+  background: #ffffff;
+}
+
+.public-profile-page .dashboard-brand {
+  display: flex;
+  justify-content: center;
+}
+
+.public-profile-page .dashboard-brand-image {
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+}
+
+.public-profile-page .dashboard-nav {
+  display: grid;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.public-profile-page .dashboard-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: 7px;
+  color: #202626;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.public-profile-page .dashboard-nav-link .dashboard-nav-icon {
+  display: inline-grid;
+  flex: 0 0 18px;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+}
+
+.public-profile-page .dashboard-nav-link .dashboard-nav-icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.public-profile-page .dashboard-nav-link:hover {
+  color: #080f76;
+  background: #f0f2fb;
+}
+
+.public-profile-page .dashboard-nav-link > span:first-child {
+  display: inline-grid;
+  flex: 0 0 18px;
+  place-items: center;
+  width: 18px;
+  color: #080f76;
+}
+
+.public-profile-page .dashboard-logout {
+  margin-top: auto;
+}
+
+.public-profile-content {
+  min-width: 0;
+  height: 100%;
+  overflow: auto;
+  padding: 34px clamp(28px, 4vw, 64px) 56px;
+}
+
+.public-profile-back {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #4f5870;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.public-profile-back:hover {
+  color: #080f76;
+  text-decoration: underline;
+}
+
+.public-profile-loading,
+.public-profile-error {
+  max-width: 1120px;
+  padding: 24px;
+  border: 1px solid #e5e7ef;
+  border-radius: 12px;
+  color: #697084;
+  background: #ffffff;
+}
+
+.public-profile-error h1 {
+  margin: 0;
+  color: #171a35;
+  font-size: 26px;
+}
+
+.public-profile-error p {
+  margin: 8px 0 0;
+}
+
+.public-profile-content > #public-profile {
+  display: grid;
+  max-width: 1280px;
+  gap: 22px;
+}
+
+.public-profile-hero {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  min-height: 190px;
+  padding: 30px 34px;
+  border: 1px solid #e5e7ef;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 5px 16px rgba(17, 21, 52, 0.04);
+}
+
+.public-profile-avatar {
+  display: grid;
+  width: 112px;
+  height: 112px;
+  place-items: center;
+  overflow: hidden;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #080f76;
+  box-shadow: 0 3px 12px rgba(17, 21, 52, 0.18);
+  font-size: 42px;
+  font-weight: 600;
+}
+
+.public-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.public-profile-identity {
+  min-width: 0;
+}
+
+.public-profile-kicker {
+  margin: 0 0 7px;
+  color: #68708a;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.public-profile-identity h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #171a35;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.public-profile-verified {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  color: #1d714b;
+  fill: #e6f5ed;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.public-profile-verified[hidden] {
+  display: none;
+}
+
+.public-profile-member-since {
+  margin: 10px 0 0;
+  color: #737b8d;
+  font-size: 12px;
+}
+
+.public-profile-rating-summary {
+  display: grid;
+  gap: 4px;
+  min-width: 144px;
+  justify-items: center;
+  padding: 16px 20px;
+  border-left: 1px solid #e8eaf1;
+  color: #68708a;
+  font-size: 12px;
+}
+
+.public-profile-rating-summary strong {
+  color: #17204f;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.public-profile-rating-summary strong span:first-child {
+  color: #e0a528;
+}
+
+.public-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.public-profile-stat {
+  display: grid;
+  gap: 4px;
+  padding: 18px 22px;
+  border: 1px solid #e5e7ef;
+  border-radius: 11px;
+  background: #ffffff;
+}
+
+.public-profile-stat strong {
+  color: #171d4d;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.public-profile-stat span {
+  color: #70788a;
+  font-size: 12px;
+}
+
+.public-profile-section {
+  padding: 24px;
+  border: 1px solid #e5e7ef;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.public-profile-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.public-profile-section-heading .public-profile-kicker {
+  margin-bottom: 4px;
+}
+
+.public-profile-section-heading h2 {
+  margin: 0;
+  color: #171a35;
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.public-profile-section-heading > span {
+  color: #7a8191;
+  font-size: 12px;
+}
+
+.public-listings-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.public-listing-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e6e8ef;
+  border-radius: 10px;
+  background: #ffffff;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.public-listing-card:hover {
+  box-shadow: 0 8px 18px rgba(17, 21, 52, 0.09);
+  transform: translateY(-2px);
+}
+
+.public-listing-image-wrap {
+  display: grid;
+  height: 170px;
+  place-items: center;
+  overflow: hidden;
+  color: #8a91a1;
+  background: #f1f3f8;
+  font-size: 12px;
+}
+
+.public-listing-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.public-listing-copy {
+  padding: 13px;
+}
+
+.public-listing-copy h3 {
+  overflow: hidden;
+  margin: 0 0 8px;
+  color: #222741;
+  font-size: 14px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.public-listing-copy > strong {
+  color: #080f76;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.public-listing-copy p {
+  margin: 7px 0 4px;
+  color: #616a7d;
+  font-size: 11px;
+}
+
+.public-listing-copy p span {
+  padding: 0 3px;
+  color: #a0a6b3;
+}
+
+.public-listing-copy small {
+  color: #8a91a1;
+  font-size: 10px;
+}
+
+.public-reviews-list {
+  display: grid;
+  gap: 10px;
+}
+
+.public-review-card {
+  padding: 15px 17px;
+  border: 1px solid #e7e9f0;
+  border-radius: 9px;
+  background: #fbfbfd;
+}
+
+.public-review-topline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.public-review-stars {
+  color: #d89b1d;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.public-review-topline > span {
+  color: #26704e;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.public-review-topline time {
+  margin-left: auto;
+  color: #858c9c;
+  font-size: 11px;
+}
+
+.public-review-text {
+  margin: 9px 0 0;
+  color: #4d556a;
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.public-review-no-comment {
+  color: #858c9c;
+  font-style: italic;
+}
+
+.public-profile-empty {
+  margin: 0;
+  padding: 24px;
+  border: 1px dashed #dce0e9;
+  border-radius: 9px;
+  color: #778092;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (min-width: 1600px) {
+  .public-profile-content {
+    padding-right: 72px;
+    padding-left: 72px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .public-listings-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

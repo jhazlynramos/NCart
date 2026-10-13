@@ -1,175 +1,549 @@
-﻿<!doctype html>
-<script src="/static/logout.js?v=2" defer></script>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/static/initial-render.js?v=3"></script>
     <title>NCart | Profile</title>
-    <link rel="stylesheet" href="/static/profile.css?v=1" />
+    <link rel="stylesheet" href="/static/profile.css?v=12" />
+    <link rel="stylesheet" href="/static/sidebar.css?v=20" />
+    <link rel="stylesheet" href="/static/theme.css?v=13" />
+    <script src="/static/logout.js?v=3" defer></script>
+    <script src="/static/sidebar.js?v=19" defer></script>
   </head>
   <body class="dashboard-page profile-page">
-  <script src="/static/logout.js?v=2" defer></script>
     <main class="dashboard-shell">
       <aside class="dashboard-sidebar">
-        <a class="dashboard-brand" href="/home"
-          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a
-        >
-        <nav class="dashboard-nav">
-          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
-          ><a class="dashboard-nav-link" href="/marketplace"
-            ><span>▣</span>Marketplace</a
-          ><a class="dashboard-nav-link" href="/favorites"
-            ><span>♥</span>Favorites</a
-          ><a class="dashboard-nav-link" href="/listings"
-            ><span>🛒</span>My Listings</a
-          ><a class="dashboard-nav-link" href="/messages"
-            ><span>▰</span>Messages</a
-          ><a class="dashboard-nav-link" href="/orders"
-            ><span>▤</span>My Orders</a
-          ><a class="dashboard-nav-link" href="/reports"
-            ><span>ⓘ</span>Reports</a
-          ><a class="dashboard-nav-link is-active" href="/profile"
-            ><span>◉</span>Profile</a
-          >
+        <a class="dashboard-brand" href="/home">
+          <img class="dashboard-brand-image" src="/static/assets/NCart_logo.png?v=4" alt="NCart" />
+        </a>
+        <nav class="dashboard-nav" aria-label="Main navigation">
+          <a class="dashboard-nav-link" href="/home"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg></span>Home</a>
+          <a class="dashboard-nav-link" href="/marketplace"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 4.5 4h15l1.5 6"/><path d="M5 10v11h14V10"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 21v-6h6v6"/></svg></span>Marketplace</a>
+          <a class="dashboard-nav-link" href="/favorites"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Favorites</a>
+          <a class="dashboard-nav-link" href="/listings"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m20.6 13.4-9.6-9.6H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>My Listings</a>
+          <a class="dashboard-nav-link" href="/messages"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span>Messages</a>
+          <a class="dashboard-nav-link" href="/orders"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>My Orders</a>
+          <a class="dashboard-nav-link" href="/reports"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 18v-3"/><path d="M12 18v-6"/><path d="M16 18v-4"/></svg></span>Reports</a>
         </nav>
-        <a
-          class="dashboard-nav-link dashboard-logout"
-          href="/logout"
-          onclick="return confirm('Are you sure you want to log out?');"
-          ><span>↪</span>Logout</a
-        >
       </aside>
+
       <section class="dashboard-content">
-        <header class="dashboard-header">
-        </header>
         <div class="dashboard-views">
           <section class="dashboard-view is-visible">
-            <div class="dashboard-view-heading">
+            <div class="profile-page-heading dashboard-view-heading">
               <div>
                 <p class="dashboard-kicker">Your account</p>
                 <h1>Profile</h1>
+                <p class="profile-page-intro">Manage your personal details and how you appear on NCart.</p>
               </div>
-              <button class="dashboard-primary" id="profile-action" type="button">
-                Edit profile
-              </button>
+              <button class="dashboard-primary" id="profile-action" type="button">Edit Profile</button>
             </div>
-            <form class="profile-panel profile-form" id="profile-form">
-              <div class="profile-identity">
-                <button class="profile-avatar-button" id="profile-avatar-button" type="button" aria-label="Choose a profile picture">
-                  <span class="profile-avatar" id="profile-avatar">N</span>
-                </button>
-                <div>
-                  <div class="profile-summary-copy" id="profile-summary-copy">
-                    <h2 id="profile-display-name">Full Name</h2>
-                    <p id="profile-display-location">Location</p>
-                    <p id="profile-display-bio">Tell buyers a little about yourself and how you sell safely.</p>
-                  </div>
-                  <p class="profile-picture-hint">Add a clear picture so buyers know who is selling.</p>
-                  <input id="profile-image" type="file" accept="image/jpeg,image/png,image/gif,image/webp" hidden>
-                  <button class="profile-upload-button" id="profile-upload-button" type="button" hidden>Choose picture</button>
-                </div>
+
+            <article class="profile-cover-card" aria-label="Profile header">
+              <div class="profile-cover">
+                <img id="profile-cover-image-display" alt="" hidden />
               </div>
-              <label class="profile-field">Account name<input id="profile-name" name="full_name" autocomplete="name" maxlength="120" placeholder="Loading account name..." required></label>
-              <label class="profile-field">Location<input id="profile-location" name="location" maxlength="160" placeholder="e.g. Norzagaray College"></label>
-              <label class="profile-field profile-field-wide">About you<textarea id="profile-bio" name="bio" maxlength="500" rows="4" placeholder="Tell buyers a little about yourself and how you sell safely."></textarea></label>
-              <p class="profile-status" id="profile-status" role="status" aria-live="polite"></p>
-            </form>
+              <div class="profile-hero">
+                <div class="profile-avatar" aria-hidden="true">
+                  <img id="profile-avatar-image" alt="" hidden />
+                  <span id="profile-avatar-initial">N</span>
+                </div>
+                <div class="profile-hero-copy">
+                  <h2><span id="profile-display-name">Loading profile…</span><svg class="profile-verified-icon verified-badge" id="profile-verified-icon" viewBox="0 0 20 20" role="img" aria-label="Administrator-approved account" hidden><circle cx="10" cy="10" r="8.25"></circle><path d="m6.3 10.1 2.4 2.4 5-5.1"></path></svg></h2>
+                  <p id="profile-display-username">@username</p>
+                  <div class="profile-badges">
+                    <span id="profile-role-badge" class="profile-badge">Account</span>
+                  </div>
+                </div>
+                <p class="profile-hero-bio" id="profile-display-bio"></p>
+              </div>
+            </article>
+
+            <section class="profile-card profile-information" aria-labelledby="profile-information-heading">
+              <div class="profile-card-heading">
+                <div>
+                  <p class="dashboard-kicker">Your details</p>
+                  <h2 id="profile-information-heading">Profile information</h2>
+                </div>
+                <p class="profile-card-hint">Your account and contact information</p>
+              </div>
+              <dl class="profile-info-grid" id="profile-info-grid">
+                <div class="profile-loading">Loading your profile information…</div>
+              </dl>
+              <p class="profile-rejection" id="profile-rejection" hidden></p>
+            </section>
+            <p class="profile-feedback" id="profile-feedback" role="status" aria-live="polite"></p>
           </section>
         </div>
       </section>
     </main>
-  </body>
-  <script>
-    const profileForm = document.querySelector("#profile-form");
-    const profileImage = document.querySelector("#profile-image");
-    const profileAvatar = document.querySelector("#profile-avatar");
-    const profileStatus = document.querySelector("#profile-status");
-    const profileAction = document.querySelector("#profile-action");
-    const profileUploadButton = document.querySelector("#profile-upload-button");
-    const profileSummaryCopy = document.querySelector("#profile-summary-copy");
-    const profileControls = profileForm.querySelectorAll("input:not([type='hidden']), textarea, button");
-    let imageData = "";
-    let isEditing = false;
 
-    const setEditing = (editing) => {
-      isEditing = editing;
-      profileControls.forEach((control) => {
-        control.disabled = !editing;
+    <div class="profile-modal-backdrop" id="profile-modal" hidden>
+      <section class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+        <header class="profile-modal-heading">
+          <div>
+            <p class="dashboard-kicker">Personalize your account</p>
+            <h2 id="profile-modal-title">Edit Profile</h2>
+          </div>
+          <button class="profile-modal-close" id="profile-close" type="button" aria-label="Close edit profile dialog">×</button>
+        </header>
+        <form id="profile-form">
+          <div class="profile-editor-grid">
+            <label class="profile-field profile-field-wide">
+              Profile Picture
+              <input id="profile-image" name="profile_image" type="file" accept="image/jpeg,image/png,image/gif,image/webp" />
+              <img id="profile-image-preview" class="profile-upload-preview profile-upload-preview-avatar" alt="Profile picture preview after cropping" hidden />
+              <small>JPG, PNG, GIF, or WebP up to 5 MB.</small>
+            </label>
+            <label class="profile-field profile-field-wide">
+              Cover Photo
+              <input id="profile-cover-image" name="cover_image" type="file" accept="image/jpeg,image/png,image/gif,image/webp" />
+              <img id="profile-cover-image-preview" class="profile-upload-preview profile-upload-preview-cover" alt="Cover photo preview after cropping" hidden />
+              <small>Optional. JPG, PNG, GIF, or WebP up to 5 MB.</small>
+            </label>
+            <label class="profile-field">
+              Full Name
+              <input id="profile-name" name="full_name" autocomplete="name" maxlength="120" required />
+            </label>
+            <label class="profile-field">
+              Username
+              <input id="profile-username" name="username" autocomplete="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" required />
+              <small>3–32 letters, numbers, or underscores.</small>
+            </label>
+            <label class="profile-field">
+              Location
+              <input id="profile-location" name="location" maxlength="160" placeholder="e.g. Norzagaray College" />
+            </label>
+            <label class="profile-field profile-field-wide">
+              Bio
+              <textarea id="profile-bio" name="bio" maxlength="500" rows="4" placeholder="Tell the campus community about yourself."></textarea>
+            </label>
+          </div>
+          <p class="profile-status" id="profile-status" role="alert" aria-live="assertive"></p>
+          <div class="profile-modal-actions">
+            <button class="profile-secondary-button" id="profile-cancel" type="button">Cancel</button>
+            <button class="dashboard-primary" id="profile-save" type="submit">Save Changes</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="profile-crop-backdrop" id="profile-crop-modal" hidden>
+      <section class="profile-crop-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-crop-title">
+        <header class="profile-modal-heading profile-crop-heading">
+          <div>
+            <p class="dashboard-kicker">Adjust your image</p>
+            <h2 id="profile-crop-title">Crop image</h2>
+          </div>
+          <button class="profile-modal-close" id="profile-crop-close" type="button" aria-label="Cancel image crop">×</button>
+        </header>
+        <p class="profile-crop-instructions">Drag the image to reposition it, then use the zoom slider to adjust the crop.</p>
+        <div class="profile-crop-stage" id="profile-crop-stage" tabindex="0" aria-label="Image crop positioning area">
+          <canvas id="profile-crop-canvas" aria-label="Image crop preview"></canvas>
+        </div>
+        <label class="profile-crop-zoom" for="profile-crop-zoom">
+          Zoom
+          <input id="profile-crop-zoom" type="range" min="1" max="3" step="0.01" value="1" />
+        </label>
+        <div class="profile-modal-actions profile-crop-actions">
+          <button class="profile-secondary-button" id="profile-crop-cancel" type="button">Cancel</button>
+          <button class="dashboard-primary" id="profile-crop-apply" type="button">Apply crop</button>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const profileForm = document.querySelector("#profile-form");
+      const profileModal = document.querySelector("#profile-modal");
+      const profileImage = document.querySelector("#profile-image");
+      const profileCoverImage = document.querySelector("#profile-cover-image");
+      const profileCropModal = document.querySelector("#profile-crop-modal");
+      const profileCropStage = document.querySelector("#profile-crop-stage");
+      const profileCropCanvas = document.querySelector("#profile-crop-canvas");
+      const profileCropZoom = document.querySelector("#profile-crop-zoom");
+      const profileImagePreview = document.querySelector("#profile-image-preview");
+      const profileCoverImagePreview = document.querySelector("#profile-cover-image-preview");
+      const profileStatus = document.querySelector("#profile-status");
+      const profileAction = document.querySelector("#profile-action");
+      const profileInfoGrid = document.querySelector("#profile-info-grid");
+      const profileFeedback = document.querySelector("#profile-feedback");
+      let profile = null;
+      let savingProfile = false;
+      let previouslyFocusedElement = null;
+      let cropImage = null;
+      let cropType = "";
+      let cropOffsetX = 0;
+      let cropOffsetY = 0;
+      let cropStartX = 0;
+      let cropStartY = 0;
+      let cropDragging = false;
+      let croppedProfileImageData = "";
+      let croppedCoverImageData = "";
+      let cropInput = null;
+      let cropRequestId = 0;
+
+      const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      })[character]);
+      const readCropImage = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          const image = new Image();
+          image.addEventListener("load", () => resolve(image), { once: true });
+          image.addEventListener("error", () => reject(new Error("The selected image could not be opened.")), { once: true });
+          image.src = reader.result;
+        }, { once: true });
+        reader.addEventListener("error", () => reject(new Error("Could not read the selected image.")));
+        reader.readAsDataURL(file);
       });
-      profileAction.textContent = editing ? "Save profile" : "Edit profile";
-      profileAction.type = editing ? "submit" : "button";
-      profileUploadButton.hidden = !editing;
-      if (editing) profileAction.setAttribute("form", "profile-form");
-      else profileAction.removeAttribute("form");
-      profileForm.classList.toggle("is-editing", editing);
-      profileSummaryCopy.hidden = editing;
-    };
+      const drawCrop = () => {
+        if (!cropImage) return;
+        const context = profileCropCanvas.getContext("2d");
+        if (!context) throw new Error("Could not prepare the image crop preview.");
+        const width = profileCropCanvas.width;
+        const height = profileCropCanvas.height;
+        const scale = Math.max(width / cropImage.width, height / cropImage.height) * Number(profileCropZoom.value);
+        const drawWidth = cropImage.width * scale;
+        const drawHeight = cropImage.height * scale;
+        cropOffsetX = Math.min(0, Math.max(width - drawWidth, cropOffsetX));
+        cropOffsetY = Math.min(0, Math.max(height - drawHeight, cropOffsetY));
+        context.clearRect(0, 0, width, height);
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, width, height);
+        context.drawImage(cropImage, (width - drawWidth) / 2 + cropOffsetX, (height - drawHeight) / 2 + cropOffsetY, drawWidth, drawHeight);
+      };
+      const sizeCropStage = () => {
+        if (!cropImage || !cropType) return;
+        const ratio = profileCropCanvas.width / profileCropCanvas.height;
+        const maxWidth = Math.min(cropType === "profile" ? 520 : 720, window.innerWidth - 40, window.innerHeight * 0.48 * ratio);
+        profileCropStage.style.maxWidth = `${Math.max(1, maxWidth)}px`;
+      };
+      const closeCropEditor = () => {
+        const input = cropInput;
+        cropRequestId += 1;
+        if (input) input.value = "";
+        cropDragging = false;
+        cropImage = null;
+        cropType = "";
+        cropInput = null;
+        profileCropModal.hidden = true;
+        profileModal.inert = false;
+        if (input) input.focus();
+      };
+      const openCropEditor = async (file, type) => {
+        const requestId = ++cropRequestId;
+        cropType = type;
+        cropInput = type === "profile" ? profileImage : profileCoverImage;
+        document.querySelector("#profile-crop-title").textContent = type === "profile" ? "Crop profile picture" : "Crop cover photo";
+        try {
+          const image = await readCropImage(file);
+          if (requestId !== cropRequestId || profileModal.hidden || cropInput.files?.[0] !== file) return;
+          cropImage = image;
+          if (type === "profile") {
+            profileCropCanvas.width = 800;
+            profileCropCanvas.height = 800;
+            profileCropStage.style.aspectRatio = `${profileCropCanvas.width} / ${profileCropCanvas.height}`;
+          } else {
+            const cover = document.querySelector(".profile-cover").getBoundingClientRect();
+            const ratio = cover.width > 0 && cover.height > 0 ? cover.width / cover.height : 3;
+            profileCropCanvas.width = 1600;
+            profileCropCanvas.height = Math.max(1, Math.round(profileCropCanvas.width / ratio));
+            profileCropStage.style.aspectRatio = `${profileCropCanvas.width} / ${profileCropCanvas.height}`;
+          }
+          cropOffsetX = 0;
+          cropOffsetY = 0;
+          profileCropZoom.value = "1";
+          sizeCropStage();
+          drawCrop();
+          profileCropModal.hidden = false;
+          profileModal.inert = true;
+          document.querySelector("#profile-crop-zoom").focus();
+        } catch (error) {
+          if (requestId !== cropRequestId) return;
+          profileStatus.textContent = error.message || "Could not prepare the selected image.";
+          const input = type === "profile" ? profileImage : profileCoverImage;
+          input.value = "";
+          cropType = "";
+          cropInput = null;
+          cropImage = null;
+          input.focus();
+        }
+      };
+      const showImage = (image, url) => {
+        image.hidden = !url;
+        if (url) image.src = url;
+        else image.removeAttribute("src");
+      };
+      const showProfile = (user) => {
+        profile = user;
+        const name = user.full_name || "NCart member";
+        document.querySelector("#profile-display-name").textContent = name;
+        document.querySelector("#profile-display-username").textContent = `@${user.username || `user${user.id}`}`;
+        document.querySelector("#profile-display-bio").textContent = user.bio || "Add a short introduction to your campus profile.";
+        document.querySelector("#profile-role-badge").textContent = user.role === "admin" ? "Admin" : "Buyer";
+        document.querySelector("#profile-verified-icon").hidden = !user.verified;
+        const avatarImage = document.querySelector("#profile-avatar-image");
+        showImage(avatarImage, user.profile_image_url);
+        document.querySelector("#profile-avatar-initial").hidden = Boolean(user.profile_image_url);
+        showImage(document.querySelector("#profile-cover-image-display"), user.cover_image_url);
+        document.querySelector("#profile-name").value = user.full_name || "";
+        document.querySelector("#profile-username").value = user.username || `user${user.id}`;
+        document.querySelector("#profile-location").value = user.location || "";
+        document.querySelector("#profile-bio").value = user.bio || "";
+        renderProfileInformation(user);
+      };
+      const infoItem = (label, value, href) => {
+        const renderedValue = href
+          ? `<a href="${escapeHtml(href)}">${escapeHtml(value || "Not provided")}</a>`
+          : escapeHtml(value || "Not provided");
+        return `<div class="profile-info-item"><dt>${escapeHtml(label)}</dt><dd>${renderedValue}</dd></div>`;
+      };
+      const renderProfileInformation = (user) => {
+        const joined = user.created_at
+          ? new Date(user.created_at).toLocaleDateString("en", { year: "numeric", month: "long" })
+          : "Date unavailable";
+        const isBuyer = user.role !== "admin";
+        profileInfoGrid.innerHTML = `
+          ${infoItem("Full Name", user.full_name)}
+          ${infoItem("Username", `@${user.username || `user${user.id}`}`)}
+          ${infoItem("Email", user.email, user.email ? `mailto:${user.email}` : "")}
+          ${infoItem("Account Type", isBuyer ? "Buyer" : "Admin")}
+          ${isBuyer ? infoItem("Student ID", "••••••••") : ""}
+          ${infoItem("Date Joined", joined)}
+          ${user.location ? infoItem("Location", user.location) : ""}
+        `;
+        const rejection = ["buyer", "seller", "student", "user"].includes(user.role)
+          && user.account_status === "rejected"
+          ? user.verification_rejection_reason
+          : "";
+        const rejectionNotice = document.querySelector("#profile-rejection");
+        rejectionNotice.textContent = rejection || "";
+        rejectionNotice.hidden = !rejection;
+      };
+      const openModal = () => {
+        if (!profile || savingProfile) return;
+        cropRequestId += 1;
+        cropType = "";
+        cropInput = null;
+        cropImage = null;
+        profileCropModal.hidden = true;
+        profileModal.inert = false;
+        previouslyFocusedElement = document.activeElement;
+        profileFeedback.textContent = "";
+        profileStatus.textContent = "";
+        profileForm.reset();
+        croppedProfileImageData = "";
+        croppedCoverImageData = "";
+        profileImagePreview.hidden = true;
+        profileCoverImagePreview.hidden = true;
+        showProfile(profile);
+        profileModal.hidden = false;
+        document.body.classList.add("profile-modal-open");
+        document.querySelector("#profile-name").focus();
+      };
+      const closeModal = () => {
+        if (savingProfile) return;
+        cropRequestId += 1;
+        cropType = "";
+        cropInput = null;
+        cropImage = null;
+        profileCropModal.hidden = true;
+        profileModal.inert = false;
+        profileModal.hidden = true;
+        document.body.classList.remove("profile-modal-open");
+        profileStatus.textContent = "";
+        if (profile) showProfile(profile);
+        if (previouslyFocusedElement instanceof HTMLElement) previouslyFocusedElement.focus();
+      };
 
-    const showProfile = (profile) => {
-      document.querySelector("#profile-name").value = profile.full_name || "";
-      document.querySelector("#profile-location").value = profile.location || "";
-      document.querySelector("#profile-bio").value = profile.bio || "";
-      document.querySelector("#profile-display-name").textContent = profile.full_name || "Full Name";
-      document.querySelector("#profile-display-location").textContent = profile.location || "Location";
-      document.querySelector("#profile-display-bio").textContent = profile.bio || "Tell buyers a little about yourself and how you sell safely.";
-      profileAvatar.textContent = profile.full_name?.trim().charAt(0).toUpperCase() || "N";
-      if (profile.profile_image_url) {
-        profileAvatar.textContent = "";
-        profileAvatar.style.backgroundImage = `url("${profile.profile_image_url}")`;
-        profileAvatar.classList.add("has-image");
-      }
-    };
-
-    document.querySelector("#profile-avatar-button").addEventListener("click", () => profileImage.click());
-    document.querySelector("#profile-upload-button").addEventListener("click", () => profileImage.click());
-    profileAction.addEventListener("click", (event) => {
-      if (!isEditing) {
+      profileAction.addEventListener("click", openModal);
+      document.querySelector("#profile-close").addEventListener("click", closeModal);
+      document.querySelector("#profile-cancel").addEventListener("click", closeModal);
+      profileModal.addEventListener("click", (event) => {
+        if (event.target === profileModal) closeModal();
+      });
+      profileModal.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closeModal();
+        } else if (event.key === "Tab") {
+          const focusable = [...profileModal.querySelectorAll('button:not(:disabled), input:not(:disabled), textarea:not(:disabled)')];
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      });
+      profileForm.addEventListener("submit", async (event) => {
         event.preventDefault();
-        setEditing(true);
-      }
-    });
-    profileImage.addEventListener("change", () => {
-      const file = profileImage.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        imageData = reader.result;
-        profileAvatar.textContent = "";
-        profileAvatar.style.backgroundImage = `url("${imageData}")`;
-        profileAvatar.classList.add("has-image");
+        if (savingProfile) return;
+        savingProfile = true;
+        const saveButton = document.querySelector("#profile-save");
+        const closeButton = document.querySelector("#profile-close");
+        const cancelButton = document.querySelector("#profile-cancel");
+        saveButton.disabled = true;
+        closeButton.disabled = true;
+        cancelButton.disabled = true;
+        profileStatus.textContent = "";
+        try {
+          if (cropType) throw new Error("Finish or cancel the selected image crop before saving.");
+          if ((profileImage.files?.length && !croppedProfileImageData)
+            || (profileCoverImage.files?.length && !croppedCoverImageData)) {
+            throw new Error("Apply or cancel each selected image crop before saving.");
+          }
+          const response = await fetch("/api/profile", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              full_name: document.querySelector("#profile-name").value,
+              username: document.querySelector("#profile-username").value,
+              location: document.querySelector("#profile-location").value,
+              bio: document.querySelector("#profile-bio").value,
+              image_data: croppedProfileImageData,
+              cover_image_data: croppedCoverImageData,
+            }),
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || "Could not save your profile.");
+          showProfile(data.profile);
+          profileModal.inert = false;
+          profileModal.hidden = true;
+          document.body.classList.remove("profile-modal-open");
+          profileFeedback.textContent = "Your profile has been updated.";
+          if (previouslyFocusedElement instanceof HTMLElement) previouslyFocusedElement.focus();
+        } catch (error) {
+          profileStatus.textContent = error.message || "Could not save your profile.";
+        } finally {
+          savingProfile = false;
+          saveButton.disabled = false;
+          closeButton.disabled = false;
+          cancelButton.disabled = false;
+        }
       });
-      reader.readAsDataURL(file);
-    });
-    profileForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      profileStatus.textContent = "Saving...";
-      const response = await fetch("/api/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          full_name: document.querySelector("#profile-name").value,
-          location: document.querySelector("#profile-location").value,
-          bio: document.querySelector("#profile-bio").value,
-          image_data: imageData,
-        }),
+
+      const handleImageSelection = (input, type) => {
+        input.addEventListener("change", () => {
+          const file = input.files?.[0];
+          if (!file) return;
+          if (!["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024) {
+            cropRequestId += 1;
+            cropType = "";
+            cropInput = null;
+            cropImage = null;
+            input.value = "";
+            profileStatus.textContent = "Choose a JPG, PNG, GIF, or WebP image no larger than 5 MB.";
+            return;
+          }
+          profileStatus.textContent = "";
+          void openCropEditor(file, type);
+        });
+      };
+      handleImageSelection(profileImage, "profile");
+      profileCoverImage.addEventListener("change", () => {
+        const file = profileCoverImage.files?.[0];
+        if (!file) return;
+        if (!["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024) {
+          cropRequestId += 1;
+          cropType = "";
+          cropInput = null;
+          cropImage = null;
+          profileCoverImage.value = "";
+          profileStatus.textContent = "Choose a JPG, PNG, GIF, or WebP image no larger than 5 MB.";
+          return;
+        }
+        profileStatus.textContent = "";
+        void openCropEditor(file, "cover");
       });
-      const data = await response.json();
-      if (!response.ok) {
-        profileStatus.textContent = data.error || "Could not save your profile.";
-        return;
-      }
-      imageData = "";
-      showProfile(data.profile);
-      setEditing(false);
-      profileStatus.textContent = "Profile saved. Buyers can now learn more about you.";
-    });
-    fetch("/api/profile").then(async (response) => {
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Could not load your account name.");
-      showProfile(data.profile);
-      setEditing(false);
-    }).catch((error) => {
-      profileStatus.textContent = error.message;
-    });
-  </script>
+      window.addEventListener("resize", sizeCropStage);
+      profileCropZoom.addEventListener("input", drawCrop);
+      profileCropStage.addEventListener("pointerdown", (event) => {
+        if (!cropImage) return;
+        cropDragging = true;
+        const bounds = profileCropCanvas.getBoundingClientRect();
+        const scaleX = profileCropCanvas.width / bounds.width;
+        const scaleY = profileCropCanvas.height / bounds.height;
+        cropStartX = event.clientX * scaleX - cropOffsetX;
+        cropStartY = event.clientY * scaleY - cropOffsetY;
+        profileCropStage.setPointerCapture(event.pointerId);
+      });
+      profileCropStage.addEventListener("pointermove", (event) => {
+        if (!cropDragging) return;
+        const bounds = profileCropCanvas.getBoundingClientRect();
+        cropOffsetX = event.clientX * (profileCropCanvas.width / bounds.width) - cropStartX;
+        cropOffsetY = event.clientY * (profileCropCanvas.height / bounds.height) - cropStartY;
+        drawCrop();
+      });
+      profileCropStage.addEventListener("pointerup", () => { cropDragging = false; });
+      profileCropStage.addEventListener("pointercancel", () => { cropDragging = false; });
+      profileCropStage.addEventListener("keydown", (event) => {
+        const movement = event.shiftKey ? 40 : 16;
+        if (event.key === "ArrowLeft") cropOffsetX -= movement;
+        else if (event.key === "ArrowRight") cropOffsetX += movement;
+        else if (event.key === "ArrowUp") cropOffsetY -= movement;
+        else if (event.key === "ArrowDown") cropOffsetY += movement;
+        else return;
+        event.preventDefault();
+        drawCrop();
+      });
+      const cancelCrop = () => closeCropEditor();
+      document.querySelector("#profile-crop-close").addEventListener("click", cancelCrop);
+      document.querySelector("#profile-crop-cancel").addEventListener("click", cancelCrop);
+      document.querySelector("#profile-crop-apply").addEventListener("click", () => {
+        if (!cropImage || !cropType) return;
+        const input = cropInput;
+        try {
+          const dataUrl = profileCropCanvas.toDataURL("image/jpeg", 0.9);
+          if (cropType === "profile") {
+            croppedProfileImageData = dataUrl;
+            showImage(profileImagePreview, dataUrl);
+          } else {
+            croppedCoverImageData = dataUrl;
+            showImage(profileCoverImagePreview, dataUrl);
+          }
+        } catch (error) {
+          profileStatus.textContent = error.message || "Could not apply the image crop.";
+          return;
+        }
+        profileStatus.textContent = "";
+        profileCropModal.hidden = true;
+        profileModal.inert = false;
+        cropDragging = false;
+        cropImage = null;
+        cropType = "";
+        cropInput = null;
+        if (input) input.focus();
+      });
+      profileCropModal.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          cancelCrop();
+        } else if (event.key === "Tab") {
+          const focusable = [...profileCropModal.querySelectorAll('button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"])')];
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      fetch("/api/profile").then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not load your profile.");
+        showProfile(data.profile);
+      }).catch((error) => {
+        profileInfoGrid.innerHTML = `<div class="profile-load-error">${escapeHtml(error.message || "Could not load profile information.")}</div>`;
+      });
+    </script>
+  </body>
 </html>

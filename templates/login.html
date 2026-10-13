@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Log in to NCart">
+  <script src="/static/initial-render.js?v=3"></script>
   <title>Log in | NCart</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/login.css?v=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/login.css?v=14">
+  <link rel="stylesheet" href="/static/theme.css?v=15">
 </head>
 <body class="login-page">
   <div class="message-modal" id="message-modal" hidden role="dialog" aria-modal="true" aria-labelledby="message-title" aria-describedby="message-text">
@@ -25,7 +27,7 @@
 
     <div class="login-copy">
       <p class="login-eyebrow">Welcome back</p>
-      <h1 id="login-title">Log in to NCart</h1>
+      <h1 id="login-title">Log in to <span class="brand-name">NCart</span></h1>
       <p class="login-helper">Your campus marketplace is waiting.</p>
     </div>
 
@@ -35,6 +37,10 @@
 
       <label for="password">Password</label>
       <input id="password" name="password" type="password" placeholder="At least 8 characters" minlength="8" autocomplete="current-password" required>
+      <label class="show-password" for="show-password">
+        <input id="show-password" type="checkbox">
+        Show password
+      </label>
 
       <div class="login-submit-row">
         <button class="login-submit" type="submit">Log In</button>
@@ -55,6 +61,8 @@
   <script>
     const status = document.querySelector('#login-status');
     const modal = document.querySelector('#message-modal');
+    const password = document.querySelector('#password');
+    const showPassword = document.querySelector('#show-password');
     const dialog = modal.querySelector('.message-dialog');
     const modalIcon = document.querySelector('#message-icon');
     const modalTitle = document.querySelector('#message-title');
@@ -70,7 +78,7 @@
     const showModal = (text, isError = true) => {
       dialog.classList.toggle('is-success', !isError);
       modalIcon.textContent = isError ? '\u00d7' : '\u2713';
-      modalTitle.textContent = isError ? 'Error Message' : 'Success Message';
+      modalTitle.textContent = isError ? 'Invalid' : 'Success';
       modalText.textContent = text;
       modal.hidden = false;
       modal.classList.add('is-visible');
@@ -96,6 +104,10 @@
       invalidMessageShown = false;
     });
 
+    showPassword.addEventListener('change', () => {
+      password.type = showPassword.checked ? 'text' : 'password';
+    });
+
     const showStatus = (message) => {
       status.textContent = message;
       status.classList.add('is-visible');
@@ -104,10 +116,13 @@
     const params = new URLSearchParams(window.location.search);
     const message = params.get('message');
     const error = params.get('error');
+    const submittedEmail = params.get('email');
+    if (submittedEmail !== null) document.querySelector('#email').value = submittedEmail;
     loginSuccess = params.get('login_success') === '1';
     resetSuccess = params.get('reset_success') === '1';
     params.delete('message');
     params.delete('error');
+    params.delete('email');
     params.delete('login_success');
     params.delete('reset_success');
     history.replaceState(null, '', `${window.location.pathname}${params.toString() ? `?${params}` : ''}${window.location.hash}`);

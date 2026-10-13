@@ -1,62 +1,62 @@
 ﻿<!doctype html>
-<script src="/static/logout.js?v=2" defer></script>
+<script src="/static/logout.js?v=3" defer></script>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/static/initial-render.js?v=3"></script>
     <title>NCart | Messages</title>
-    <link rel="stylesheet" href="/static/messages.css?v=1" />
+    <link rel="stylesheet" href="/static/messages.css?v=11" />
+    <link rel="stylesheet" href="/static/sidebar.css?v=20" />
+    <link rel="stylesheet" href="/static/theme.css?v=13" />
+    <script src="/static/sidebar.js?v=19" defer></script>
   </head>
   <body class="dashboard-page dashboard-messages-page">
-  <script src="/static/logout.js?v=2" defer></script>
+  <script src="/static/logout.js?v=3" defer></script>
     <main class="dashboard-shell">
       <aside class="dashboard-sidebar">
         <a class="dashboard-brand" href="/home"
-          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a
+          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png?v=4" alt="NCart"></a
         >
         <nav class="dashboard-nav">
-          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          <a class="dashboard-nav-link" href="/home"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg></span>Home</a
           ><a class="dashboard-nav-link" href="/marketplace"
-            ><span>▣</span>Marketplace</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 4.5 4h15l1.5 6"/><path d="M5 10v11h14V10"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 21v-6h6v6"/></svg></span>Marketplace</a
           ><a class="dashboard-nav-link" href="/favorites"
-            ><span>♥</span>Favorites</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Favorites</a
           ><a class="dashboard-nav-link" href="/listings"
-            ><span>🛒</span>My Listings</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m20.6 13.4-9.6-9.6H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>My Listings</a
           ><a class="dashboard-nav-link is-active" href="/messages"
-            ><span>▰</span>Messages</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span>Messages</a
           ><a class="dashboard-nav-link" href="/orders"
-            ><span>▤</span>My Orders</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>My Orders</a
           ><a class="dashboard-nav-link" href="/reports"
-            ><span>ⓘ</span>Reports</a
-          ><a class="dashboard-nav-link" href="/profile"
-            ><span>◉</span>Profile</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 18v-3"/><path d="M12 18v-6"/><path d="M16 18v-4"/></svg></span>Reports</a
           >
         </nav>
-        <a
-          class="dashboard-nav-link dashboard-logout"
-          href="/logout"
-          onclick="return confirm('Are you sure you want to log out?');"
-          ><span>↪</span>Logout</a
-        >
       </aside>
       <section class="dashboard-content">
         <div class="dashboard-views">
           <section class="dashboard-view is-visible">
             <section class="messages-workspace" aria-label="Messages workspace">
               <aside class="conversation-list">
+                <h1 class="conversation-page-title">Messages</h1>
                 <div class="conversation-list-heading">
                   <span class="conversation-list-icon">▰</span>
                   <label class="conversation-search" for="conversation-search">
-                    <span>⌕</span><input id="conversation-search" type="search" placeholder="Search Messages">
+                    <span>⌕</span><input id="conversation-search" type="search" placeholder="Search conversations" autocomplete="off">
                   </label>
                 </div>
                 <div id="conversation-list-items">
                   <button class="conversation-list-item" id="conversation-list-item" type="button" hidden>
-                    <span class="conversation-avatar">N</span>
-                    <span class="conversation-list-copy"><strong>NCART seller</strong><small id="conversation-preview">Is this item still available?</small></span>
+                    <span class="conversation-avatar"><img alt="" hidden><span>N</span></span>
+                    <span class="conversation-list-copy"><strong>NCART seller</strong><small class="conversation-preview">Is this item still available?</small></span>
                     <time>Just now</time>
+                    <span class="conversation-unread" hidden></span>
                   </button>
                 </div>
+                <p class="conversation-search-empty" id="conversation-search-empty" hidden>No conversations match your search.</p>
+                <p class="messages-status" id="messages-status" role="status" aria-live="polite" hidden></p>
                 <div class="messages-empty empty-state" id="messages-empty">
                   <span>▰</span>
                   <h2>Your conversations will appear here.</h2>
@@ -65,13 +65,20 @@
               </aside>
               <section class="conversation-panel" id="conversation-panel" hidden aria-label="Conversation">
                 <div class="conversation-heading">
-                  <div>
+                  <div class="conversation-heading-identity">
                     <p class="dashboard-kicker">Conversation</p>
-                    <h2 id="conversation-title"></h2>
+                    <a class="conversation-profile-link" id="conversation-profile-link" href="#">
+                      <span class="conversation-avatar conversation-header-avatar" id="conversation-avatar"><img alt="" hidden><span>N</span></span>
+                      <h2 id="conversation-title"></h2>
+                    </a>
                     <span id="conversation-context"></span>
                   </div>
-                  <a class="message-button" href="/marketplace">Back to Marketplace</a>
+                  <div class="conversation-heading-actions">
+                    <button class="message-button close-conversation" id="close-conversation" type="button">← Back to Messages</button>
+                    <a class="message-button" href="/marketplace">Back to Marketplace</a>
+                  </div>
                 </div>
+                <p class="conversation-status" id="conversation-status" role="status" aria-live="polite" hidden></p>
                 <div class="conversation-thread" id="conversation-thread">
                   <p class="conversation-placeholder">Start a conversation about this item.</p>
                 </div>
@@ -79,8 +86,14 @@
                   <span><strong id="reply-compose-label">Replying to</strong><small id="reply-compose-text"></small></span>
                   <button id="cancel-reply" type="button" aria-label="Cancel reply">&times;</button>
                 </div>
+                <div class="message-image-preview" id="message-image-preview" hidden>
+                  <img id="message-image-preview-image" alt="Selected image preview">
+                  <button id="remove-message-image" type="button">Remove image</button>
+                </div>
                 <form class="conversation-compose" id="conversation-compose">
-                  <input id="conversation-input" type="text" placeholder="Write a message..." autocomplete="off" required>
+                  <input id="conversation-input" type="text" placeholder="Write a message..." autocomplete="off">
+                  <label class="message-image-button" for="message-image-input" aria-label="Attach an image" title="Attach an image">＋</label>
+                  <input id="message-image-input" class="message-image-input" type="file" accept="image/jpeg,image/png,image/webp">
                   <button class="dashboard-primary" type="submit">Send</button>
                 </form>
               </section>
@@ -90,31 +103,113 @@
       </section>
     </main>
     <script>
-      let activeConversation = (() => {
+      const pendingConversation = (() => {
         try {
           return JSON.parse(localStorage.getItem("ncart-active-conversation") || "null");
         } catch {
           return null;
         }
       })();
+      let activeConversation = null;
+      let viewerId = null;
+      const messageUrlParams = new URLSearchParams(window.location.search);
+      let requestedOtherUserId = Number(messageUrlParams.get("other_user_id")) || null;
+      const messagesWorkspace = document.querySelector(".messages-workspace");
       const messagesEmpty = document.querySelector("#messages-empty");
+      const conversationSearchEmpty = document.querySelector("#conversation-search-empty");
+      const conversationSearch = document.querySelector("#conversation-search");
+      const messagesStatus = document.querySelector("#messages-status");
       const conversationListItems = document.querySelector("#conversation-list-items");
       const conversationListItem = document.querySelector("#conversation-list-item");
-      const conversationPreview = document.querySelector("#conversation-preview");
       const conversationPanel = document.querySelector("#conversation-panel");
       const conversationTitle = document.querySelector("#conversation-title");
+      const conversationProfileLink = document.querySelector("#conversation-profile-link");
+      const conversationAvatar = document.querySelector("#conversation-avatar");
       const conversationContext = document.querySelector("#conversation-context");
+      const conversationStatus = document.querySelector("#conversation-status");
       const conversationThread = document.querySelector("#conversation-thread");
       const conversationCompose = document.querySelector("#conversation-compose");
       const conversationInput = document.querySelector("#conversation-input");
+      const messageImageInput = document.querySelector("#message-image-input");
+      const messageImagePreview = document.querySelector("#message-image-preview");
+      const messageImagePreviewImage = document.querySelector("#message-image-preview-image");
+      const removeMessageImage = document.querySelector("#remove-message-image");
       const replyComposePreview = document.querySelector("#reply-compose-preview");
       const replyComposeLabel = document.querySelector("#reply-compose-label");
       const replyComposeText = document.querySelector("#reply-compose-text");
       const cancelReply = document.querySelector("#cancel-reply");
+      const closeConversationButton = document.querySelector("#close-conversation");
       let replyToMessage = null;
+      const setMessagesStatus = (message = "") => {
+        messagesStatus.textContent = message;
+        messagesStatus.hidden = !message;
+      };
+      const setConversationStatus = (message = "") => {
+        conversationStatus.textContent = message;
+        conversationStatus.hidden = !message;
+      };
+      const createVerifiedBadge = () => {
+        const badge = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        badge.setAttribute("class", "verified-badge");
+        badge.setAttribute("viewBox", "0 0 20 20");
+        badge.setAttribute("role", "img");
+        badge.setAttribute("aria-label", "Administrator-approved account");
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", "10");
+        circle.setAttribute("cy", "10");
+        circle.setAttribute("r", "8.25");
+        const check = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        check.setAttribute("d", "m6.3 10.1 2.4 2.4 5-5.1");
+        badge.append(circle, check);
+        return badge;
+      };
+      const setIdentity = (element, name, verified) => {
+        element.replaceChildren(document.createTextNode(name || "Seller"));
+        if (verified) element.append(createVerifiedBadge());
+      };
+      const setAvatar = (element, imageUrl, name) => {
+        const image = element.querySelector("img");
+        const initial = element.querySelector("span");
+        initial.textContent = (name || "N").trim().charAt(0).toUpperCase() || "N";
+        initial.hidden = false;
+        image.hidden = true;
+        image.removeAttribute("src");
+        image.onerror = () => {
+          image.hidden = true;
+          initial.hidden = false;
+        };
+        if (imageUrl) {
+          image.src = imageUrl;
+          image.hidden = false;
+          initial.hidden = true;
+        } else {
+          initial.hidden = false;
+        }
+      };
+      const setProfileLink = (userId) => {
+        const id = Number(userId);
+        conversationProfileLink.href = Number.isSafeInteger(id) && id > 0 ? `/users/${id}` : "#";
+      };
+      const getOtherUserId = (conversation) => {
+        const otherUserId = Number(conversation.other_user_id);
+        if (Number.isSafeInteger(otherUserId) && otherUserId > 0 && otherUserId !== viewerId) {
+          return otherUserId;
+        }
+        const senderId = Number(conversation.sender_id);
+        const recipientId = Number(conversation.recipient_id);
+        if (senderId === viewerId && Number.isSafeInteger(recipientId) && recipientId > 0 && recipientId !== viewerId) {
+          return recipientId;
+        }
+        if (recipientId === viewerId && Number.isSafeInteger(senderId) && senderId > 0 && senderId !== viewerId) {
+          return senderId;
+        }
+        return null;
+      };
       const setReplyTarget = (message) => {
         replyToMessage = message;
-        replyComposeLabel.textContent = `Replying to ${message.sender_name || "message"}`;
+        replyComposeLabel.replaceChildren(document.createTextNode("Replying to "));
+        replyComposeLabel.append(document.createTextNode(message.sender_name || "message"));
+        if (message.sender_verified) replyComposeLabel.append(createVerifiedBadge());
         replyComposeText.textContent = message.body;
         replyComposePreview.hidden = false;
         conversationInput.focus();
@@ -125,12 +220,32 @@
         replyComposeText.textContent = "";
       };
       cancelReply.addEventListener("click", clearReplyTarget);
-      const clearActiveConversation = () => {
-        localStorage.removeItem("ncart-active-conversation");
+      const closeConversation = () => {
+        const selectedItem = conversationListItems.querySelector(".conversation-list-item.is-active");
         activeConversation = null;
         conversationPanel.hidden = true;
-        messagesEmpty.hidden = false;
-        conversationListItem.hidden = true;
+        messagesWorkspace.classList.remove("is-conversation-open");
+        conversationListItems.querySelectorAll(".conversation-list-item").forEach((item) => {
+          item.classList.remove("is-active");
+          item.removeAttribute("aria-current");
+        });
+        conversationThread.replaceChildren();
+        clearReplyTarget();
+        clearImageAttachment();
+        setConversationStatus();
+        setMessagesStatus();
+        applyConversationSearch();
+        selectedItem?.focus();
+      };
+      const formatMessageTime = (value) => {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        const time = date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+        const now = new Date();
+        if (date.getFullYear() === now.getFullYear()
+          && date.getMonth() === now.getMonth()
+          && date.getDate() === now.getDate()) return time;
+        return `${date.toLocaleDateString([], { month: "short", day: "numeric", year: date.getFullYear() === now.getFullYear() ? undefined : "numeric" })} ${time}`;
       };
       const renderMessages = (messages) => {
         const wasAtBottom = conversationThread.scrollHeight - conversationThread.scrollTop - conversationThread.clientHeight < 80;
@@ -145,12 +260,23 @@
           return;
         }
         messages.forEach((item) => {
+          const sent = Number(item.sender_id) === Number(activeConversation.viewerId);
+          const row = document.createElement("div");
+          row.className = `conversation-message-row${sent ? " is-sent" : " is-received"}`;
+          if (!sent) {
+            const avatar = document.createElement("span");
+            avatar.className = "conversation-avatar message-avatar";
+            const avatarImage = document.createElement("img");
+            avatarImage.alt = "";
+            avatarImage.hidden = true;
+            const avatarInitial = document.createElement("span");
+            avatarInitial.textContent = "N";
+            avatar.append(avatarImage, avatarInitial);
+            setAvatar(avatar, item.sender_image_url, item.sender_name);
+            row.append(avatar);
+          }
           const message = document.createElement("div");
-          message.className = Number(item.sender_id) === Number(activeConversation.viewerId)
-            ? "conversation-message is-sent"
-            : "conversation-message is-received";
-          const messageBody = document.createElement("span");
-          messageBody.textContent = item.body;
+          message.className = `conversation-message${sent ? " is-sent" : " is-received"}`;
           const itemLabel = document.createElement("small");
           itemLabel.className = "conversation-message-item";
           itemLabel.textContent = `Item: ${item.listing_title}`;
@@ -161,16 +287,42 @@
             quoted.textContent = `Replying to: ${item.replied_body}`;
             message.append(quoted);
           }
-          message.append(messageBody);
+          if (item.body) {
+            const messageBody = document.createElement("span");
+            messageBody.textContent = item.body;
+            message.append(messageBody);
+          }
+          if (item.image_url) {
+            const imageLink = document.createElement("a");
+            imageLink.className = "conversation-image-link";
+            imageLink.href = item.image_url;
+            imageLink.target = "_blank";
+            imageLink.rel = "noopener noreferrer";
+            imageLink.setAttribute("aria-label", "Open attached image");
+            const image = document.createElement("img");
+            image.className = "conversation-image";
+            image.src = item.image_url;
+            image.alt = "Image sent in this conversation";
+            imageLink.append(image);
+            message.append(imageLink);
+          }
+          const timestamp = document.createElement("time");
+          timestamp.className = "conversation-message-time";
+          const messageTime = item.created_at_ms ?? item.created_at;
+          timestamp.dateTime = typeof messageTime === "number"
+            ? new Date(messageTime).toISOString()
+            : messageTime;
+          timestamp.textContent = formatMessageTime(messageTime);
+          message.append(timestamp);
           const replyButton = document.createElement("button");
           replyButton.type = "button";
           replyButton.className = "conversation-reply-button";
           replyButton.textContent = "Reply";
           replyButton.addEventListener("click", () => setReplyTarget(item));
           message.append(replyButton);
-          conversationThread.append(message);
+          row.append(message);
+          conversationThread.append(row);
         });
-        conversationPreview.textContent = messages[messages.length - 1].body;
         requestAnimationFrame(() => {
           if (wasAtBottom || !hadMessages) {
             conversationThread.scrollTop = conversationThread.scrollHeight;
@@ -180,19 +332,37 @@
         });
       };
       const loadMessages = async () => {
-        const response = await fetch(`/api/messages?listing_id=${encodeURIComponent(activeConversation.listingId)}&other_user_id=${encodeURIComponent(activeConversation.sellerId)}`);
+        const requestedConversation = activeConversation;
+        if (!requestedConversation) return;
+        const otherUserId = Number(requestedConversation.sellerId);
+        if (!Number.isSafeInteger(otherUserId) || otherUserId <= 0) {
+          throw new Error("This conversation has an invalid participant.");
+        }
+        const response = await fetch(`/api/messages?other_user_id=${encodeURIComponent(otherUserId)}`);
         const data = await response.json();
+        if (activeConversation !== requestedConversation) return;
         if (!response.ok) {
-          if (response.status === 400) clearActiveConversation();
           throw new Error(data.error || "Could not load messages.");
         }
-        activeConversation.viewerId = data.viewer_id;
+        requestedConversation.viewerId = data.viewer_id;
+        const responseOtherUserId = Number(data.other_user?.id);
+        if (
+          data.other_user
+          && Number.isSafeInteger(responseOtherUserId)
+          && responseOtherUserId === otherUserId
+        ) {
+          requestedConversation.sellerName = data.other_user.full_name || requestedConversation.sellerName;
+          setIdentity(conversationTitle, data.other_user.full_name, data.other_user.verified);
+          setAvatar(conversationAvatar, data.other_user.profile_image_url, data.other_user.full_name);
+        }
         renderMessages(data.messages || []);
+        setConversationStatus();
       };
-      const sendMessage = async (messageText) => {
+      const sendMessage = async (messageText, imageData = "") => {
         if (!activeConversation?.listingId || !activeConversation?.sellerId) {
           throw new Error("Choose a valid conversation first.");
         }
+        if (!messageText && !imageData) return;
         const response = await fetch("/api/messages", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -200,6 +370,7 @@
             listing_id: activeConversation.listingId,
             recipient_id: activeConversation.sellerId,
             body: messageText,
+            image_data: imageData,
             reply_to_id: replyToMessage?.id || null,
           }),
         });
@@ -207,91 +378,203 @@
         if (!response.ok) throw new Error(data.error || "Could not send message.");
       };
       const openConversation = (conversation) => {
-        localStorage.setItem("ncart-active-conversation", JSON.stringify({
+        const otherUserId = getOtherUserId(conversation);
+        if (otherUserId === null) {
+          setMessagesStatus("This conversation could not be identified. Refresh the conversation list and try again.");
+          return;
+        }
+        activeConversation = {
           listingId: conversation.listing_id,
-          sellerId: conversation.other_user_id,
+          sellerId: otherUserId,
           sellerName: conversation.other_name,
+          sellerImage: conversation.other_image_url || "",
           title: conversation.listing_title,
           category: conversation.listing_category || "",
           price: conversation.listing_price || "",
           image: conversation.listing_image || "",
           message: "",
-        }));
-        window.location.reload();
+        };
+        conversationListItems.querySelectorAll(".conversation-list-item").forEach((item) => {
+          const selected = Number(item.dataset.listingId) === Number(activeConversation.listingId)
+            && Number(item.dataset.sellerId) === Number(activeConversation.sellerId);
+          item.classList.toggle("is-active", selected);
+          if (selected) item.setAttribute("aria-current", "true");
+          else item.removeAttribute("aria-current");
+        });
+        messagesEmpty.hidden = true;
+        conversationSearchEmpty.hidden = true;
+        conversationPanel.hidden = false;
+        messagesWorkspace.classList.add("is-conversation-open");
+        setIdentity(conversationTitle, activeConversation.sellerName, conversation.other_verified);
+        setAvatar(conversationAvatar, activeConversation.sellerImage, activeConversation.sellerName);
+        setProfileLink(activeConversation.sellerId);
+        conversationContext.textContent = `${activeConversation.price || ""} · ${activeConversation.category || ""}`;
+        setConversationStatus();
+        loadMessages().catch((error) => setConversationStatus(error.message));
+        conversationInput.focus();
       };
+      const formatConversationTime = (value) => {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const messageDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        const dayDifference = Math.round((today - messageDay) / 86400000);
+        if (dayDifference === 0) {
+          return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+        }
+        if (dayDifference === 1) return "Yesterday";
+        if (dayDifference < 7) return date.toLocaleDateString([], { weekday: "long" });
+        return date.toLocaleDateString([], { month: "short", day: "numeric" });
+      };
+      const applyConversationSearch = () => {
+        const searchTerm = conversationSearch.value.trim().toLocaleLowerCase();
+        const items = [...conversationListItems.querySelectorAll(".conversation-list-item")];
+        let visibleCount = 0;
+        items.forEach((item) => {
+          const matches = !searchTerm || item.dataset.otherName.toLocaleLowerCase().includes(searchTerm);
+          item.hidden = !matches;
+          if (matches) visibleCount += 1;
+        });
+        const hasConversations = items.length > 0;
+        messagesEmpty.hidden = hasConversations;
+        conversationSearchEmpty.hidden = !hasConversations || visibleCount > 0;
+      };
+      conversationSearch.addEventListener("input", applyConversationSearch);
       const loadInbox = async () => {
         const response = await fetch("/api/messages", { cache: "no-store" });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "Could not load conversations.");
-        if (data.conversations?.length) {
-          messagesEmpty.hidden = true;
-          conversationListItems.replaceChildren();
-          data.conversations.forEach((conversation) => {
-            const item = conversationListItem.cloneNode(true);
-            item.removeAttribute("id");
-            item.hidden = false;
-            item.querySelector("strong").textContent = conversation.other_name;
-            item.querySelector("small").textContent = conversation.body;
-            item.querySelector("time").textContent = "Just now";
-            item.onclick = () => openConversation(conversation);
-            conversationListItems.append(item);
-          });
-        } else if (!hasValidConversation) {
-          messagesEmpty.hidden = false;
-          conversationListItems.replaceChildren();
-          conversationListItem.hidden = true;
+        viewerId = Number(data.viewer_id);
+        const conversations = data.conversations || [];
+        conversationListItems.replaceChildren();
+        conversations.forEach((conversation) => {
+          const otherUserId = getOtherUserId(conversation);
+          const item = conversationListItem.cloneNode(true);
+          item.removeAttribute("id");
+          item.hidden = false;
+          item.dataset.listingId = conversation.listing_id;
+          item.dataset.sellerId = otherUserId ?? "";
+          item.dataset.otherName = conversation.other_name || "";
+          item.classList.toggle(
+            "is-active",
+            Number(conversation.listing_id) === Number(activeConversation?.listingId)
+              && otherUserId === Number(activeConversation?.sellerId),
+          );
+          if (item.classList.contains("is-active")) item.setAttribute("aria-current", "true");
+          setIdentity(item.querySelector("strong"), conversation.other_name, conversation.other_verified);
+          setAvatar(item.querySelector(".conversation-avatar"), conversation.other_image_url, conversation.other_name);
+          const previewText = conversation.body || (conversation.image_url ? "Photo" : "");
+          item.querySelector(".conversation-preview").textContent = previewText;
+          item.querySelector("time").textContent =
+            formatConversationTime(conversation.created_at_ms ?? conversation.created_at);
+          const unreadIndicator = item.querySelector(".conversation-unread");
+          const unreadCount = Number(conversation.unread_count) || 0;
+          unreadIndicator.hidden = unreadCount === 0;
+          unreadIndicator.textContent = unreadCount > 99 ? "99+" : String(unreadCount);
+          item.setAttribute(
+            "aria-label",
+            `${conversation.other_name}: ${previewText}${unreadCount ? `, ${unreadCount} unread` : ""}`,
+          );
+          item.onclick = () => openConversation(conversation);
+          conversationListItems.append(item);
+        });
+        messagesEmpty.hidden = conversations.length > 0;
+        applyConversationSearch();
+        setMessagesStatus();
+        if (requestedOtherUserId) {
+          const linkedConversation = [...conversationListItems.querySelectorAll(".conversation-list-item")]
+            .find((item) => Number(item.dataset.sellerId) === requestedOtherUserId);
+          requestedOtherUserId = null;
+          linkedConversation?.click();
         }
       };
-      const hasValidConversation = activeConversation?.title
-        && Number(activeConversation.listingId) > 0
-        && Number(activeConversation.sellerId) > 0;
-      if (hasValidConversation) {
-        messagesEmpty.hidden = true;
-        conversationListItem.hidden = false;
-        conversationListItem.querySelector("strong").textContent = activeConversation.sellerName || "Seller";
-        conversationPreview.textContent = activeConversation.message || "Is this item still available?";
-        conversationPanel.hidden = false;
-        conversationTitle.textContent = activeConversation.sellerName || "Seller";
-        conversationContext.textContent = `${activeConversation.price || ""} · ${activeConversation.category || ""}`;
-        loadMessages().then(async () => {
-          if (activeConversation.message && !activeConversation.initialMessageSent) {
-            await sendMessage(activeConversation.message);
-            activeConversation.initialMessageSent = true;
-            localStorage.setItem("ncart-active-conversation", JSON.stringify(activeConversation));
-            await loadMessages();
-          }
-        }).catch((error) => {
-          if (activeConversation) conversationThread.textContent = error.message;
-          if (!activeConversation) loadInbox();
+      const sendPendingMessage = async () => {
+        if (!pendingConversation) return;
+        if (Number(pendingConversation.listingId) <= 0 || Number(pendingConversation.sellerId) <= 0) {
+          localStorage.removeItem("ncart-active-conversation");
+          return;
+        }
+        const messageText = String(pendingConversation.message || "").trim();
+        if (!messageText || pendingConversation.initialMessageSent) {
+          localStorage.removeItem("ncart-active-conversation");
+          return;
+        }
+        const response = await fetch("/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            listing_id: pendingConversation.listingId,
+            recipient_id: pendingConversation.sellerId,
+            body: messageText,
+            reply_to_id: null,
+          }),
         });
-        conversationInput.focus();
-        window.setInterval(() => {
-          loadMessages().catch(() => {});
-          loadInbox().catch(() => {});
-        }, 2500);
-      }
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not send message.");
+        localStorage.removeItem("ncart-active-conversation");
+        await loadInbox();
+      };
+      const clearImageAttachment = () => {
+        messageImageInput.value = "";
+        messageImageInput.dataset.imageData = "";
+        messageImagePreview.hidden = true;
+        messageImagePreviewImage.removeAttribute("src");
+      };
+      messageImageInput.addEventListener("change", () => {
+        const file = messageImageInput.files?.[0];
+        if (!file) {
+          clearImageAttachment();
+          return;
+        }
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024) {
+          clearImageAttachment();
+          setMessagesStatus("Choose a JPG, PNG, or WEBP image no larger than 5 MB.");
+          return;
+        }
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          if (typeof reader.result !== "string") {
+            setMessagesStatus("The selected image could not be read.");
+            return;
+          }
+          messageImageInput.dataset.imageData = reader.result;
+          messageImagePreviewImage.src = reader.result;
+          messageImagePreview.hidden = false;
+          setMessagesStatus();
+        });
+        reader.addEventListener("error", () => setMessagesStatus("The selected image could not be read."));
+        reader.readAsDataURL(file);
+      });
+      removeMessageImage.addEventListener("click", clearImageAttachment);
+      closeConversationButton.addEventListener("click", closeConversation);
       conversationCompose.addEventListener("submit", async (event) => {
         event.preventDefault();
         const messageText = conversationInput.value.trim();
-        if (!messageText || !hasValidConversation || !activeConversation) return;
+        const imageData = messageImageInput.dataset.imageData || "";
+        if ((!messageText && !imageData) || !activeConversation) return;
         try {
-          await sendMessage(messageText);
+          await sendMessage(messageText, imageData);
           conversationInput.value = "";
+          clearImageAttachment();
           clearReplyTarget();
           await loadMessages();
+          await loadInbox();
           conversationInput.focus();
         } catch (error) {
-          window.alert(error.message);
+          setConversationStatus(error.message);
         }
       });
-      if (!hasValidConversation) {
-        loadInbox().catch((error) => {
-          conversationThread.textContent = error.message;
-        });
-        window.setInterval(() => {
-          loadInbox().catch(() => {});
-        }, 2500);
-      }
+      loadInbox()
+        .then(sendPendingMessage)
+        .catch((error) => setMessagesStatus(error.message));
+      window.setInterval(() => {
+        if (activeConversation) {
+          loadMessages().catch((error) => setConversationStatus(error.message));
+        } else {
+          loadInbox().catch((error) => setMessagesStatus(error.message));
+        }
+      }, 2500);
     </script>
   </body>
 </html>

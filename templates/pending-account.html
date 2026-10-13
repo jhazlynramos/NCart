@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NCart account confirmation status">
+  <script src="/static/initial-render.js?v=3"></script>
+  <title>Account confirmation | NCart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/login.css?v=3">
+  <link rel="stylesheet" href="/static/pending-account.css?v=1">
+  <link rel="stylesheet" href="/static/theme.css?v=13">
+</head>
+<body class="login-page account-status-page">
+  <main class="login-card account-status-card" aria-labelledby="account-status-title">
+    <a class="back-link" href="/">&larr; Back to welcome</a>
+    <div class="account-status-heading">
+      <svg class="account-status-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="19" />
+        <path d="M24 13v12l8 5" />
+        <path d="M17 4.5 13 8M31 4.5 35 8" />
+      </svg>
+      <p class="login-eyebrow">Account verification</p>
+      <h1 id="account-status-title">Account Verification Pending</h1>
+    </div>
+    <div class="account-status-copy">
+      <p id="account-status-summary">Your account has been successfully created and your OTP has been verified.</p>
+      <p id="account-status-message">Please wait for an administrator to confirm your account before you can access NCart.</p>
+    </div>
+    <section class="account-review-status" aria-labelledby="account-review-title">
+      <svg class="account-review-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+        <path d="M12 3V1" />
+      </svg>
+      <div>
+        <h2 id="account-review-title">Pending Administrator Confirmation</h2>
+        <p id="account-review-message">Your account is currently under review. You will be notified once it has been approved.</p>
+      </div>
+    </section>
+    <p class="signup-prompt account-status-actions"><a href="/templates/login.html">Return to Log In</a></p>
+  </main>
+  <script>
+    const parameters = new URLSearchParams(window.location.search);
+    const rejected = parameters.get('state') === 'rejected';
+    const adminPending = parameters.get('state') === 'admin_pending';
+    if (adminPending) {
+      document.querySelector('#account-status-title').textContent = 'Admin Registration Pending';
+      document.querySelector('#account-status-summary').textContent =
+        'Your Admin registration has been received and is awaiting review.';
+      document.querySelector('#account-status-message').textContent =
+        'You cannot sign in as an Admin until an existing administrator approves your request and you verify the email code.';
+      document.querySelector('#account-review-title').textContent = 'Pending Admin Approval';
+      document.querySelector('#account-review-message').textContent =
+        'A verification code will be sent to your registered email after your registration is approved.';
+    } else if (rejected) {
+      document.querySelector('#account-status-title').textContent = 'Account Not Approved';
+      document.querySelector('#account-status-summary').textContent =
+        'The administrator has completed the review of your account.';
+      document.querySelector('#account-status-message').textContent =
+        'Your account has not been approved by the administrator.';
+      document.querySelector('#account-review-title').textContent = 'Administrator Review Complete';
+      document.querySelector('#account-review-message').textContent =
+        'Access to NCart is not available for this account.';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+# Environment files may contain database, OAuth, SMTP, or session credentials.
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# IDE and editor-local settings
+.vscode/
+.idea/
+*.code-workspace
+
+# Runtime data and logs
+*.log
+logs/
+tmp/
+temp/
+static/uploads/
+private/
+instance/
+
+
+# Local database files and dumps
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.sql
+*.sql.gz
+*.bak
+
+
+# Local credentials and certificates
+credentials*.json
+*-service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx

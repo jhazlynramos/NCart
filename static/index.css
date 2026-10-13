@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 :root {
   --navy: #05062e;
   --cobalt: #07138c;
@@ -6,8 +8,9 @@
   --paper: #f4f4f2;
   --line: #d8d8d5;
   --white: #ffffff;
-  --mono: "DM Mono", "Courier New", monospace;
-  --serif: "Libre Baskerville", Georgia, serif;
+  --sans: "Poppins", "Segoe UI", Arial, sans-serif;
+  --mono: "Poppins", "Segoe UI", Arial, sans-serif;
+  --serif: "Poppins", "Segoe UI", Arial, sans-serif;
 }
 
 * {
@@ -265,7 +268,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 150px;
+  width: 200px;
   margin: 0 auto;
   color: #11115c;
 }
@@ -428,7 +431,7 @@ button {
   }
 
   .mark {
-    width: 100px;
+    width: 135px;
   }
 
   .auth-copy {

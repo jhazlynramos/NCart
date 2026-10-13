@@ -1,11 +1,15 @@
 ﻿<!doctype html>
-<script src="/static/logout.js?v=2" defer></script>
+<script src="/static/logout.js?v=3" defer></script>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/static/initial-render.js?v=3"></script>
     <title>NCart | My Orders</title>
-    <link rel="stylesheet" href="/static/orders.css?v=1" />
+    <link rel="stylesheet" href="/static/orders.css?v=9" />
+    <link rel="stylesheet" href="/static/sidebar.css?v=20" />
+    <link rel="stylesheet" href="/static/theme.css?v=13" />
+    <script src="/static/sidebar.js?v=19" defer></script>
   </head>
   <body class="dashboard-page">
     <div class="message-modal order-cancel-modal" id="order-cancel-modal" hidden role="dialog" aria-modal="true" aria-labelledby="order-cancel-title">
@@ -26,64 +30,52 @@
         <div class="message-icon order-track-icon" aria-hidden="true">✓</div>
         <h2 class="message-title" id="order-track-title">Track your order</h2>
         <p class="order-track-summary" id="order-track-summary">Current status</p>
-        <div class="order-tracking-status" id="order-track-status">Pending</div>
+        <div class="order-tracking-status" id="order-track-status">Order Placed</div>
         <ul class="tracking-steps" aria-label="Order tracking progress">
-          <li class="tracking-step is-complete"><span>Pending</span></li>
-          <li class="tracking-step"><span>Shipped</span></li>
-          <li class="tracking-step"><span>Out for delivery</span></li>
-          <li class="tracking-step"><span>Received</span></li>
+          <li class="tracking-step"><span>Order Placed</span></li>
+          <li class="tracking-step"><span>Preparing Order</span></li>
+          <li class="tracking-step"><span>Ready for Pick Up</span></li>
+          <li class="tracking-step"><span>Completed</span></li>
         </ul>
       </div>
     </div>
     <main class="dashboard-shell">
       <aside class="dashboard-sidebar">
         <a class="dashboard-brand" href="/home"
-          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png" alt="NCart"></a
+          ><img class="dashboard-brand-image" src="/static/assets/NCart_logo.png?v=4" alt="NCart"></a
         >
         <nav class="dashboard-nav">
-          <a class="dashboard-nav-link" href="/home"><span>⌂</span>Home</a
+          <a class="dashboard-nav-link" href="/home"><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg></span>Home</a
           ><a class="dashboard-nav-link" href="/marketplace"
-            ><span>▣</span>Marketplace</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 4.5 4h15l1.5 6"/><path d="M5 10v11h14V10"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 21v-6h6v6"/></svg></span>Marketplace</a
           ><a class="dashboard-nav-link" href="/favorites"
-            ><span>♥</span>Favorites</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Favorites</a
           ><a class="dashboard-nav-link" href="/listings"
-            ><span>🛒</span>My Listings</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m20.6 13.4-9.6-9.6H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>My Listings</a
           ><a class="dashboard-nav-link" href="/messages"
-            ><span>▰</span>Messages</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span>Messages</a
           ><a class="dashboard-nav-link is-active" href="/orders"
-            ><span>▤</span>My Orders</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>My Orders</a
           ><a class="dashboard-nav-link" href="/reports"
-            ><span>ⓘ</span>Reports</a
-          ><a class="dashboard-nav-link" href="/profile"
-            ><span>◉</span>Profile</a
+            ><span class="dashboard-nav-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 18v-3"/><path d="M12 18v-6"/><path d="M16 18v-4"/></svg></span>Reports</a
           >
         </nav>
-        <a
-          class="dashboard-nav-link dashboard-logout"
-          href="/logout"
-          onclick="return confirm('Are you sure you want to log out?');"
-          ><span>↪</span>Logout</a
-        >
       </aside>
-      <section class="dashboard-content">
-        <header class="dashboard-header">
-          <label class="dashboard-search" for="search"
-            ><span>⌕</span
-            ><input id="search" type="search" placeholder="Search items"
-          /></label>
-        </header>
+      <section class="dashboard-content dashboard-inline-search-content">
         <div class="dashboard-views">
           <section class="dashboard-view is-visible">
-            <div class="dashboard-view-heading">
+            <div class="dashboard-view-heading has-inline-search">
               <div>
                 <p class="dashboard-kicker">Purchase history</p>
                 <h1>My Orders</h1>
               </div>
+
             </div>
+            <p class="payment-action-message order-success-message" id="order-success-message" role="status" hidden></p>
             <div class="dashboard-filter-row order-filter-row" id="order-filters">
               <button class="dashboard-filter is-selected" type="button" data-order-filter="all">All orders</button>
-              <button class="dashboard-filter" type="button" data-order-filter="pending">Pending</button>
-              <button class="dashboard-filter" type="button" data-order-filter="received">Received</button>
+              <button class="dashboard-filter" type="button" data-order-filter="in_progress">In Progress</button>
+              <button class="dashboard-filter" type="button" data-order-filter="completed">Completed</button>
               <button class="dashboard-filter" type="button" data-order-filter="cancelled">Cancelled</button>
             </div>
             <div class="order-grid" id="orders-grid" hidden></div>
@@ -97,6 +89,19 @@
                 >Start shopping</a
               >
             </div>
+            <section class="seller-orders-section payment-verification-section" id="payment-verification-section" hidden>
+              <div class="dashboard-section-heading">
+                <div>
+                  <p class="dashboard-kicker">Seller dashboard</p>
+                  <h2>Pending Payment Verification</h2>
+                </div>
+              </div>
+              <div class="empty-state seller-empty-state" id="pending-payments-empty" hidden>
+                <h2>No pending payments.</h2>
+                <p>Payments submitted for your listings will appear here.</p>
+              </div>
+              <div class="order-grid" id="pending-payments-grid"></div>
+            </section>
             <section class="seller-orders-section" id="seller-orders-section" hidden>
               <div class="dashboard-section-heading">
                 <div>
@@ -106,8 +111,8 @@
               </div>
               <div class="dashboard-filter-row order-filter-row seller-order-filter-row" id="seller-order-filters">
                 <button class="dashboard-filter is-selected" type="button" data-seller-order-filter="all">All orders</button>
-                <button class="dashboard-filter" type="button" data-seller-order-filter="pending">Pending</button>
-                <button class="dashboard-filter" type="button" data-seller-order-filter="received">Received</button>
+                <button class="dashboard-filter" type="button" data-seller-order-filter="in_progress">In Progress</button>
+                <button class="dashboard-filter" type="button" data-seller-order-filter="completed">Completed</button>
                 <button class="dashboard-filter" type="button" data-seller-order-filter="cancelled">Cancelled</button>
               </div>
               <div class="empty-state seller-empty-state" id="seller-orders-empty" hidden>
@@ -127,10 +132,14 @@
       const ordersGrid = document.querySelector("#orders-grid");
       const ordersEmpty = document.querySelector("#orders-empty");
       const sellerOrdersSection = document.querySelector("#seller-orders-section");
+      const pendingPaymentsSection = document.querySelector("#payment-verification-section");
+      const pendingPaymentsGrid = document.querySelector("#pending-payments-grid");
+      const pendingPaymentsEmpty = document.querySelector("#pending-payments-empty");
       const sellerOrdersGrid = document.querySelector("#seller-orders-grid");
       const sellerOrdersEmpty = document.querySelector("#seller-orders-empty");
       const sellerOrderFilters = document.querySelector("#seller-order-filters");
       const orderFilters = document.querySelector("#order-filters");
+      const orderSuccessMessage = document.querySelector("#order-success-message");
       const orderCancelModal = document.querySelector("#order-cancel-modal");
       const orderCancelClose = document.querySelector("#order-cancel-close");
       const orderCancelKeep = document.querySelector("#order-cancel-keep");
@@ -140,41 +149,171 @@
       const orderTrackStatus = document.querySelector("#order-track-status");
       const orderTrackSummary = document.querySelector("#order-track-summary");
       const trackingSteps = Array.from(document.querySelectorAll(".tracking-step"));
-      const cartStorageKey = "ncart-cart";
-      const checkoutStorageKey = "ncart-checkout-active";
+      const orderPaymentMethods = ["Cash on Pick Up", "GCash", "Bank Transfer"];
+      const placedPaymentMethod = sessionStorage.getItem("ncart-order-confirmation");
+      if (orderPaymentMethods.includes(placedPaymentMethod)) {
+        orderSuccessMessage.textContent = `Order Placed Successfully. Payment Method: ${placedPaymentMethod}.`;
+        orderSuccessMessage.hidden = false;
+        sessionStorage.removeItem("ncart-order-confirmation");
+      }
       const money = (value) => `₱${Number(value || 0).toFixed(2)}`;
       const formatDate = (value) => new Date(value).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-      const readCart = () => {
-        try {
-          const saved = JSON.parse(localStorage.getItem(cartStorageKey) || "[]");
-          return Array.isArray(saved) ? saved : [];
-        } catch {
-          return [];
-        }
-      };
-      const clearCart = () => localStorage.removeItem(cartStorageKey);
+      const formatDateTime = (value) => new Date(value).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+      const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
+      })[character]);
+      const verifiedBadgeMarkup = '<svg class="verified-badge" viewBox="0 0 20 20" role="img" aria-label="Administrator-approved account"><circle cx="10" cy="10" r="8.25"></circle><path d="m6.3 10.1 2.4 2.4 5-5.1"></path></svg>';
+      const orderStatuses = [
+        ["order_placed", "Order Placed"],
+        ["preparing_order", "Preparing Order"],
+        ["ready_for_pickup", "Ready for Pick Up"],
+        ["completed", "Completed"],
+        ["cancelled", "Cancelled"],
+      ];
+      const normalizeOrderStatus = (status) => String(status || "order_placed").toLowerCase();
+      const checkoutParameters = new URLSearchParams(window.location.search);
+      const checkoutActive = checkoutParameters.get("checkout") === "1";
+      const selectedCartItemIds = (checkoutParameters.get("cart_item_ids") || "")
+        .split(",").filter((value) => /^\d+$/.test(value) && Number(value) > 0);
       const readApiResponse = async (response) => {
         const text = await response.text();
         const contentType = response.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) {
-          throw new Error(`Orders service returned HTTP ${response.status}. Restart the NCart server.`);
+          console.error("NCart returned a non-JSON response", {
+            url: response.url,
+            status: response.status,
+            body: text,
+          });
+          throw new Error(`NCart returned HTTP ${response.status} instead of JSON.`);
         }
         try {
           return JSON.parse(text);
         } catch {
+          console.error("NCart returned invalid JSON", {
+            url: response.url,
+            status: response.status,
+            body: text,
+          });
           throw new Error("Orders service returned an invalid response.");
         }
       };
       const statusClass = (status) => {
-        const normalized = (status || "pending").toLowerCase();
-        if (normalized === "paid" || normalized === "received") return "is-paid";
-        if (normalized === "shipped" || normalized === "out_for_delivery") return "is-shipped";
+        const normalized = normalizeOrderStatus(status);
+        if (normalized === "completed") return "is-paid";
+        if (["preparing_order", "ready_for_pickup"].includes(normalized)) return "is-shipped";
         if (normalized === "cancelled") return "is-cancelled";
         return "is-pending";
       };
-      const statusLabel = (status) => String(status || "pending").replaceAll("_", " ");
+      const statusLabel = (status) => {
+        const normalized = normalizeOrderStatus(status);
+        const orderLabel = orderStatuses.find(([value]) => value === normalized)?.[1];
+        if (orderLabel) return orderLabel;
+        return String(status || "pending").replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+      };
+      const nextOrderStatus = {
+        order_placed: "preparing_order",
+        preparing_order: "ready_for_pickup",
+        ready_for_pickup: "completed",
+      };
+      const sellerStatusChoices = (order, status = normalizeOrderStatus(order.status)) => {
+        const choices = [status];
+        const next = nextOrderStatus[status];
+        const onlinePayment = ["GCash", "Bank Transfer"].includes(order.payment_method);
+        if (next && (!onlinePayment || order.payment_status === "verified")) choices.push(next);
+        if (status === "order_placed" && order.can_seller_cancel) choices.push("cancelled");
+        return choices;
+      };
       const renderSellerOrders = (sales) => {
         const sellerSales = Array.isArray(sales) ? sales : [];
+        const pendingPayments = sellerSales.filter((order) => order.payment_status === "pending_verification");
+        pendingPaymentsSection.hidden = sellerSales.length === 0;
+        pendingPaymentsEmpty.hidden = pendingPayments.length > 0;
+        pendingPaymentsGrid.hidden = pendingPayments.length === 0;
+        pendingPaymentsGrid.innerHTML = pendingPayments.map((order) => `
+          <article class="order-card payment-review-card">
+            <div class="order-card-body">
+              <div class="order-card-top">
+                <span class="order-label">Order #${order.id}</span>
+                <span class="order-status is-pending">Payment pending</span>
+              </div>
+              <h3>${escapeHtml(order.listing_title)}</h3>
+              <p>Buyer: ${escapeHtml(order.buyer_name)} · ${escapeHtml(order.buyer_email)}</p>
+              <div class="order-payment-row"><span>Method</span><strong>${escapeHtml(order.payment_method)}</strong></div>
+              <div class="order-payment-row"><span>Reference No.</span><strong>${escapeHtml(order.payment_reference_no)}</strong></div>
+              <div class="order-payment-row"><span>Quantity</span><strong>${order.quantity}</strong></div>
+              <div class="order-summary-row"><span>Amount</span><strong>${money(order.total_price)}</strong></div>
+              <small>Submitted ${formatDateTime(order.payment_submitted_at)}</small>
+              <a class="order-track-button payment-receipt-link" href="/api/orders/${order.id}/payment-receipt" target="_blank" rel="noopener">View receipt</a>
+              <label class="payment-rejection-field">Rejection reason (required to reject)
+                <textarea class="payment-rejection-reason" maxlength="500" rows="2"></textarea>
+              </label>
+              <p class="payment-action-message" role="status" hidden></p>
+              <div class="order-actions">
+                <button class="payment-review-button payment-approve-button" type="button" data-order-id="${order.id}" data-decision="approved">Approve payment</button>
+                <button class="payment-review-button payment-reject-button" type="button" data-order-id="${order.id}" data-decision="rejected">Reject payment</button>
+              </div>
+            </div>
+          </article>
+        `).join("");
+        pendingPaymentsGrid.querySelectorAll(".payment-review-button").forEach((button) => {
+          button.addEventListener("click", async () => {
+            const card = button.closest(".payment-review-card");
+            const reasonField = card.querySelector(".payment-rejection-reason");
+            const reason = reasonField.value.trim();
+            const message = card.querySelector(".payment-action-message");
+            if (button.dataset.decision === "rejected" && !reason) {
+              message.textContent = "Enter a rejection reason before rejecting this payment.";
+              message.hidden = false;
+              reasonField.focus();
+              return;
+            }
+            card.querySelectorAll(".payment-review-button").forEach((action) => { action.disabled = true; });
+            try {
+              const response = await fetch(`/api/orders/${button.dataset.orderId}/payment-review`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ decision: button.dataset.decision, rejection_reason: reason }),
+              });
+              const data = await readApiResponse(response);
+              if (!response.ok) throw new Error(data.error || "Could not review this payment.");
+              if (data.notification_warning) window.alert(data.notification_warning);
+              window.location.reload();
+            } catch (error) {
+              message.textContent = error.message;
+              message.hidden = false;
+              card.querySelectorAll(".payment-review-button").forEach((action) => { action.disabled = false; });
+            }
+          });
+        });
+        ordersGrid.querySelectorAll(".order-rating-form").forEach((form) => {
+          form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            if (!form.reportValidity()) return;
+            const button = form.querySelector('button[type="submit"]');
+            const message = form.querySelector(".order-rating-message");
+            button.disabled = true;
+            message.hidden = true;
+            try {
+              const response = await fetch(`/api/orders/${form.dataset.orderId}/rating`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  rating: Number(form.elements.rating.value),
+                  review: form.elements.review.value,
+                }),
+              });
+              const result = await readApiResponse(response);
+              if (!response.ok) throw new Error(result.error || "Could not submit your rating.");
+              message.textContent = result.message;
+              message.hidden = false;
+              window.setTimeout(() => window.location.reload(), 700);
+            } catch (error) {
+              message.textContent = error.message;
+              message.hidden = false;
+              button.disabled = false;
+            }
+          });
+        });
         sellerOrdersSection.hidden = false;
         sellerOrdersGrid.replaceChildren();
         sellerOrdersGrid.hidden = false;
@@ -193,18 +332,16 @@
             <div class="order-card-body">
               <div class="order-card-top">
                 <span class="order-label">Order #${order.id}</span>
-                <span class="order-status ${statusClass(order.status)}">${statusLabel(order.status)}</span>
+                <span class="order-status ${statusClass(order.status)}">${escapeHtml(statusLabel(order.status))}</span>
               </div>
               <h3>${order.listing_title}</h3>
-              <p>Buyer: ${order.buyer_name}</p>
+              <p>Buyer: <a class="order-profile-link" href="/users/${order.buyer_id}">${escapeHtml(order.buyer_name)}${order.buyer_verified ? verifiedBadgeMarkup : ""}</a></p>
+              <div class="order-summary-row"><span>Quantity</span><strong>${order.quantity}</strong></div>
               <div class="order-summary-row"><span>Total</span><strong>${money(order.total_price)}</strong></div>
               <small>Ordered on ${formatDate(order.created_at)}</small>
               <label class="seller-status-field">Update status
-                <select class="seller-status-select" data-order-id="${order.id}"${order.status === "cancelled" ? " disabled" : ""}>
-                  <option value="pending"${order.status === "pending" ? " selected" : ""}>Pending</option>
-                  <option value="shipped"${order.status === "shipped" ? " selected" : ""}>Shipped</option>
-                  <option value="out_for_delivery"${order.status === "out_for_delivery" ? " selected" : ""}>Out for delivery</option>
-                  <option value="received"${order.status === "received" ? " selected" : ""}>Received</option>
+                <select class="seller-status-select" data-order-id="${order.id}"${sellerStatusChoices(order).length === 1 ? " disabled" : ""}>
+                  ${sellerStatusChoices(order).map((status) => `<option value="${escapeHtml(status)}"${normalizeOrderStatus(order.status) === status ? " selected" : ""}>${escapeHtml(statusLabel(status))}</option>`).join("")}
                 </select>
               </label>
             </div>
@@ -226,6 +363,17 @@
               const orderCard = select.closest(".order-card");
               if (orderCard) {
                 orderCard.dataset.orderStatus = orderFilterStatus(select.value);
+                const statusBadge = orderCard.querySelector(".order-status");
+                statusBadge.className = `order-status ${statusClass(select.value)}`;
+                statusBadge.textContent = statusLabel(select.value);
+              }
+              const order = sellerOrders.find((item) => String(item.id) === select.dataset.orderId);
+              if (order) {
+                order.status = select.value;
+                order.can_seller_cancel = false;
+                const choices = sellerStatusChoices(order);
+                select.innerHTML = choices.map((status) => `<option value="${escapeHtml(status)}"${status === order.status ? " selected" : ""}>${escapeHtml(statusLabel(status))}</option>`).join("");
+                select.disabled = choices.length === 1;
               }
               applySellerOrderFilter();
             } catch (error) {
@@ -239,10 +387,10 @@
         applySellerOrderFilter();
       };
       const orderFilterStatus = (status) => {
-        const normalized = String(status || "pending").toLowerCase();
-        if (normalized === "paid" || normalized === "shipped" || normalized === "received") return "received";
+        const normalized = normalizeOrderStatus(status);
+        if (normalized === "completed") return "completed";
         if (normalized === "cancelled") return "cancelled";
-        return "pending";
+        return "in_progress";
       };
       let selectedOrderFilter = "all";
       let selectedSellerOrderFilter = "all";
@@ -254,8 +402,8 @@
         }
         if (visibleOrderCount > 0) return;
         const filterLabels = {
-          pending: "Pending",
-          received: "Received",
+          in_progress: "In Progress",
+          completed: "Completed",
           cancelled: "Cancelled",
         };
         const filterLabel = filterLabels[selectedOrderFilter] || "";
@@ -286,8 +434,8 @@
         }
         if (visibleOrderCount > 0) return;
         const filterLabels = {
-          pending: "Pending",
-          received: "Received",
+          in_progress: "In Progress",
+          completed: "Completed",
           cancelled: "Cancelled",
         };
         const filterLabel = filterLabels[selectedSellerOrderFilter] || "";
@@ -324,26 +472,25 @@
         orderCancelKeep.focus();
       };
       const updateTrackingSteps = (status) => {
-        const stepOrder = ["pending", "shipped", "out_for_delivery", "received"];
-        const currentIndex = stepOrder.indexOf(String(status || "pending").toLowerCase());
+        const currentIndex = orderStatuses.findIndex(([value]) => value === normalizeOrderStatus(status));
         trackingSteps.forEach((step, index) => {
-          const isComplete = index <= Math.max(currentIndex, 0);
+          const isComplete = index < currentIndex;
           step.classList.toggle("is-complete", isComplete);
-          step.classList.toggle("is-current", index === currentIndex && currentIndex >= 0);
+          step.classList.toggle("is-current", index === currentIndex);
         });
       };
       const openTrackModal = (order) => {
-        const normalizedStatus = String(order.status || "pending").toLowerCase();
+        const normalizedStatus = normalizeOrderStatus(order.status);
         const messages = {
-          pending: "Your order is being processed and will be prepared for shipping soon.",
-          shipped: "Your order has been packed and is on the way to you.",
-          out_for_delivery: "Your order is out for delivery and should arrive soon.",
-          received: "Your order has been received. Thank you for shopping with NCart.",
+          order_placed: "Your order has been placed and is waiting to be prepared.",
+          preparing_order: "Your order is now being prepared.",
+          ready_for_pickup: "Your order is ready for pick up.",
+          completed: "Your order has been marked as completed.",
           cancelled: "This order was cancelled and is no longer active.",
         };
         const label = statusLabel(order.status);
         orderTrackStatus.textContent = label;
-        orderTrackSummary.textContent = messages[normalizedStatus] || messages.pending;
+        orderTrackSummary.textContent = messages[normalizedStatus] || messages.order_placed;
         updateTrackingSteps(normalizedStatus);
         orderTrackModal.hidden = false;
         orderTrackModal.classList.add("is-visible");
@@ -366,17 +513,41 @@
           window.alert(error.message);
         }
       };
-      const renderCheckout = () => {
-        const cart = readCart();
+      const renderCheckout = async () => {
+        if (!selectedCartItemIds.length) {
+          orderFilters.hidden = true;
+          sellerOrdersSection.hidden = true;
+          ordersGrid.hidden = true;
+          ordersEmpty.hidden = false;
+          ordersEmpty.querySelector("h2").textContent = "No items selected.";
+          ordersEmpty.querySelector("p").textContent = "Choose items from your cart to continue to checkout.";
+          return;
+        }
+        const cartResponse = await fetch(`/api/cart?ids=${encodeURIComponent(selectedCartItemIds.join(","))}`, { cache: "no-store" });
+        const cartData = await readApiResponse(cartResponse);
+        if (!cartResponse.ok) throw new Error(cartData.error || "Could not load selected cart items.");
+        const cart = (cartData.items || []).map((item) => ({
+          cartItemId: item.cart_item_id,
+          listingId: item.listing_id,
+          title: item.title || "Unavailable item",
+          category: item.category || "General",
+          price: item.price || "0",
+          quantity: item.cart_quantity,
+          image: item.image_url,
+          isAvailable: item.is_available,
+          availabilityMessage: item.availability_message,
+        }));
         orderFilters.hidden = true;
         sellerOrdersSection.hidden = true;
         sellerOrdersGrid.replaceChildren();
-        if (!cart.length) {
+        if (!cart.length || cart.length !== selectedCartItemIds.length) {
           ordersGrid.hidden = true;
           ordersEmpty.hidden = false;
+          ordersEmpty.querySelector("h2").textContent = "Selected items are no longer in your cart.";
+          ordersEmpty.querySelector("p").textContent = "Return to your cart and select the items you want to purchase.";
           return;
         }
-        const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
+        const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1), 0);
         const total = subtotal;
         ordersEmpty.hidden = true;
         ordersGrid.hidden = false;
@@ -389,60 +560,222 @@
               </div>
             </div>
             <div class="checkout-items">
-              ${cart.map((item) => `
-                <div class="checkout-item">
-                  <div class="checkout-thumb">${item.image ? `<img src="${item.image}" alt="${item.title}">` : "<span>Item</span>"}</div>
+              ${cart.map((item, index) => `
+                <div class="checkout-item" data-checkout-index="${index}">
+                    <div class="checkout-thumb">${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">` : "<span>Item</span>"}</div>
                   <div class="checkout-copy">
-                    <strong>${item.title}</strong>
-                    <small>${item.category || "General"}</small>
-                    <span>${money(item.price)}</span>
+                      <strong>${escapeHtml(item.title)}</strong>
+                    <small>${escapeHtml(item.category || "General")}</small>
+                    <span>${Number(item.quantity || 1)} × ${money(item.price)}</span>
+                    <strong>${money(Number(item.price || 0) * Number(item.quantity || 1))}</strong>
+                    ${item.isAvailable ? "" : `<small class="checkout-stock-error">${escapeHtml(item.availabilityMessage)}</small>`}
                   </div>
                 </div>
               `).join("")}
             </div>
+            <div class="checkout-payment-evidence-list">
+              ${cart.map((item, index) => `
+                <section class="checkout-payment-evidence" data-checkout-index="${index}" hidden>
+                  <h3>Payment for ${escapeHtml(item.title)}</h3>
+                  <p>Each cart item creates a separate seller order. Submit a separate receipt and reference number for each item.</p>
+                  <label class="payment-upload-field">Upload payment receipt (JPG or PNG, max 5 MB)
+                    <input type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png">
+                  </label>
+                  <label class="payment-upload-field">Payment Reference Number
+                    <input type="text" maxlength="100" pattern="[A-Za-z0-9][A-Za-z0-9 ._/#-]{0,99}">
+                  </label>
+                </section>
+              `).join("")}
+            </div>
+            <p class="payment-action-message checkout-payment-error" id="checkout-payment-error" role="alert" tabindex="-1" hidden></p>
             <div class="checkout-summary">
               <div><span>Subtotal</span><strong>${money(subtotal)}</strong></div>
-              <div><span>Delivery</span><strong>Free</strong></div>
+              <div><span>Pickup</span><strong>Free</strong></div>
               <div class="checkout-total"><span>Total</span><strong>${money(total)}</strong></div>
             </div>
             <label class="checkout-field">
               Payment method
               <select id="checkout-payment-method">
-                <option>Cash on Delivery</option>
-                <option>GCash</option>
-                <option>Bank Transfer</option>
+                <option value="Cash on Pick Up">Cash on Pick Up</option>
+                <option value="GCash">GCash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
               </select>
             </label>
-            <button class="checkout-submit" id="place-order" type="button">Place order</button>
+            <p class="checkout-payment-note" id="checkout-payment-note" hidden>
+              The seller will confirm each order after verifying its receipt and reference number.
+            </p>
+            <button class="checkout-submit" id="place-order" type="button"${cart.some((item) => !item.isAvailable) ? " disabled" : ""}>Place order</button>
           </div>
         `;
-        document.querySelector("#place-order").addEventListener("click", async () => {
-          const paymentMethod = document.querySelector("#checkout-payment-method")?.value || "Cash on Delivery";
-          const items = readCart();
+        const paymentMethodSelect = document.querySelector("#checkout-payment-method");
+        const paymentNote = document.querySelector("#checkout-payment-note");
+        const paymentEvidence = Array.from(document.querySelectorAll(".checkout-payment-evidence"));
+        const placeOrderButton = document.querySelector("#place-order");
+        const checkoutPaymentError = document.querySelector("#checkout-payment-error");
+        let isPlacingOrder = false;
+        const updatePaymentMethodFields = () => {
+          const paymentMethod = paymentMethodSelect.value;
+          const needsEvidence = ["GCash", "Bank Transfer"].includes(paymentMethod);
+          paymentNote.hidden = !needsEvidence;
+          paymentEvidence.forEach((section) => {
+            section.hidden = !needsEvidence;
+            section.querySelectorAll("input").forEach((input) => { input.required = needsEvidence; });
+          });
+          placeOrderButton.textContent = needsEvidence ? "Submit payment and place order" : "Place order";
+          placeOrderButton.disabled = isPlacingOrder
+            || cart.some((item) => !item.isAvailable)
+            || !orderPaymentMethods.includes(paymentMethod);
+          checkoutPaymentError.hidden = true;
+        };
+        paymentMethodSelect.addEventListener("change", updatePaymentMethodFields);
+        updatePaymentMethodFields();
+        placeOrderButton.addEventListener("click", async () => {
+          const paymentMethod = paymentMethodSelect.value;
+          if (placeOrderButton.disabled || isPlacingOrder) return;
+          if (!orderPaymentMethods.includes(paymentMethod)) {
+            checkoutPaymentError.textContent = "Choose a valid payment method.";
+            checkoutPaymentError.hidden = false;
+            paymentMethodSelect.focus();
+            return;
+          }
+          const items = cart;
           if (!items.length) return;
+          if (items.some((item) => !item.isAvailable)) {
+            checkoutPaymentError.textContent = "Remove unavailable items or correct their quantity in your cart before checking out.";
+            checkoutPaymentError.hidden = false;
+            return;
+          }
+          const needsEvidence = ["GCash", "Bank Transfer"].includes(paymentMethod);
+          const references = new Set();
+          if (needsEvidence) {
+            for (const section of paymentEvidence) {
+              const fileInput = section.querySelector('input[type="file"]');
+              const referenceInput = section.querySelector('input[type="text"]');
+              const file = fileInput.files[0];
+              const reference = referenceInput.value.trim();
+              if (!file || file.size > 5 * 1024 * 1024) {
+                checkoutPaymentError.textContent = "Choose a receipt image no larger than 5 MB for every item.";
+                checkoutPaymentError.hidden = false;
+                fileInput.focus();
+                return;
+              }
+              if (!referenceInput.checkValidity()) {
+                checkoutPaymentError.textContent = "Enter a valid payment reference number for every item.";
+                checkoutPaymentError.hidden = false;
+                referenceInput.focus();
+                return;
+              }
+              if (references.has(reference.toLowerCase())) {
+                checkoutPaymentError.textContent = "Use a unique payment reference number for each order.";
+                checkoutPaymentError.hidden = false;
+                referenceInput.focus();
+                return;
+              }
+              references.add(reference.toLowerCase());
+            }
+          }
+          isPlacingOrder = true;
+          updatePaymentMethodFields();
+          placeOrderButton.disabled = true;
+          const createdOrders = [];
+          let createFailure = null;
           try {
-            for (const item of items) {
-              const response = await fetch("/api/orders", {
+            for (const [index, item] of items.entries()) {
+              const requestUrl = "/api/orders";
+              const resolvedRequestUrl = new URL(requestUrl, window.location.href).href;
+              const requestPayload = {
+                listing_id: Number(item.listingId),
+                quantity: Number(item.quantity || 1),
+                cart_item_id: Number(item.cartItemId),
+                payment_method: paymentMethod,
+              };
+              console.info("Submitting NCart order", {
+                url: resolvedRequestUrl,
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ listing_id: Number(item.listingId), payment_method: paymentMethod }),
+                payload: requestPayload,
+              });
+              const requestOptions = {
+                method: "POST",
+                credentials: "same-origin",
+              };
+              if (needsEvidence) {
+                const section = paymentEvidence[index];
+                const formData = new FormData();
+                formData.append("listing_id", String(requestPayload.listing_id));
+                formData.append("quantity", String(requestPayload.quantity));
+                formData.append("cart_item_id", String(requestPayload.cart_item_id));
+                formData.append("payment_method", paymentMethod);
+                formData.append(
+                  "payment_reference_no",
+                  section.querySelector('input[type="text"]').value.trim(),
+                );
+                formData.append(
+                  "payment_receipt",
+                  section.querySelector('input[type="file"]').files[0],
+                );
+                requestOptions.body = formData;
+              } else {
+                requestOptions.headers = { "Content-Type": "application/json" };
+                requestOptions.body = JSON.stringify(requestPayload);
+              }
+              const response = await fetch(requestUrl, requestOptions);
+              console.info("NCart order response", {
+                url: response.url,
+                status: response.status,
+                contentType: response.headers.get("content-type"),
               });
               const data = await readApiResponse(response);
-              if (!response.ok) throw new Error(data.error || "Could not place order.");
+              if (!response.ok) {
+                console.warn("NCart rejected the order", {
+                  url: response.url,
+                  status: response.status,
+                  response: data,
+                  error: data.error || "Could not place order.",
+                });
+                createFailure = { index, message: data.error || "Could not place order." };
+                break;
+              }
+              createdOrders.push({ id: data.id, index });
             }
-            clearCart();
-            localStorage.removeItem(checkoutStorageKey);
-            window.location.reload();
           } catch (error) {
-            window.alert(error.message);
+            console.error("NCart order request failed", {
+              url: new URL("/api/orders", window.location.href).href,
+              payment_method: paymentMethod,
+              failed_item_index: createdOrders.length,
+              error_name: error.name,
+              error_message: error.message,
+              current_origin: window.location.origin,
+              endpoint: new URL("/api/orders", window.location.href).href,
+              error,
+            });
+            createFailure = {
+              index: createdOrders.length,
+              message: error.message,
+              isNetworkError: error.name === "TypeError" && error.message === "Failed to fetch",
+            };
           }
+          if (createFailure) {
+            isPlacingOrder = false;
+            updatePaymentMethodFields();
+            const failureMessage = createFailure.isNetworkError
+              ? `Network request to ${new URL("/api/orders", window.location.href).href} failed: ${createFailure.message}.`
+              : createFailure.message;
+            const followUp = createdOrders.length ? " Earlier orders are already in My Orders." : "";
+            checkoutPaymentError.textContent = `${failureMessage}${followUp}`;
+            checkoutPaymentError.hidden = false;
+            checkoutPaymentError.focus();
+            if (createdOrders.length) {
+              window.setTimeout(() => { window.location.href = "/cart"; }, 1500);
+            }
+            return;
+          }
+          sessionStorage.setItem("ncart-order-confirmation", paymentMethod);
+          window.location.href = "/orders";
         });
       };
       const renderOrders = async () => {
-        const cart = readCart();
-        const checkoutActive = localStorage.getItem(checkoutStorageKey) === "1";
-        if (cart.length && checkoutActive) {
-          renderCheckout();
+        if (checkoutActive) {
+          await renderCheckout();
           return;
         }
         const response = await fetch("/api/orders", { cache: "no-store" });
@@ -467,30 +800,106 @@
             <div class="order-card-body">
               <div class="order-card-top">
                 <span class="order-label">Order #${order.id}</span>
-                <span class="order-status ${statusClass(order.status)}">${order.status || "pending"}</span>
+                <span class="order-status ${statusClass(order.status)}">${escapeHtml(statusLabel(order.status))}</span>
               </div>
-              <h3>${order.listing_title}</h3>
-              <p>Seller: ${order.seller_name}</p>
+              <h3>${escapeHtml(order.listing_title)}</h3>
+              <p>Seller: <a class="order-profile-link" href="/users/${order.seller_id}">${escapeHtml(order.seller_name)}${order.seller_verified ? verifiedBadgeMarkup : ""}</a></p>
+              <div class="order-payment-row"><span>Quantity</span><strong>${order.quantity}</strong></div>
               <div class="order-payment-row">
                 <span>Payment</span>
-                <strong>${order.payment_method || "Cash on Delivery"}</strong>
+                <strong>${escapeHtml(order.payment_method || "Cash on Pick Up")}</strong>
               </div>
+              ${["GCash", "Bank Transfer"].includes(order.payment_method) ? `
+                <div class="order-payment-row">
+                  <span>Payment status</span>
+                  <strong>${escapeHtml(statusLabel(order.payment_status || "unsubmitted"))}</strong>
+                </div>
+                ${order.payment_reference_no ? `<div class="order-payment-row"><span>Reference No.</span><strong>${escapeHtml(order.payment_reference_no)}</strong></div>` : ""}
+                ${order.payment_submitted_at ? `<small>Submitted ${formatDateTime(order.payment_submitted_at)}</small>` : ""}
+                ${order.payment_verified_at ? `<small>Verified ${formatDateTime(order.payment_verified_at)}</small>` : ""}
+                ${order.payment_rejection_reason ? `<p class="payment-rejection-message">Payment rejected: ${escapeHtml(order.payment_rejection_reason)}</p>` : ""}
+                ${order.payment_status === "pending_verification" || order.payment_status === "verified" || order.payment_status === "rejected"
+                  ? `<a class="order-track-button payment-receipt-link" href="/api/orders/${order.id}/payment-receipt" target="_blank" rel="noopener">View submitted receipt</a>`
+                  : ""}
+                ${order.payment_status === "unsubmitted" || order.payment_status === "rejected" ? `
+                  <form class="payment-submission-form" data-order-id="${order.id}">
+                    <label class="payment-upload-field">Amount to verify
+                      <input type="number" name="payment_amount" min="0.01" step="0.01" value="${escapeHtml(Number(order.total_price).toFixed(2))}" readonly required>
+                    </label>
+                    <label class="payment-upload-field">Upload payment receipt (JPG or PNG, max 5 MB)
+                      <input type="file" name="payment_receipt" accept="image/jpeg,image/png,.jpg,.jpeg,.png" required>
+                    </label>
+                    <label class="payment-upload-field">Payment Reference Number
+                      <input type="text" name="payment_reference_no" maxlength="100" value="${escapeHtml(order.payment_reference_no || "")}" required>
+                    </label>
+                    <p class="payment-action-message" role="status" hidden></p>
+                    <button class="payment-submit-button" type="submit">Submit payment</button>
+                  </form>
+                ` : ""}
+              ` : ""}
               <div class="order-summary-row">
                 <span>Total</span>
                 <strong>${money(order.total_price)}</strong>
               </div>
               <small>Ordered on ${formatDate(order.created_at)}</small>
               <div class="order-actions">
-                ${String(order.status || "pending").toLowerCase() === "cancelled"
-                  ? ""
-                  : `<button class="order-track-button" type="button" data-order-status="${order.status || "pending"}" data-order-id="${order.id}">Track order</button>`}
-                ${String(order.status || "pending").toLowerCase() === "pending"
+                <button class="order-track-button" type="button" data-order-status="${escapeHtml(normalizeOrderStatus(order.status))}" data-order-id="${order.id}">Track order</button>
+                ${normalizeOrderStatus(order.status) === "order_placed"
                   ? `<button class="order-cancel-button" type="button" data-order-id="${order.id}"${order.can_cancel === false ? " disabled" : ""}>${order.can_cancel === false ? "Cancellation expired" : "Cancel order"}</button>`
                   : ""}
               </div>
+              ${order.can_rate_seller ? `
+                <form class="order-rating-form" data-order-id="${order.id}">
+                  <label>Rate this seller
+                    <select name="rating" required>
+                      <option value="">Choose a rating</option>
+                      <option value="5">★★★★★ - Excellent</option>
+                      <option value="4">★★★★☆ - Good</option>
+                      <option value="3">★★★☆☆ - Fair</option>
+                      <option value="2">★★☆☆☆ - Poor</option>
+                      <option value="1">★☆☆☆☆ - Very poor</option>
+                    </select>
+                  </label>
+                  <label>Review (optional)
+                    <textarea name="review" maxlength="1000" rows="2" placeholder="Share your transaction experience"></textarea>
+                  </label>
+                  <p class="order-rating-message" role="status" hidden></p>
+                  <button class="order-track-button" type="submit">Submit Rating</button>
+                </form>
+              ` : ""}
             </div>
           </article>
         `).join("");
+        ordersGrid.querySelectorAll(".payment-submission-form").forEach((form) => {
+          form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const fileInput = form.elements.payment_receipt;
+            const file = fileInput.files[0];
+            const message = form.querySelector(".payment-action-message");
+            if (!file || file.size > 5 * 1024 * 1024) {
+              message.textContent = "Choose a receipt image no larger than 5 MB.";
+              message.hidden = false;
+              return;
+            }
+            const button = form.querySelector(".payment-submit-button");
+            button.disabled = true;
+            try {
+              const response = await fetch(`/api/orders/${form.dataset.orderId}/payment`, {
+                method: "POST",
+                body: new FormData(form),
+              });
+              const data = await readApiResponse(response);
+              if (!response.ok) throw new Error(data.error || "Could not submit payment.");
+              message.textContent = data.message;
+              message.hidden = false;
+              window.setTimeout(() => window.location.reload(), 700);
+            } catch (error) {
+              message.textContent = error.message;
+              message.hidden = false;
+              button.disabled = false;
+            }
+          });
+        });
         ordersGrid.querySelectorAll(".order-track-button").forEach((button) => {
           button.addEventListener("click", () => {
             const currentOrder = {
@@ -504,6 +913,16 @@
           button.addEventListener("click", () => openCancelModal(button));
         });
         applyOrderFilter();
+        const requestedOrderId = new URLSearchParams(window.location.search).get("order");
+        const requestedOrder = orders.find((order) => String(order.id) === requestedOrderId);
+        if (requestedOrder) {
+          selectedOrderFilter = orderFilterStatus(requestedOrder.status);
+          orderFilters.querySelectorAll("[data-order-filter]").forEach((button) => {
+            button.classList.toggle("is-selected", button.dataset.orderFilter === selectedOrderFilter);
+          });
+          applyOrderFilter();
+          openTrackModal(requestedOrder);
+        }
       };
       orderFilters.addEventListener("click", (event) => {
         const filter = event.target.closest("[data-order-filter]");

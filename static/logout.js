@@ -90,10 +90,10 @@ if (logoutLink) {
       background: #080f76;
       font-size: 24px;
     }
-    #shared-logout-modal .message-title { margin: 0 0 8px; color: #111534; font: 400 22px Georgia, serif; }
-    #shared-logout-modal .message-text { min-height: 0; margin: 10px 0 18px; color: #555b58; font: 12px/1.5 Consolas, monospace; }
+    #shared-logout-modal .message-title { margin: 0 0 8px; color: #111534; font: 400 22px/1.3 Poppins, "Segoe UI", Arial, sans-serif; }
+    #shared-logout-modal .message-text { min-height: 0; margin: 10px 0 18px; color: #555b58; font: 400 12px/1.5 Poppins, "Segoe UI", Arial, sans-serif; }
     #shared-logout-modal .message-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
-    #shared-logout-modal .message-button { min-height: 36px; border: 0; border-radius: 6px; color: #ffffff; background: #080f76; cursor: pointer; font: 12px Consolas, monospace; }
+    #shared-logout-modal .message-button { min-height: 36px; border: 0; border-radius: 6px; color: #ffffff; background: #080f76; cursor: pointer; font: 600 12px Poppins, "Segoe UI", Arial, sans-serif; }
     #shared-logout-modal .message-cancel { color: #202626; background: #eef0ee; }
     #shared-logout-modal .message-button:hover, #shared-logout-modal .message-button:focus-visible { filter: brightness(1.12); }
     @media (prefers-reduced-motion: reduce) { #shared-logout-modal, #shared-logout-modal .message-dialog { transition: none; } }
